@@ -3,6 +3,7 @@
 import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import { BookCover } from "@/components/book-cover";
+import { CollectionManager } from "@/components/collection-manager";
 import { ArrowLeft, Star, ExternalLink, Trash2, Heart } from "lucide-react";
 import type { Book, BookStatus, BookCategory } from "@/types/database";
 import { BOOK_CATEGORIES } from "@/types/database";
@@ -236,6 +237,12 @@ export default function BookDetailPage({
                 </option>
               ))}
             </select>
+          </div>
+
+          {/* Collections */}
+          <div>
+            <p className="mb-2 font-sans text-xs uppercase tracking-wider text-warm-gray">Collections</p>
+            <CollectionManager bookId={book.id} />
           </div>
 
           {/* Google Books category tags */}

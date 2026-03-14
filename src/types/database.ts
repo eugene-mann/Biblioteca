@@ -92,6 +92,25 @@ export interface RecommendationTopic {
   created_at: string;
 }
 
+export interface Collection {
+  id: string;
+  name: string;
+  sort_order: number;
+  user_id: string;
+  created_at: string;
+}
+
+export interface CollectionBook {
+  collection_id: string;
+  book_id: string;
+  added_at: string;
+}
+
+export interface CollectionWithCovers extends Collection {
+  book_count: number;
+  cover_urls: (string | null)[];
+}
+
 export interface Recommendation {
   id: string;
   title: string;

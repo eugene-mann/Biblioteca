@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { SearchBar } from "@/components/search-bar";
 import { BookGrid, BookGridSkeleton } from "@/components/book-grid";
+import { CollectionCarousel } from "@/components/collection-carousel";
 import { QuoteDivider } from "@/components/quote-carousel";
 import { BookOpen, Heart } from "lucide-react";
 import type { Book, BookStatus, BookCategory } from "@/types/database";
@@ -17,6 +18,9 @@ export default function LibraryPage() {
   const [sortBy, setSortBy] = useState<SortKey>("date_added");
   const [showFavorites, setShowFavorites] = useState(false);
   const [categoryFilter, setCategoryFilter] = useState<BookCategory | "all">("all");
+  const [selectedCollectionId, setSelectedCollectionId] = useState<string | null>(null);
+  const [collectionBookIds, setCollectionBookIds] = useState<Set<string> | null>(null);
+  const [collectionKey, setCollectionKey] = useState(0);
 
   const fetchBooks = useCallback(async () => {
     setIsLoading(true);
@@ -35,9 +39,25 @@ export default function LibraryPage() {
     fetchBooks();
   }, [fetchBooks]);
 
+  useEffect(() => {
+    if (!selectedCollectionId) {
+      setCollectionBookIds(null);
+      return;
+    }
+    async function fetchCollectionBooks() {
+      const res = await fetch(`/api/collections/${selectedCollectionId}/books`);
+      if (res.ok) {
+        const data = await res.json();
+        setCollectionBookIds(new Set(data.bookIds));
+      }
+    }
+    fetchCollectionBooks();
+  }, [selectedCollectionId]);
+
   const filteredBooks = useMemo(
     () =>
       books
+        .filter((b) => !collectionBookIds || collectionBookIds.has(b.id))
         .filter((b) => statusFilter === "all" || b.status === statusFilter)
         .filter((b) => !showFavorites || b.is_favorite)
         .filter((b) => categoryFilter === "all" || b.category === categoryFilter)
@@ -53,7 +73,7 @@ export default function LibraryPage() {
               return new Date(b.date_added).getTime() - new Date(a.date_added).getTime();
           }
         }),
-    [books, statusFilter, showFavorites, categoryFilter, sortBy]
+    [books, collectionBookIds, statusFilter, showFavorites, categoryFilter, sortBy]
   );
 
   const statusOptions: { value: BookStatus | "all"; label: string }[] = [
@@ -87,6 +107,15 @@ export default function LibraryPage() {
       </div>
 
       <SearchBar onBookAdded={fetchBooks} />
+
+      {books.length > 0 && (
+        <CollectionCarousel
+          key={collectionKey}
+          selectedCollectionId={selectedCollectionId}
+          onSelectCollection={setSelectedCollectionId}
+          onCollectionChange={() => setCollectionKey((k) => k + 1)}
+        />
+      )}
 
       {books.length > 0 && (
         <div className="flex w-full flex-wrap items-center gap-4">
@@ -179,6 +208,7 @@ export default function LibraryPage() {
               setStatusFilter("all");
               setShowFavorites(false);
               setCategoryFilter("all");
+              setSelectedCollectionId(null);
             }}
             className="font-sans text-sm font-medium text-amber underline"
           >
