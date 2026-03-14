@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-03-14 — UI Polish, Cover Cleanup & Award Collections
+
+### Changed
+- **Quote block repositioned** — Moved from above the book grid to after the 3rd row of tiles, improving content flow
+
+### Fixed
+- **Missing book covers** — Found and updated cover images for 14 books via Google Books API
+
+### Added
+- **Hugo Award Winners collection** — 27 Hugo Best Novel winners identified and added
+- **Pulitzer Prize Winners collection** — 8 Pulitzer winners (Fiction, Biography, History, Nonfiction) identified and added
+
 ## 2026-03-14 — Collections
 
 ### Added

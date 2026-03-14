@@ -184,8 +184,6 @@ export default function LibraryPage() {
         </div>
       )}
 
-      {books.length > 0 && <QuoteDivider />}
-
       {isLoading ? (
         <BookGridSkeleton />
       ) : books.length === 0 ? (
@@ -217,7 +215,20 @@ export default function LibraryPage() {
         </div>
       ) : (
         <div className="w-full animate-in fade-in duration-300">
-          <BookGrid books={filteredBooks} />
+          <BookGrid books={filteredBooks.slice(0, 15)} />
+          {filteredBooks.length > 15 && (
+            <>
+              <div className="my-8">
+                <QuoteDivider />
+              </div>
+              <BookGrid books={filteredBooks.slice(15)} />
+            </>
+          )}
+          {filteredBooks.length <= 15 && (
+            <div className="mt-8">
+              <QuoteDivider />
+            </div>
+          )}
         </div>
       )}
     </div>
