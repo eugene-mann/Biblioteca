@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BIBLIOTECA — Brutalist Typography</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================
+       RESET & BASE
+       ======================================== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background: #0A0A0A;
+      color: #F0F0F0;
+      font-family: 'Space Mono', monospace;
+      min-height: 100vh;
+      padding-bottom: 60px;
+    }
+
+    /* ========================================
+       NAV
+       ======================================== */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 40px;
+      border-bottom: 3px solid #333333;
+      position: sticky;
+      top: 0;
+      background: #0A0A0A;
+      z-index: 100;
+    }
+
+    nav .logo {
+      font-family: 'Space Mono', monospace;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #00FF87;
+      text-decoration: none;
+    }
+
+    nav .nav-links {
+      display: flex;
+      gap: 32px;
+    }
+
+    nav .nav-links a {
+      font-family: 'Space Mono', monospace;
+      font-weight: 400;
+      font-size: 12px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #F0F0F0;
+      text-decoration: none;
+      padding-bottom: 8px;
+      border-bottom: 3px solid transparent;
+      transition: none;
+    }
+
+    nav .nav-links a:hover {
+      color: #00FF87;
+    }
+
+    nav .nav-links a.active {
+      border-bottom: 3px solid #00FF87;
+      color: #F0F0F0;
+    }
+
+    /* ========================================
+       GIANT STATS
+       ======================================== */
+    .stats-section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 40px;
+      border-bottom: 3px solid #333333;
+    }
+
+    .stat-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      padding: 0 40px;
+    }
+
+    .stat-block:not(:last-child) {
+      border-right: 2px solid #333333;
+    }
+
+    .stat-number {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 900;
+      font-size: 120px;
+      line-height: 1;
+      color: #F0F0F0;
+      letter-spacing: -4px;
+    }
+
+    .stat-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #666666;
+      margin-top: 12px;
+    }
+
+    /* ========================================
+       SEARCH BAR
+       ======================================== */
+    .search-container {
+      padding: 0 40px;
+      margin: 32px 0;
+    }
+
+    .search-bar {
+      width: 100%;
+      padding: 16px 20px;
+      background: #0A0A0A;
+      border: 2px solid #333333;
+      border-radius: 0px;
+      color: #F0F0F0;
+      font-family: 'Space Mono', monospace;
+      font-size: 14px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      outline: none;
+    }
+
+    .search-bar:focus {
+      border-color: #00FF87;
+    }
+
+    .search-bar::placeholder {
+      color: #666666;
+    }
+
+    @keyframes blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+
+    .search-wrapper {
+      position: relative;
+      width: 100%;
+    }
+
+    .search-cursor {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 10px;
+      height: 20px;
+      background: #00FF87;
+      animation: blink 1s step-end infinite;
+      pointer-events: none;
+    }
+
+    .search-bar:focus ~ .search-cursor {
+      display: none;
+    }
+
+    /* ========================================
+       FILTER BAR
+       ======================================== */
+    .filter-bar {
+      padding: 0 40px;
+      margin-bottom: 32px;
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #666666;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px 0;
+    }
+
+    .filter-btn:hover {
+      color: #F0F0F0;
+    }
+
+    .filter-btn.active {
+      color: #00FF87;
+    }
+
+    /* ========================================
+       MAIN LAYOUT
+       ======================================== */
+    .main-layout {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 0;
+      padding: 0 40px;
+    }
+
+    .main-content {
+      padding-right: 40px;
+      border-right: 2px solid #333333;
+    }
+
+    .sidebar {
+      padding-left: 40px;
+    }
+
+    /* ========================================
+       BOOK GRID
+       ======================================== */
+    .book-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 2px;
+    }
+
+    .book-cell {
+      aspect-ratio: 2 / 3;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .book-cell .cover {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .book-cell .initials {
+      font-family: 'Space Mono', monospace;
+      font-weight: 700;
+      font-size: 18px;
+      color: rgba(255, 255, 255, 0.85);
+      letter-spacing: 2px;
+      text-align: center;
+      z-index: 1;
+      line-height: 1.2;
+    }
+
+    .book-cell:hover {
+      outline: 2px solid #00FF87;
+      outline-offset: -2px;
+      filter: brightness(1.15);
+    }
+
+    /* ========================================
+       SIDEBAR
+       ======================================== */
+    .sidebar-section {
+      margin-bottom: 40px;
+    }
+
+    .sidebar-header {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #F0F0F0;
+      padding-left: 16px;
+      border-left: 4px solid #00FF87;
+      margin-bottom: 24px;
+    }
+
+    .now-reading-item {
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #222222;
+    }
+
+    .now-reading-item:last-child {
+      border-bottom: none;
+    }
+
+    .now-reading-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      font-weight: 700;
+      color: #F0F0F0;
+      margin-bottom: 4px;
+    }
+
+    .now-reading-author {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: #666666;
+      margin-bottom: 8px;
+    }
+
+    .now-reading-progress {
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      font-weight: 700;
+      color: #00FF87;
+    }
+
+    .activity-item {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: #666666;
+      line-height: 2;
+      border-bottom: 1px solid #1A1A1A;
+    }
+
+    .activity-date {
+      color: #F0F0F0;
+    }
+
+    /* ========================================
+       BOOK LIST
+       ======================================== */
+    .book-list-section {
+      padding: 40px 40px;
+      border-top: 3px solid #333333;
+      margin-top: 40px;
+    }
+
+    .book-list-header {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #666666;
+      margin-bottom: 20px;
+    }
+
+    .book-list-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #1A1A1A;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .book-list-row:hover {
+      background: #111111;
+    }
+
+    .book-list-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .book-list-num {
+      color: #666666;
+      font-weight: 400;
+      width: 28px;
+      flex-shrink: 0;
+    }
+
+    .book-list-title {
+      color: #F0F0F0;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .book-list-sep {
+      color: #333333;
+      margin: 0 8px;
+      flex-shrink: 0;
+    }
+
+    .book-list-author {
+      color: #666666;
+      font-weight: 400;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .book-list-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-shrink: 0;
+      margin-left: 16px;
+    }
+
+    .book-list-status {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #666666;
+    }
+
+    .book-list-status.reading {
+      color: #00FF87;
+    }
+
+    .book-list-stars {
+      color: #F0F0F0;
+      font-size: 12px;
+      letter-spacing: 1px;
+    }
+
+    .book-list-stars .empty {
+      color: #333333;
+    }
+
+    /* ========================================
+       STICKY FOOTER
+       ======================================== */
+    .footer-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #0A0A0A;
+      border-top: 2px solid #333333;
+      padding: 14px 40px;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: #666666;
+      z-index: 100;
+      display: flex;
+      gap: 8px;
+    }
+
+    .footer-bar .accent {
+      color: #00FF87;
+    }
+
+    .footer-sep {
+      color: #333333;
+    }
+
+    /* ========================================
+       RESPONSIVE — TABLET
+       ======================================== */
+    @media (max-width: 1199px) {
+      .main-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .main-content {
+        padding-right: 0;
+        border-right: none;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .stats-section {
+        flex-wrap: wrap;
+        gap: 24px;
+      }
+
+      .stat-block {
+        flex: 0 0 45%;
+        padding: 20px 0;
+      }
+
+      .stat-block:not(:last-child) {
+        border-right: none;
+      }
+
+      .stat-block:nth-child(1),
+      .stat-block:nth-child(2) {
+        border-bottom: 2px solid #333333;
+      }
+
+      .stat-number {
+        font-size: 96px;
+      }
+    }
+
+    /* ========================================
+       RESPONSIVE — MOBILE
+       ======================================== */
+    @media (max-width: 767px) {
+      nav {
+        padding: 16px 20px;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      nav .nav-links {
+        gap: 20px;
+      }
+
+      nav .nav-links a {
+        font-size: 10px;
+        letter-spacing: 2px;
+      }
+
+      .stats-section {
+        flex-direction: column;
+        padding: 40px 20px;
+        gap: 0;
+      }
+
+      .stat-block {
+        flex: none;
+        width: 100%;
+        padding: 24px 0;
+        align-items: flex-start;
+      }
+
+      .stat-block:not(:last-child) {
+        border-right: none;
+        border-bottom: 1px solid #333333;
+      }
+
+      .stat-block:nth-child(1),
+      .stat-block:nth-child(2) {
+        border-bottom: 1px solid #333333;
+      }
+
+      .stat-number {
+        font-size: 60px;
+        letter-spacing: -2px;
+      }
+
+      .search-container,
+      .filter-bar,
+      .main-layout,
+      .book-list-section {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .book-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .book-list-author {
+        display: none;
+      }
+
+      .book-list-sep {
+        display: none;
+      }
+
+      .footer-bar {
+        padding: 12px 20px;
+        font-size: 9px;
+        letter-spacing: 1px;
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============ NAV ============ -->
+  <nav>
+    <a href="#" class="logo">BIBLIOTECA</a>
+    <div class="nav-links">
+      <a href="#" class="active">LIBRARY</a>
+      <a href="#">DISCOVER</a>
+      <a href="#">SETTINGS</a>
+    </div>
+  </nav>
+
+  <!-- ============ GIANT STATS ============ -->
+  <section class="stats-section">
+    <div class="stat-block">
+      <div class="stat-number">487</div>
+      <div class="stat-label">BOOKS</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-number">23</div>
+      <div class="stat-label">READING</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-number">312</div>
+      <div class="stat-label">FINISHED</div>
+    </div>
+  </section>
+
+  <!-- ============ SEARCH ============ -->
+  <div class="search-container">
+    <div class="search-wrapper">
+      <input type="text" class="search-bar" placeholder="SEARCH_">
+      <div class="search-cursor"></div>
+    </div>
+  </div>
+
+  <!-- ============ FILTERS ============ -->
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="all">[ALL]</button>
+    <button class="filter-btn" data-filter="reading">[READING]</button>
+    <button class="filter-btn" data-filter="want_to_read">[WANT_TO_READ]</button>
+    <button class="filter-btn" data-filter="read">[READ]</button>
+  </div>
+
+  <!-- ============ MAIN LAYOUT ============ -->
+  <div class="main-layout">
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+      <div class="book-grid" id="bookGrid">
+        <!-- Books injected by JS -->
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-header">NOW_READING</div>
+        <div class="now-reading-item">
+          <div class="now-reading-title">The Midnight Library</div>
+          <div class="now-reading-author">Matt Haig</div>
+          <div class="now-reading-progress">142/318</div>
+        </div>
+        <div class="now-reading-item">
+          <div class="now-reading-title">Sapiens</div>
+          <div class="now-reading-author">Yuval Noah Harari</div>
+          <div class="now-reading-progress">289/443</div>
+        </div>
+        <div class="now-reading-item">
+          <div class="now-reading-title">Kitchen Confidential</div>
+          <div class="now-reading-author">Anthony Bourdain</div>
+          <div class="now-reading-progress">98/302</div>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-header">RECENT_ACTIVITY</div>
+        <div class="activity-item"><span class="activity-date">03.14</span> — Finished 'Atomic Habits'</div>
+        <div class="activity-item"><span class="activity-date">03.12</span> — Started 'Kitchen Confidential'</div>
+        <div class="activity-item"><span class="activity-date">03.09</span> — Added 'Project Hail Mary'</div>
+        <div class="activity-item"><span class="activity-date">03.07</span> — Finished 'Normal People'</div>
+        <div class="activity-item"><span class="activity-date">03.04</span> — Rated 'Dune' ★★★★☆</div>
+        <div class="activity-item"><span class="activity-date">03.01</span> — Started 'Sapiens'</div>
+        <div class="activity-item"><span class="activity-date">02.27</span> — Finished 'Educated'</div>
+        <div class="activity-item"><span class="activity-date">02.24</span> — Added 'The Gene'</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============ BOOK LIST ============ -->
+  <section class="book-list-section" id="bookList">
+    <!-- Injected by JS -->
+  </section>
+
+  <!-- ============ STICKY FOOTER ============ -->
+  <div class="footer-bar">
+    <span>TOTAL_PAGES: <span class="accent">47,832</span></span>
+    <span class="footer-sep">//</span>
+    <span>AVG_RATING: <span class="accent">4.2</span></span>
+    <span class="footer-sep">//</span>
+    <span>LAST_ADDED: <span class="accent">2024.03.14</span></span>
+  </div>
+
+  <!-- ============ DATA + LOGIC ============ -->
+  <script>
+    const books = [
+      { id: 1,  title: "The Midnight Library",            author: "Matt Haig",             color: "#4A6FA5", status: "reading",      rating: 4, pages: "142/318" },
+      { id: 2,  title: "Sapiens",                         author: "Yuval Noah Harari",     color: "#8B6F47", status: "reading",      rating: 5, pages: "289/443" },
+      { id: 3,  title: "Atomic Habits",                   author: "James Clear",           color: "#2D8B57", status: "read",         rating: 5, pages: "306" },
+      { id: 4,  title: "Dune",                            author: "Frank Herbert",         color: "#C4783E", status: "read",         rating: 4, pages: "412" },
+      { id: 5,  title: "Meditations",                     author: "Marcus Aurelius",       color: "#6B5B73", status: "read",         rating: 5, pages: "256" },
+      { id: 6,  title: "The Alchemist",                   author: "Paulo Coelho",          color: "#4A6FA5", status: "want_to_read", rating: 0, pages: "197" },
+      { id: 7,  title: "Thinking, Fast and Slow",         author: "Daniel Kahneman",       color: "#7A5C8A", status: "read",         rating: 4, pages: "499" },
+      { id: 8,  title: "1984",                            author: "George Orwell",         color: "#4A6FA5", status: "read",         rating: 5, pages: "328" },
+      { id: 9,  title: "Educated",                        author: "Tara Westover",         color: "#8B6F47", status: "read",         rating: 4, pages: "334" },
+      { id: 10, title: "The Design of Everyday Things",   author: "Don Norman",            color: "#C95D63", status: "want_to_read", rating: 0, pages: "368" },
+      { id: 11, title: "Shoe Dog",                        author: "Phil Knight",           color: "#8B6F47", status: "read",         rating: 4, pages: "386" },
+      { id: 12, title: "Project Hail Mary",               author: "Andy Weir",             color: "#C4783E", status: "want_to_read", rating: 0, pages: "476" },
+      { id: 13, title: "The Remains of the Day",          author: "Kazuo Ishiguro",        color: "#4A6FA5", status: "read",         rating: 5, pages: "245" },
+      { id: 14, title: "Creativity, Inc.",                 author: "Ed Catmull",            color: "#2D8B57", status: "read",         rating: 4, pages: "368" },
+      { id: 15, title: "The Gene",                        author: "Siddhartha Mukherjee",  color: "#3A7CA5", status: "want_to_read", rating: 0, pages: "592" },
+      { id: 16, title: "Kitchen Confidential",            author: "Anthony Bourdain",      color: "#8B6F47", status: "reading",      rating: 4, pages: "98/302" },
+      { id: 17, title: "Algorithms to Live By",           author: "Brian Christian",       color: "#3A7CA5", status: "read",         rating: 3, pages: "368" },
+      { id: 18, title: "Normal People",                   author: "Sally Rooney",          color: "#4A6FA5", status: "read",         rating: 4, pages: "273" },
+      { id: 19, title: "The Innovator's Dilemma",         author: "Clayton Christensen",   color: "#2D8B57", status: "read",         rating: 4, pages: "286" },
+      { id: 20, title: "When Breath Becomes Air",         author: "Paul Kalanithi",        color: "#8B6F47", status: "read",         rating: 5, pages: "228" }
+    ];
+
+    function getInitials(title) {
+      const skip = ["the", "of", "a", "an", "and", "to", "in"];
+      const words = title.split(" ").filter(w => !skip.includes(w.toLowerCase()));
+      if (words.length === 1) return words[0].substring(0, 2).toUpperCase();
+      return words.slice(0, 2).map(w => w[0]).join("").toUpperCase();
+    }
+
+    function renderStars(rating) {
+      if (!rating) return '<span style="color:#333333">-----</span>';
+      let s = "";
+      for (let i = 0; i < 5; i++) {
+        if (i < rating) s += "\u2605";
+        else s += '<span class="empty">\u2606</span>';
+      }
+      return s;
+    }
+
+    function statusLabel(status) {
+      return status.replace(/_/g, " ").toUpperCase();
+    }
+
+    let activeFilter = "all";
+
+    function renderGrid() {
+      const grid = document.getElementById("bookGrid");
+      const filtered = activeFilter === "all" ? books : books.filter(b => b.status === activeFilter);
+      grid.innerHTML = filtered.map(b => `
+        <div class="book-cell" title="${b.title} — ${b.author}" data-status="${b.status}">
+          <div class="cover" style="background:${b.color}"></div>
+          <div class="initials">${getInitials(b.title)}</div>
+        </div>
+      `).join("");
+    }
+
+    function renderList() {
+      const list = document.getElementById("bookList");
+      const filtered = activeFilter === "all" ? books : books.filter(b => b.status === activeFilter);
+      list.innerHTML = `
+        <div class="book-list-header">FULL_INDEX — ${filtered.length} ENTRIES</div>
+        ${filtered.map((b, i) => `
+          <div class="book-list-row">
+            <div class="book-list-left">
+              <span class="book-list-num">${String(i + 1).padStart(2, "0")}.</span>
+              <span class="book-list-title">${b.title}</span>
+              <span class="book-list-sep">—</span>
+              <span class="book-list-author">${b.author}</span>
+            </div>
+            <div class="book-list-right">
+              <span class="book-list-status ${b.status === 'reading' ? 'reading' : ''}">${statusLabel(b.status)}</span>
+              <span class="book-list-stars">${renderStars(b.rating)}</span>
+            </div>
+          </div>
+        `).join("")}
+      `;
+    }
+
+    // Filter buttons
+    document.querySelectorAll(".filter-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        activeFilter = btn.dataset.filter;
+        renderGrid();
+        renderList();
+      });
+    });
+
+    // Initial render
+    renderGrid();
+    renderList();
+  </script>
+
+</body>
+</html>

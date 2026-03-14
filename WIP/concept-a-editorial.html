@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biblioteca — Your Personal Library</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet">
+  <style>
+    /* ───────────────────────────────────────────────
+       RESET & BASE
+       ─────────────────────────────────────────────── */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: #F5F0EB;
+      color: #2C2416;
+      line-height: 1.6;
+      position: relative;
+    }
+
+    /* Paper texture — subtle noise grain overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.3;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 256px 256px;
+    }
+
+    /* Additional warm radial glow */
+    body::after {
+      content: '';
+      position: fixed;
+      top: -20%;
+      right: -10%;
+      width: 60%;
+      height: 60%;
+      background: radial-gradient(ellipse, rgba(160, 82, 45, 0.03) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ───────────────────────────────────────────────
+       TYPOGRAPHY UTILITIES
+       ─────────────────────────────────────────────── */
+    .font-serif {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+    }
+
+    .font-sans {
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .small-caps {
+      font-variant: small-caps;
+      letter-spacing: 0.12em;
+      text-transform: lowercase;
+    }
+
+    .text-secondary {
+      color: #6B5E4F;
+    }
+
+    .text-accent {
+      color: #A0522D;
+    }
+
+    /* ───────────────────────────────────────────────
+       LAYOUT CONTAINER
+       ─────────────────────────────────────────────── */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ───────────────────────────────────────────────
+       NAVIGATION
+       ─────────────────────────────────────────────── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 0;
+      border-bottom: 1px solid #D8D0C5;
+      position: relative;
+      z-index: 10;
+    }
+
+    .wordmark {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-style: italic;
+      font-weight: 600;
+      font-size: 1.75rem;
+      color: #2C2416;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'DM Sans', sans-serif;
+      font-variant: small-caps;
+      letter-spacing: 0.14em;
+      text-transform: lowercase;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #6B5E4F;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: #2C2416;
+    }
+
+    /* ───────────────────────────────────────────────
+       HERO — CURRENTLY READING
+       ─────────────────────────────────────────────── */
+    .hero {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 3.5rem;
+      align-items: center;
+      padding: 4rem 0 3rem;
+    }
+
+    .hero-cover {
+      width: 200px;
+      height: 300px;
+      background-color: #4A6FA5;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow:
+        0 4px 16px rgba(44, 36, 22, 0.10),
+        0 1px 3px rgba(44, 36, 22, 0.06);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-cover::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 50%, rgba(0,0,0,0.06) 100%);
+    }
+
+    .hero-cover .initials {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 3.5rem;
+      font-weight: 300;
+      color: rgba(255, 255, 255, 0.85);
+      letter-spacing: 0.05em;
+      z-index: 1;
+    }
+
+    .hero-text {
+      max-width: 520px;
+    }
+
+    .hero-label {
+      font-family: 'DM Sans', sans-serif;
+      font-variant: small-caps;
+      letter-spacing: 0.18em;
+      text-transform: lowercase;
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: #A0522D;
+      margin-bottom: 1rem;
+    }
+
+    .hero-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 3rem;
+      font-weight: 400;
+      line-height: 1.15;
+      color: #2C2416;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-author {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      color: #6B5E4F;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-note {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: #6B5E4F;
+      line-height: 1.65;
+      border-left: 2px solid #D8D0C5;
+      padding-left: 1rem;
+    }
+
+    .hero-progress {
+      margin-top: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .progress-bar {
+      flex: 1;
+      max-width: 200px;
+      height: 2px;
+      background-color: #D8D0C5;
+      border-radius: 1px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      width: 62%;
+      height: 100%;
+      background-color: #A0522D;
+      border-radius: 1px;
+    }
+
+    .progress-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem;
+      color: #6B5E4F;
+      letter-spacing: 0.04em;
+    }
+
+    /* ───────────────────────────────────────────────
+       STATS LINE
+       ─────────────────────────────────────────────── */
+    .stats {
+      text-align: center;
+      padding: 2rem 0;
+      border-top: 1px solid #D8D0C5;
+      border-bottom: 1px solid #D8D0C5;
+    }
+
+    .stats span {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.18em;
+      color: #6B5E4F;
+      font-weight: 400;
+    }
+
+    .stats .divider {
+      display: inline-block;
+      width: 4px;
+      height: 4px;
+      background-color: #D8D0C5;
+      border-radius: 50%;
+      margin: 0 1.25rem;
+      vertical-align: middle;
+    }
+
+    /* ───────────────────────────────────────────────
+       SEARCH BAR
+       ─────────────────────────────────────────────── */
+    .search-section {
+      padding: 2.5rem 0 0;
+    }
+
+    .search-input {
+      width: 100%;
+      border: none;
+      border-bottom: 1px solid #D8D0C5;
+      background: transparent;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-style: italic;
+      font-size: 1.25rem;
+      color: #2C2416;
+      padding: 0.75rem 0;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .search-input::placeholder {
+      color: #B5A99A;
+    }
+
+    .search-input:focus {
+      border-bottom-color: #A0522D;
+    }
+
+    /* ───────────────────────────────────────────────
+       FILTER BAR & SORT
+       ─────────────────────────────────────────────── */
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 2rem 0 1.5rem;
+    }
+
+    .filters {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+
+    .filters a {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      color: #6B5E4F;
+      text-decoration: none;
+      padding-bottom: 4px;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .filters a:hover {
+      color: #2C2416;
+    }
+
+    .filters a.active {
+      color: #A0522D;
+      border-bottom-color: #A0522D;
+    }
+
+    .filters .sep {
+      margin: 0 0.75rem;
+      color: #D8D0C5;
+      font-size: 0.85rem;
+      user-select: none;
+    }
+
+    .sort-select {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      color: #6B5E4F;
+      background: transparent;
+      border: 1px solid #D8D0C5;
+      border-radius: 3px;
+      padding: 0.4rem 1.75rem 0.4rem 0.75rem;
+      outline: none;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236B5E4F' stroke-width='1.2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.6rem center;
+      transition: border-color 0.2s ease;
+    }
+
+    .sort-select:hover {
+      border-color: #A0522D;
+    }
+
+    /* ───────────────────────────────────────────────
+       BOOK GRID
+       ─────────────────────────────────────────────── */
+    .book-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 2rem 1.5rem;
+      padding-bottom: 2rem;
+    }
+
+    /* Featured — first 2 books span 6 cols each */
+    .book-card.featured {
+      grid-column: span 6;
+    }
+
+    /* Regular books — 3 cols each (4 per row) */
+    .book-card.regular {
+      grid-column: span 3;
+    }
+
+    /* Pull-quote panel spans full width */
+    .pull-quote-panel {
+      grid-column: 1 / -1;
+      padding: 2.5rem 0 2.5rem 2rem;
+      border-left: 3px solid #2D5A3D;
+      margin: 0.5rem 0;
+    }
+
+    .pull-quote-text {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-style: italic;
+      font-size: 1.4rem;
+      line-height: 1.6;
+      color: #2C2416;
+      max-width: 700px;
+    }
+
+    .pull-quote-attr {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      color: #6B5E4F;
+      margin-top: 0.75rem;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Book Card ─────────────────────────────────── */
+    .book-card {
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .book-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .book-card:hover .book-title {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      text-decoration-color: #D8D0C5;
+    }
+
+    .book-cover {
+      width: 100%;
+      aspect-ratio: 2 / 3;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow:
+        0 2px 8px rgba(44, 36, 22, 0.08),
+        0 1px 2px rgba(44, 36, 22, 0.04);
+    }
+
+    .book-cover::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(0,0,0,0.05) 100%);
+    }
+
+    .book-cover .initials {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 300;
+      color: rgba(255, 255, 255, 0.85);
+      letter-spacing: 0.06em;
+      z-index: 1;
+    }
+
+    .featured .book-cover .initials {
+      font-size: 2.5rem;
+    }
+
+    .regular .book-cover .initials {
+      font-size: 1.75rem;
+    }
+
+    .book-info {
+      padding-top: 0.75rem;
+    }
+
+    .book-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 500;
+      color: #2C2416;
+      line-height: 1.3;
+      transition: text-decoration 0.2s ease;
+    }
+
+    .featured .book-title {
+      font-size: 1.25rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .regular .book-title {
+      font-size: 1.05rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .book-author {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      color: #6B5E4F;
+    }
+
+    .book-rating {
+      display: flex;
+      gap: 4px;
+      margin-top: 0.5rem;
+    }
+
+    .rating-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: #D8D0C5;
+    }
+
+    .rating-dot.filled {
+      background-color: #A0522D;
+    }
+
+    .book-status-badge {
+      display: inline-block;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.65rem;
+      font-variant: small-caps;
+      letter-spacing: 0.1em;
+      text-transform: lowercase;
+      color: #2D5A3D;
+      margin-top: 0.35rem;
+    }
+
+    /* ───────────────────────────────────────────────
+       FOOTER
+       ─────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid #D8D0C5;
+      padding: 2rem 0;
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    footer p {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem;
+      color: #6B5E4F;
+      letter-spacing: 0.08em;
+    }
+
+    /* ───────────────────────────────────────────────
+       RESPONSIVE — TABLET
+       ─────────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .book-card.featured {
+        grid-column: span 6;
+      }
+      .book-card.regular {
+        grid-column: span 4;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        text-align: center;
+        padding: 3rem 0 2rem;
+      }
+
+      .hero-cover {
+        margin: 0 auto;
+        width: 160px;
+        height: 240px;
+      }
+
+      .hero-text {
+        max-width: 100%;
+      }
+
+      .hero-note {
+        text-align: left;
+      }
+
+      .hero-progress {
+        justify-content: center;
+      }
+
+      .hero-title {
+        font-size: 2.25rem;
+      }
+
+      .book-grid {
+        gap: 1.5rem 1rem;
+      }
+
+      .book-card.featured {
+        grid-column: span 6;
+      }
+
+      .book-card.regular {
+        grid-column: span 4;
+      }
+
+      .toolbar {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+      }
+
+      .pull-quote-text {
+        font-size: 1.2rem;
+      }
+    }
+
+    /* ───────────────────────────────────────────────
+       RESPONSIVE — MOBILE
+       ─────────────────────────────────────────────── */
+    @media (max-width: 520px) {
+      .container {
+        padding: 0 1.25rem;
+      }
+
+      nav {
+        flex-direction: column;
+        gap: 0.75rem;
+        padding: 1rem 0;
+      }
+
+      .nav-links {
+        gap: 1.25rem;
+      }
+
+      .hero {
+        padding: 2rem 0 1.5rem;
+      }
+
+      .hero-title {
+        font-size: 1.85rem;
+      }
+
+      .book-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.25rem 1rem;
+      }
+
+      .book-card.featured,
+      .book-card.regular {
+        grid-column: span 1;
+      }
+
+      .stats span {
+        font-size: 0.7rem;
+        letter-spacing: 0.12em;
+      }
+
+      .stats .divider {
+        margin: 0 0.75rem;
+      }
+
+      .pull-quote-panel {
+        padding: 1.5rem 0 1.5rem 1.25rem;
+      }
+
+      .pull-quote-text {
+        font-size: 1.1rem;
+      }
+
+      .filters {
+        flex-wrap: wrap;
+        gap: 0.25rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- ═══════════════════════════════════════════
+         NAVIGATION
+         ═══════════════════════════════════════════ -->
+    <nav>
+      <a href="#" class="wordmark">Biblioteca</a>
+      <ul class="nav-links">
+        <li><a href="#" class="active small-caps">Library</a></li>
+        <li><a href="#" class="small-caps">Discover</a></li>
+        <li><a href="#" class="small-caps">Settings</a></li>
+      </ul>
+    </nav>
+
+    <!-- ═══════════════════════════════════════════
+         HERO — CURRENTLY READING
+         ═══════════════════════════════════════════ -->
+    <section class="hero">
+      <div class="hero-cover" style="background-color: #4A6FA5;">
+        <span class="initials">ML</span>
+      </div>
+      <div class="hero-text">
+        <div class="hero-label">Currently Reading</div>
+        <h1 class="hero-title">The Midnight Library</h1>
+        <p class="hero-author">Matt Haig</p>
+        <p class="hero-note">
+          Between life and death there is a library, and within that library,
+          the shelves go on forever. Every book provides a chance to try
+          another life you could have lived.
+        </p>
+        <div class="hero-progress">
+          <div class="progress-bar"><div class="progress-fill"></div></div>
+          <span class="progress-label">62% complete</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         STATS LINE
+         ═══════════════════════════════════════════ -->
+    <div class="stats">
+      <span>487 volumes</span>
+      <span class="divider"></span>
+      <span>312 read</span>
+      <span class="divider"></span>
+      <span>23 currently reading</span>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         SEARCH
+         ═══════════════════════════════════════════ -->
+    <div class="search-section">
+      <input type="text" class="search-input" placeholder="Search your library..." id="searchInput">
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         FILTER BAR + SORT
+         ═══════════════════════════════════════════ -->
+    <div class="toolbar">
+      <div class="filters" id="filters">
+        <a href="#" class="active" data-filter="all">All</a>
+        <span class="sep">/</span>
+        <a href="#" data-filter="want_to_read">Want to Read</a>
+        <span class="sep">/</span>
+        <a href="#" data-filter="reading">Reading</a>
+        <span class="sep">/</span>
+        <a href="#" data-filter="read">Read</a>
+      </div>
+      <select class="sort-select" id="sortSelect">
+        <option value="default">Sort by: Default</option>
+        <option value="title">Sort by: Title</option>
+        <option value="author">Sort by: Author</option>
+        <option value="rating">Sort by: Rating</option>
+      </select>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         BOOK GRID
+         ═══════════════════════════════════════════ -->
+    <div class="book-grid" id="bookGrid">
+      <!-- Books are rendered by JavaScript below -->
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         FOOTER
+         ═══════════════════════════════════════════ -->
+    <footer>
+      <p>Biblioteca &copy; 2024</p>
+    </footer>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       SCRIPT — Data + Rendering
+       ═══════════════════════════════════════════════ -->
+  <script>
+    const books = [
+      { id: 1,  title: "The Midnight Library",            author: "Matt Haig",             color: "#4A6FA5", status: "reading",      rating: 4 },
+      { id: 2,  title: "Sapiens",                         author: "Yuval Noah Harari",     color: "#8B6F47", status: "reading",      rating: 5 },
+      { id: 3,  title: "Atomic Habits",                   author: "James Clear",           color: "#2D8B57", status: "read",         rating: 5 },
+      { id: 4,  title: "Dune",                            author: "Frank Herbert",         color: "#C4783E", status: "read",         rating: 4 },
+      { id: 5,  title: "Meditations",                     author: "Marcus Aurelius",       color: "#6B5B73", status: "read",         rating: 5 },
+      { id: 6,  title: "The Alchemist",                   author: "Paulo Coelho",          color: "#4A6FA5", status: "want_to_read", rating: 3 },
+      { id: 7,  title: "Thinking, Fast and Slow",         author: "Daniel Kahneman",       color: "#7A5C8A", status: "read",         rating: 4 },
+      { id: 8,  title: "1984",                            author: "George Orwell",         color: "#4A6FA5", status: "read",         rating: 5 },
+      { id: 9,  title: "Educated",                        author: "Tara Westover",         color: "#8B6F47", status: "read",         rating: 4 },
+      { id: 10, title: "The Design of Everyday Things",   author: "Don Norman",            color: "#C95D63", status: "want_to_read", rating: 0 },
+      { id: 11, title: "Shoe Dog",                        author: "Phil Knight",           color: "#8B6F47", status: "read",         rating: 4 },
+      { id: 12, title: "Project Hail Mary",               author: "Andy Weir",             color: "#C4783E", status: "want_to_read", rating: 0 },
+      { id: 13, title: "The Remains of the Day",          author: "Kazuo Ishiguro",        color: "#4A6FA5", status: "read",         rating: 5 },
+      { id: 14, title: "Creativity, Inc.",                author: "Ed Catmull",            color: "#2D8B57", status: "read",         rating: 4 },
+      { id: 15, title: "The Gene",                        author: "Siddhartha Mukherjee",  color: "#3A7CA5", status: "want_to_read", rating: 0 },
+      { id: 16, title: "Kitchen Confidential",            author: "Anthony Bourdain",      color: "#8B6F47", status: "reading",      rating: 4 },
+      { id: 17, title: "Algorithms to Live By",           author: "Brian Christian",       color: "#3A7CA5", status: "read",         rating: 3 },
+      { id: 18, title: "Normal People",                   author: "Sally Rooney",          color: "#4A6FA5", status: "read",         rating: 4 },
+      { id: 19, title: "The Innovator's Dilemma",         author: "Clayton Christensen",   color: "#2D8B57", status: "read",         rating: 4 },
+      { id: 20, title: "When Breath Becomes Air",         author: "Paul Kalanithi",        color: "#8B6F47", status: "read",         rating: 5 },
+    ];
+
+    function getInitials(title) {
+      const words = title.replace(/[^a-zA-Z0-9\s]/g, '').split(/\s+/);
+      if (words.length === 1) return words[0].substring(0, 2).toUpperCase();
+      return (words[0][0] + words[1][0]).toUpperCase();
+    }
+
+    function renderRating(rating) {
+      if (!rating) return '';
+      let dots = '';
+      for (let i = 0; i < 5; i++) {
+        dots += `<span class="rating-dot${i < rating ? ' filled' : ''}"></span>`;
+      }
+      return `<div class="book-rating">${dots}</div>`;
+    }
+
+    function statusLabel(status) {
+      const labels = {
+        reading: 'Reading',
+        want_to_read: 'Want to Read',
+        read: 'Read'
+      };
+      return labels[status] || '';
+    }
+
+    function renderBooks(filter = 'all', searchTerm = '') {
+      const grid = document.getElementById('bookGrid');
+      let filtered = books;
+
+      if (filter !== 'all') {
+        filtered = filtered.filter(b => b.status === filter);
+      }
+
+      if (searchTerm) {
+        const term = searchTerm.toLowerCase();
+        filtered = filtered.filter(b =>
+          b.title.toLowerCase().includes(term) ||
+          b.author.toLowerCase().includes(term)
+        );
+      }
+
+      // Sort
+      const sortVal = document.getElementById('sortSelect').value;
+      if (sortVal === 'title') {
+        filtered.sort((a, b) => a.title.localeCompare(b.title));
+      } else if (sortVal === 'author') {
+        filtered.sort((a, b) => a.author.localeCompare(b.author));
+      } else if (sortVal === 'rating') {
+        filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+      }
+
+      let html = '';
+      const pullQuoteHTML = `
+        <div class="pull-quote-panel">
+          <p class="pull-quote-text">
+            "A reader lives a thousand lives before he dies.
+            The man who never reads lives only one."
+          </p>
+          <p class="pull-quote-attr">&mdash; George R.R. Martin</p>
+        </div>
+      `;
+
+      let pullQuoteInserted = false;
+      // Track position in the regular books to insert pull-quote after first row of regulars
+      let regularCount = 0;
+
+      filtered.forEach((book, index) => {
+        const isFeatured = index < 2;
+        const cardClass = isFeatured ? 'featured' : 'regular';
+        const initials = getInitials(book.title);
+
+        // Insert pull-quote after the first 4 regular books (first row of 4)
+        if (!isFeatured) {
+          regularCount++;
+          if (regularCount === 5 && !pullQuoteInserted) {
+            html += pullQuoteHTML;
+            pullQuoteInserted = true;
+          }
+        }
+
+        const statusBadge = (book.status === 'reading' || book.status === 'want_to_read')
+          ? `<div class="book-status-badge">${statusLabel(book.status)}</div>`
+          : '';
+
+        html += `
+          <div class="book-card ${cardClass}" data-status="${book.status}">
+            <div class="book-cover" style="background-color: ${book.color};">
+              <span class="initials">${initials}</span>
+            </div>
+            <div class="book-info">
+              <div class="book-title">${book.title}</div>
+              <div class="book-author">${book.author}</div>
+              ${renderRating(book.rating)}
+              ${statusBadge}
+            </div>
+          </div>
+        `;
+      });
+
+      // If we never inserted the pull-quote (less than 6 regular books), add it at the end
+      if (!pullQuoteInserted && filtered.length > 2) {
+        html += pullQuoteHTML;
+      }
+
+      grid.innerHTML = html;
+    }
+
+    // ── Filter clicks ──────────────────────────────
+    document.getElementById('filters').addEventListener('click', function(e) {
+      if (e.target.tagName === 'A') {
+        e.preventDefault();
+        this.querySelectorAll('a').forEach(a => a.classList.remove('active'));
+        e.target.classList.add('active');
+        renderBooks(e.target.dataset.filter, document.getElementById('searchInput').value);
+      }
+    });
+
+    // ── Search input ───────────────────────────────
+    document.getElementById('searchInput').addEventListener('input', function() {
+      const activeFilter = document.querySelector('#filters a.active').dataset.filter;
+      renderBooks(activeFilter, this.value);
+    });
+
+    // ── Sort change ────────────────────────────────
+    document.getElementById('sortSelect').addEventListener('change', function() {
+      const activeFilter = document.querySelector('#filters a.active').dataset.filter;
+      renderBooks(activeFilter, document.getElementById('searchInput').value);
+    });
+
+    // ── Initial render ─────────────────────────────
+    renderBooks();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biblioteca — The Reading Room</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Libre+Franklin:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #1A1814;
+      --surface: #242018;
+      --border: #3A352C;
+      --text-primary: #E8E0D4;
+      --text-secondary: #9B9083;
+      --accent-amber: #C8956C;
+      --accent-burgundy: #8B3A3A;
+      --glow-amber: rgba(200, 149, 108, 0.15);
+      --glow-amber-strong: rgba(200, 149, 108, 0.25);
+      --radius: 5px;
+    }
+
+    body {
+      font-family: 'Libre Franklin', sans-serif;
+      background-color: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.02'/%3E%3C/svg%3E");
+    }
+
+    /* ─── Typography ─── */
+
+    h1, h2, h3, h4, .display {
+      font-family: 'Playfair Display', serif;
+    }
+
+    .small-caps {
+      font-family: 'Libre Franklin', sans-serif;
+      font-weight: 500;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    /* ─── Navigation ─── */
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 3rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .wordmark {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: var(--accent-amber);
+      text-shadow: 0 0 30px var(--glow-amber);
+      letter-spacing: 0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'Libre Franklin', sans-serif;
+      font-weight: 500;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--accent-amber);
+    }
+
+    /* ─── Hero: Currently Reading ─── */
+
+    .hero {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 3rem;
+      padding: 4rem 3rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      align-items: center;
+    }
+
+    .hero-cover {
+      width: 200px;
+      height: 300px;
+      border-radius: var(--radius);
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 1.5rem;
+      position: relative;
+      box-shadow:
+        0 8px 40px var(--glow-amber),
+        0 2px 12px rgba(0, 0, 0, 0.5);
+    }
+
+    .hero-cover .cover-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: rgba(255, 255, 255, 0.9);
+      text-align: center;
+      line-height: 1.3;
+      text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
+    }
+
+    .hero-details {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+    }
+
+    .hero-label {
+      color: var(--accent-amber);
+      margin-bottom: 0.75rem;
+    }
+
+    .hero-title {
+      font-size: 2.2rem;
+      font-weight: 600;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero-author {
+      font-family: 'Libre Franklin', sans-serif;
+      font-weight: 300;
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-excerpt {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 2rem;
+      max-width: 480px;
+    }
+
+    .progress-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .progress-track {
+      flex: 1;
+      height: 3px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--accent-amber);
+      border-radius: 2px;
+      box-shadow: 0 0 8px var(--glow-amber);
+      transition: width 0.6s ease;
+    }
+
+    .progress-label {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    /* ─── Stats Line ─── */
+
+    .stats {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0;
+      padding: 2rem 3rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .stat {
+      text-align: center;
+      padding: 0 2rem;
+    }
+
+    .stat-divider {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--accent-amber);
+      opacity: 0.6;
+    }
+
+    .stat-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: var(--accent-amber);
+      text-shadow: 0 0 20px var(--glow-amber);
+    }
+
+    .stat-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-top: 0.25rem;
+    }
+
+    /* ─── Search ─── */
+
+    .search-section {
+      max-width: 700px;
+      margin: 3rem auto 0;
+      padding: 0 3rem;
+    }
+
+    .search-input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 0;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.2rem;
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .search-input::placeholder {
+      color: #5C554A;
+    }
+
+    .search-input:focus {
+      border-bottom-color: var(--accent-amber);
+      box-shadow: 0 2px 12px var(--glow-amber);
+    }
+
+    /* ─── Filters ─── */
+
+    .filters {
+      display: flex;
+      justify-content: center;
+      gap: 0.25rem;
+      padding: 2rem 3rem;
+    }
+
+    .filter-btn {
+      background: none;
+      border: none;
+      font-family: 'Libre Franklin', sans-serif;
+      font-weight: 400;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      padding: 0.4rem 0.75rem;
+      transition: color 0.3s ease, text-shadow 0.3s ease;
+      position: relative;
+    }
+
+    .filter-btn::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 1px;
+      background: var(--accent-amber);
+      box-shadow: 0 0 8px var(--glow-amber);
+      transition: width 0.3s ease;
+    }
+
+    .filter-btn.active,
+    .filter-btn:hover {
+      color: var(--accent-amber);
+    }
+
+    .filter-btn.active::after {
+      width: 80%;
+    }
+
+    .filter-separator {
+      color: var(--border);
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      font-size: 0.7rem;
+    }
+
+    /* ─── Sort ─── */
+
+    .sort-bar {
+      display: flex;
+      justify-content: flex-end;
+      padding: 0 3rem 1rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .sort-select {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.4rem 0.75rem;
+      font-family: 'Libre Franklin', sans-serif;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      outline: none;
+    }
+
+    .sort-select:focus {
+      border-color: var(--accent-amber);
+    }
+
+    .sort-select option {
+      background: var(--surface);
+      color: var(--text-primary);
+    }
+
+    /* ─── Book Grid ─── */
+
+    .book-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1.5rem;
+      padding: 1rem 3rem 4rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .book-card {
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .book-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .book-card:hover .book-cover {
+      box-shadow:
+        0 8px 32px var(--glow-amber-strong),
+        0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    .book-card.featured {
+      grid-column: span 6;
+    }
+
+    .book-card.featured .book-inner {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 1.5rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      align-items: start;
+    }
+
+    .book-card.featured .book-cover {
+      width: 100%;
+      height: 240px;
+    }
+
+    .book-card.regular {
+      grid-column: span 4;
+    }
+
+    .book-cover {
+      width: 100%;
+      height: 220px;
+      border-radius: var(--radius);
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 1rem;
+      box-shadow:
+        0 4px 16px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.03);
+      transition: box-shadow 0.3s ease;
+    }
+
+    .book-cover .cover-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.85);
+      text-align: center;
+      line-height: 1.3;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .book-info {
+      padding-top: 0.75rem;
+    }
+
+    .book-card.featured .book-info {
+      padding-top: 0;
+    }
+
+    .book-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.3;
+      margin-bottom: 0.25rem;
+    }
+
+    .book-card.featured .book-title {
+      font-size: 1.2rem;
+    }
+
+    .book-author {
+      font-family: 'Libre Franklin', sans-serif;
+      font-weight: 300;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+    }
+
+    .book-rating {
+      display: flex;
+      gap: 3px;
+    }
+
+    .rating-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      border: 1px solid var(--accent-amber);
+    }
+
+    .rating-dot.filled {
+      background: var(--accent-amber);
+      box-shadow: 0 0 4px var(--glow-amber);
+    }
+
+    .book-status-badge {
+      display: inline-block;
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 500;
+      color: var(--accent-amber);
+      margin-bottom: 0.5rem;
+      opacity: 0.8;
+    }
+
+    .book-card.featured .book-excerpt {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-top: 0.75rem;
+    }
+
+    /* ─── Pull Quote ─── */
+
+    .pull-quote {
+      max-width: 800px;
+      margin: 2rem auto 4rem;
+      padding: 2rem 3rem 2rem 2.5rem;
+      border-left: 3px solid var(--accent-burgundy);
+      position: relative;
+    }
+
+    .pull-quote p {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.3rem;
+      line-height: 1.7;
+      color: var(--text-primary);
+    }
+
+    .pull-quote cite {
+      display: block;
+      margin-top: 1rem;
+      font-family: 'Libre Franklin', sans-serif;
+      font-style: normal;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      letter-spacing: 0.05em;
+    }
+
+    /* ─── Footer ─── */
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 3rem;
+      text-align: center;
+    }
+
+    footer p {
+      font-family: 'Libre Franklin', sans-serif;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      letter-spacing: 0.05em;
+    }
+
+    /* ─── No results ─── */
+
+    .no-results {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 4rem 0;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+    }
+
+    /* ─── Responsive ─── */
+
+    @media (max-width: 1024px) {
+      .hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 2rem;
+        padding: 3rem 2rem;
+      }
+
+      .hero-cover {
+        margin: 0 auto;
+        width: 170px;
+        height: 255px;
+      }
+
+      .hero-excerpt {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .book-card.featured {
+        grid-column: span 6;
+      }
+
+      .book-card.regular {
+        grid-column: span 4;
+      }
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        padding: 1rem 1.5rem;
+      }
+
+      .nav-links {
+        gap: 1.2rem;
+      }
+
+      .hero {
+        padding: 2.5rem 1.5rem;
+      }
+
+      .hero-title {
+        font-size: 1.7rem;
+      }
+
+      .stats {
+        padding: 1.5rem;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .stat {
+        padding: 0.5rem 1rem;
+      }
+
+      .stat-divider {
+        display: none;
+      }
+
+      .book-grid {
+        grid-template-columns: repeat(6, 1fr);
+        padding: 1rem 1.5rem 3rem;
+        gap: 1.25rem;
+      }
+
+      .book-card.featured {
+        grid-column: span 6;
+      }
+
+      .book-card.featured .book-inner {
+        grid-template-columns: 130px 1fr;
+      }
+
+      .book-card.regular {
+        grid-column: span 3;
+      }
+
+      .search-section, .filters, .sort-bar, .pull-quote {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+      }
+
+      footer {
+        padding: 1.5rem;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .wordmark {
+        font-size: 1.3rem;
+      }
+
+      .nav-links a {
+        font-size: 0.6rem;
+      }
+
+      .hero-cover {
+        width: 140px;
+        height: 210px;
+      }
+
+      .hero-title {
+        font-size: 1.4rem;
+      }
+
+      .book-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        padding: 1rem;
+      }
+
+      .book-card.featured {
+        grid-column: span 2;
+      }
+
+      .book-card.featured .book-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .book-card.featured .book-cover {
+        height: 200px;
+      }
+
+      .book-card.regular {
+        grid-column: span 1;
+      }
+
+      .book-cover {
+        height: 180px;
+      }
+
+      .pull-quote p {
+        font-size: 1.05rem;
+      }
+
+      .stat-number {
+        font-size: 1.4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── Navigation ─── -->
+  <nav>
+    <div class="wordmark">Biblioteca</div>
+    <ul class="nav-links">
+      <li><a href="#" class="active">Library</a></li>
+      <li><a href="#">Discover</a></li>
+      <li><a href="#">Lists</a></li>
+      <li><a href="#">Settings</a></li>
+    </ul>
+  </nav>
+
+  <!-- ─── Hero: Currently Reading ─── -->
+  <section class="hero">
+    <div class="hero-cover" style="background: linear-gradient(160deg, #5A7FB5 0%, #3A5A8A 100%);">
+      <div class="cover-title">The Midnight Library</div>
+    </div>
+    <div class="hero-details">
+      <div class="small-caps hero-label">Currently Reading</div>
+      <h1 class="hero-title">The Midnight Library</h1>
+      <p class="hero-author">Matt Haig</p>
+      <p class="hero-excerpt">"Between life and death there is a library, and within that library, the shelves go on forever. Every book provides a chance to try another life you could have lived."</p>
+      <div class="progress-container">
+        <div class="progress-track">
+          <div class="progress-fill" style="width: 64%;"></div>
+        </div>
+        <span class="progress-label">64% complete</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Stats ─── -->
+  <section class="stats">
+    <div class="stat">
+      <div class="stat-number">20</div>
+      <div class="stat-label">Total Books</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat">
+      <div class="stat-number">13</div>
+      <div class="stat-label">Completed</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat">
+      <div class="stat-number">3</div>
+      <div class="stat-label">Reading Now</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat">
+      <div class="stat-number">4</div>
+      <div class="stat-label">Wish List</div>
+    </div>
+  </section>
+
+  <!-- ─── Search ─── -->
+  <div class="search-section">
+    <input type="text" class="search-input" id="searchInput" placeholder="Search your library...">
+  </div>
+
+  <!-- ─── Filters ─── -->
+  <div class="filters">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <span class="filter-separator">&middot;</span>
+    <button class="filter-btn" data-filter="reading">Reading</button>
+    <span class="filter-separator">&middot;</span>
+    <button class="filter-btn" data-filter="read">Read</button>
+    <span class="filter-separator">&middot;</span>
+    <button class="filter-btn" data-filter="want_to_read">Want to Read</button>
+  </div>
+
+  <!-- ─── Sort ─── -->
+  <div class="sort-bar">
+    <select class="sort-select" id="sortSelect">
+      <option value="default">Default Order</option>
+      <option value="title">Title A–Z</option>
+      <option value="author">Author A–Z</option>
+      <option value="rating">Highest Rated</option>
+    </select>
+  </div>
+
+  <!-- ─── Book Grid ─── -->
+  <section class="book-grid" id="bookGrid">
+    <!-- Populated by JS -->
+  </section>
+
+  <!-- ─── Pull Quote ─── -->
+  <section class="pull-quote">
+    <p>"A reader lives a thousand lives before he dies. The man who never reads lives only one."</p>
+    <cite>— George R.R. Martin</cite>
+  </section>
+
+  <!-- ─── Footer ─── -->
+  <footer>
+    <p>&copy; 2026 Biblioteca — A personal reading room</p>
+  </footer>
+
+  <script>
+    const books = [
+      { id: 1, title: "The Midnight Library", author: "Matt Haig", color: "#4A6FA5", status: "reading", rating: 4, excerpt: "Between life and death there is a library..." },
+      { id: 2, title: "Sapiens", author: "Yuval Noah Harari", color: "#8B6F47", status: "reading", rating: 5, excerpt: "A sweeping history of humankind from the Stone Age to Silicon Valley." },
+      { id: 3, title: "Atomic Habits", author: "James Clear", color: "#2D8B57", status: "read", rating: 5 },
+      { id: 4, title: "Dune", author: "Frank Herbert", color: "#C4783E", status: "read", rating: 4 },
+      { id: 5, title: "Meditations", author: "Marcus Aurelius", color: "#6B5B73", status: "read", rating: 5 },
+      { id: 6, title: "The Alchemist", author: "Paulo Coelho", color: "#4A6FA5", status: "want_to_read", rating: 3 },
+      { id: 7, title: "Thinking, Fast and Slow", author: "Daniel Kahneman", color: "#7A5C8A", status: "read", rating: 4 },
+      { id: 8, title: "1984", author: "George Orwell", color: "#4A6FA5", status: "read", rating: 5 },
+      { id: 9, title: "Educated", author: "Tara Westover", color: "#8B6F47", status: "read", rating: 4 },
+      { id: 10, title: "The Design of Everyday Things", author: "Don Norman", color: "#C95D63", status: "want_to_read", rating: 0 },
+      { id: 11, title: "Shoe Dog", author: "Phil Knight", color: "#8B6F47", status: "read", rating: 4 },
+      { id: 12, title: "Project Hail Mary", author: "Andy Weir", color: "#C4783E", status: "want_to_read", rating: 0 },
+      { id: 13, title: "The Remains of the Day", author: "Kazuo Ishiguro", color: "#4A6FA5", status: "read", rating: 5 },
+      { id: 14, title: "Creativity, Inc.", author: "Ed Catmull", color: "#2D8B57", status: "read", rating: 4 },
+      { id: 15, title: "The Gene", author: "Siddhartha Mukherjee", color: "#3A7CA5", status: "want_to_read", rating: 0 },
+      { id: 16, title: "Kitchen Confidential", author: "Anthony Bourdain", color: "#8B6F47", status: "reading", rating: 4 },
+      { id: 17, title: "Algorithms to Live By", author: "Brian Christian", color: "#3A7CA5", status: "read", rating: 3 },
+      { id: 18, title: "Normal People", author: "Sally Rooney", color: "#4A6FA5", status: "read", rating: 4 },
+      { id: 19, title: "The Innovator's Dilemma", author: "Clayton Christensen", color: "#2D8B57", status: "read", rating: 4 },
+      { id: 20, title: "When Breath Becomes Air", author: "Paul Kalanithi", color: "#8B6F47", status: "read", rating: 5 }
+    ];
+
+    const statusLabels = {
+      reading: "Reading",
+      read: "Completed",
+      want_to_read: "Want to Read"
+    };
+
+    let currentFilter = "all";
+    let currentSort = "default";
+    let searchQuery = "";
+
+    function darkenColor(hex, amount) {
+      const num = parseInt(hex.replace("#", ""), 16);
+      const r = Math.max(0, (num >> 16) - amount);
+      const g = Math.max(0, ((num >> 8) & 0x00FF) - amount);
+      const b = Math.max(0, (num & 0x0000FF) - amount);
+      return `rgb(${r}, ${g}, ${b})`;
+    }
+
+    function renderRating(rating) {
+      let dots = "";
+      for (let i = 0; i < 5; i++) {
+        dots += `<span class="rating-dot ${i < rating ? "filled" : ""}"></span>`;
+      }
+      return dots;
+    }
+
+    function renderBooks() {
+      const grid = document.getElementById("bookGrid");
+      let filtered = books.filter(book => {
+        const matchFilter = currentFilter === "all" || book.status === currentFilter;
+        const matchSearch = searchQuery === "" ||
+          book.title.toLowerCase().includes(searchQuery) ||
+          book.author.toLowerCase().includes(searchQuery);
+        return matchFilter && matchSearch;
+      });
+
+      if (currentSort === "title") {
+        filtered.sort((a, b) => a.title.localeCompare(b.title));
+      } else if (currentSort === "author") {
+        filtered.sort((a, b) => a.author.localeCompare(b.author));
+      } else if (currentSort === "rating") {
+        filtered.sort((a, b) => b.rating - a.rating);
+      }
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '<div class="no-results">No books found</div>';
+        return;
+      }
+
+      let html = "";
+      filtered.forEach((book, index) => {
+        const isFeatured = index < 2 && currentFilter === "all" && currentSort === "default" && searchQuery === "";
+        const gradientEnd = darkenColor(book.color, 40);
+
+        if (isFeatured) {
+          html += `
+            <div class="book-card featured" data-status="${book.status}">
+              <div class="book-inner">
+                <div class="book-cover" style="background: linear-gradient(160deg, ${book.color} 0%, ${gradientEnd} 100%);">
+                  <div class="cover-title">${book.title}</div>
+                </div>
+                <div class="book-info">
+                  <div class="book-status-badge">${statusLabels[book.status]}</div>
+                  <h3 class="book-title">${book.title}</h3>
+                  <p class="book-author">${book.author}</p>
+                  <div class="book-rating">${renderRating(book.rating)}</div>
+                  ${book.excerpt ? `<p class="book-excerpt">${book.excerpt}</p>` : ""}
+                </div>
+              </div>
+            </div>`;
+        } else {
+          html += `
+            <div class="book-card regular" data-status="${book.status}">
+              <div class="book-cover" style="background: linear-gradient(160deg, ${book.color} 0%, ${gradientEnd} 100%);">
+                <div class="cover-title">${book.title}</div>
+              </div>
+              <div class="book-info">
+                <h3 class="book-title">${book.title}</h3>
+                <p class="book-author">${book.author}</p>
+                <div class="book-rating">${renderRating(book.rating)}</div>
+              </div>
+            </div>`;
+        }
+      });
+
+      grid.innerHTML = html;
+    }
+
+    // Filter buttons
+    document.querySelectorAll(".filter-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentFilter = btn.dataset.filter;
+        renderBooks();
+      });
+    });
+
+    // Sort select
+    document.getElementById("sortSelect").addEventListener("change", (e) => {
+      currentSort = e.target.value;
+      renderBooks();
+    });
+
+    // Search input
+    document.getElementById("searchInput").addEventListener("input", (e) => {
+      searchQuery = e.target.value.toLowerCase().trim();
+      renderBooks();
+    });
+
+    // Initial render
+    renderBooks();
+  </script>
+
+</body>
+</html>
