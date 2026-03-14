@@ -11,6 +11,7 @@
 ### Added
 - **Hugo Award Winners collection** — 27 Hugo Best Novel winners identified and added
 - **Pulitzer Prize Winners collection** — 8 Pulitzer winners (Fiction, Biography, History, Nonfiction) identified and added
+- **Delete collections** — Hover-to-reveal X button on collection cards with inline Yes/No confirmation
 
 ## 2026-03-14 — Collections
 
