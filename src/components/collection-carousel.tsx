@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
-import { Book, Plus } from "lucide-react";
+import { Book, Plus, X } from "lucide-react";
 import {
   DndContext,
   closestCenter,
@@ -87,11 +87,14 @@ function SortableCollectionCard({
   collection,
   isSelected,
   onSelect,
+  onDelete,
 }: {
   collection: CollectionWithCovers;
   isSelected: boolean;
   onSelect: () => void;
+  onDelete: (id: string) => void;
 }) {
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
     useSortable({ id: collection.id });
 
@@ -102,22 +105,57 @@ function SortableCollectionCard({
   };
 
   return (
-    <button
+    <div
       ref={setNodeRef}
       style={style}
-      {...attributes}
-      {...listeners}
-      onClick={onSelect}
-      className={`w-[140px] flex-shrink-0 cursor-pointer rounded-sm border p-2 text-center transition-colors bg-card ${
+      className={`group relative w-[140px] flex-shrink-0 rounded-sm border text-center transition-colors bg-card ${
         isSelected ? "border-2 border-amber" : "border-warm-border"
       }`}
     >
-      <CoverStack coverUrls={collection.cover_urls} />
-      <p className="mt-1.5 truncate font-serif text-sm font-medium">{collection.name}</p>
-      <p className="text-xs text-warm-gray">
-        {collection.book_count} {collection.book_count === 1 ? "book" : "books"}
-      </p>
-    </button>
+      {confirmDelete ? (
+        <div className="flex h-full flex-col items-center justify-center gap-2 p-2">
+          <p className="font-sans text-xs text-warm-gray">Delete?</p>
+          <div className="flex gap-2">
+            <button
+              onClick={() => onDelete(collection.id)}
+              className="rounded-sm bg-destructive px-2 py-1 text-xs font-medium text-white"
+            >
+              Yes
+            </button>
+            <button
+              onClick={() => setConfirmDelete(false)}
+              className="rounded-sm border border-warm-border px-2 py-1 text-xs font-medium"
+            >
+              No
+            </button>
+          </div>
+        </div>
+      ) : (
+        <>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setConfirmDelete(true);
+            }}
+            className="absolute right-1 top-1 z-10 rounded-full p-0.5 text-warm-gray opacity-0 transition-opacity hover:text-destructive group-hover:opacity-100"
+          >
+            <X className="h-3.5 w-3.5" />
+          </button>
+          <button
+            {...attributes}
+            {...listeners}
+            onClick={onSelect}
+            className="w-full cursor-pointer p-2"
+          >
+            <CoverStack coverUrls={collection.cover_urls} />
+            <p className="mt-1.5 truncate font-serif text-sm font-medium">{collection.name}</p>
+            <p className="text-xs text-warm-gray">
+              {collection.book_count} {collection.book_count === 1 ? "book" : "books"}
+            </p>
+          </button>
+        </>
+      )}
+    </div>
   );
 }
 
@@ -173,6 +211,21 @@ export function CollectionCarousel({
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ orderedIds }),
     });
+  }
+
+  async function handleDelete(id: string) {
+    try {
+      const res = await fetch(`/api/collections/${id}`, { method: "DELETE" });
+      if (res.ok) {
+        setCollections((prev) => prev.filter((c) => c.id !== id));
+        if (selectedCollectionId === id) {
+          onSelectCollection(null);
+        }
+        onCollectionChange();
+      }
+    } catch {
+      // silent
+    }
   }
 
   async function handleCreate() {
@@ -234,6 +287,7 @@ export function CollectionCarousel({
                   collection={collection}
                   isSelected={selectedCollectionId === collection.id}
                   onSelect={() => onSelectCollection(collection.id)}
+                  onDelete={handleDelete}
                 />
               ))}
             </SortableContext>
