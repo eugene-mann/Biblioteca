@@ -111,6 +111,17 @@ export interface CollectionWithCovers extends Collection {
   cover_urls: (string | null)[];
 }
 
+export interface BookInsight {
+  id: string;
+  book_id: string;
+  why_read: string;
+  themes: string[];
+  quotes: string[];
+  related_book_ids: string[];
+  generated_at: string;
+  user_id: string;
+}
+
 export interface Recommendation {
   id: string;
   title: string;
