@@ -136,7 +136,6 @@ export async function searchBooks(query: string): Promise<Omit<Book, "id" | "dat
   if (!query.trim()) return [];
 
   const apiKey = process.env.GOOGLE_BOOKS_API_KEY;
-  console.log(`[search] API key present: ${!!apiKey}, length: ${apiKey?.length ?? 0}`);
   const params = new URLSearchParams({
     q: query,
     maxResults: "10",
@@ -144,9 +143,10 @@ export async function searchBooks(query: string): Promise<Omit<Book, "id" | "dat
   });
   if (apiKey) params.set("key", apiKey);
 
-  const url = `https://www.googleapis.com/books/v1/volumes?${params}`;
-  console.log(`[search] Fetching: ${url.replace(apiKey ?? "", "***")}`);
-  let res = await fetch(url, { cache: "no-store" });
+  let res = await fetch(
+    `https://www.googleapis.com/books/v1/volumes?${params}`,
+    { cache: "no-store" }
+  );
 
   // Retry once after a short delay on rate limit
   if (res.status === 429) {

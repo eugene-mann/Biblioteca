@@ -122,6 +122,26 @@ export interface BookInsight {
   user_id: string;
 }
 
+export type ChangelogAction =
+  | "added"
+  | "removed"
+  | "rating_changed"
+  | "category_changed"
+  | "status_changed"
+  | "favorite_changed";
+
+export interface BookChangelog {
+  id: string;
+  book_id: string | null;
+  book_title: string;
+  book_cover_url: string | null;
+  action: ChangelogAction;
+  old_value: string | null;
+  new_value: string | null;
+  created_at: string;
+  user_id: string;
+}
+
 export interface Recommendation {
   id: string;
   title: string;

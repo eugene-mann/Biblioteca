@@ -5,6 +5,8 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { BookGrid, BookGridSkeleton } from "@/components/book-grid";
 import { CollectionCarousel } from "@/components/collection-carousel";
 import { QuoteDivider } from "@/components/quote-carousel";
+import { AddBookCard } from "@/components/add-book-card";
+import { AddBookToCollectionModal } from "@/components/add-book-to-collection-modal";
 import { BookOpen, Heart } from "lucide-react";
 import type { Book, BookStatus, BookCategory } from "@/types/database";
 import { BOOK_CATEGORIES } from "@/types/database";
@@ -85,6 +87,11 @@ export default function LibraryPage() {
     (slug: string | null, id: string | null) => {
       setParams({ collection: slug });
       setSelectedCollectionId(id);
+      setSelectedCollectionName(
+        slug
+          ? slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
+          : null
+      );
     },
     [setParams]
   );
@@ -94,6 +101,9 @@ export default function LibraryPage() {
   const [selectedCollectionId, setSelectedCollectionId] = useState<string | null>(null);
   const [collectionBookIds, setCollectionBookIds] = useState<Set<string> | null>(null);
   const [collectionKey, setCollectionKey] = useState(0);
+  const [addBookModalOpen, setAddBookModalOpen] = useState(false);
+  const [selectedCollectionName, setSelectedCollectionName] = useState<string | null>(null);
+  const [collectionBookVersion, setCollectionBookVersion] = useState(0);
 
   const fetchBooks = useCallback(async () => {
     setIsLoading(true);
@@ -128,7 +138,7 @@ export default function LibraryPage() {
       }
     }
     fetchCollectionBooks();
-  }, [selectedCollectionId]);
+  }, [selectedCollectionId, collectionBookVersion]);
 
   const filteredBooks = useMemo(
     () =>
@@ -304,9 +314,17 @@ export default function LibraryPage() {
             for (let i = 0; i < filteredBooks.length; i += CHUNK_SIZE) {
               chunks.push(filteredBooks.slice(i, i + CHUNK_SIZE));
             }
+            const isLastChunk = (i: number) => i === chunks.length - 1;
             return chunks.map((chunk, i) => (
               <div key={i}>
-                <BookGrid books={chunk} />
+                <BookGrid
+                  books={chunk}
+                  renderAfter={
+                    isLastChunk(i) && selectedCollectionId ? (
+                      <AddBookCard onClick={() => setAddBookModalOpen(true)} />
+                    ) : undefined
+                  }
+                />
                 {(i < chunks.length - 1 || filteredBooks.length <= CHUNK_SIZE) && (
                   <div className="my-6">
                     <QuoteDivider colorIndex={i} />
@@ -316,6 +334,23 @@ export default function LibraryPage() {
             ));
           })()}
         </div>
+      )}
+
+      {selectedCollectionId && selectedCollectionName && (
+        <AddBookToCollectionModal
+          open={addBookModalOpen}
+          onOpenChange={(isOpen) => {
+            setAddBookModalOpen(isOpen);
+            if (!isOpen) {
+              setCollectionBookVersion((v) => v + 1);
+            }
+          }}
+          collectionId={selectedCollectionId}
+          collectionName={selectedCollectionName}
+          collectionBookIds={
+            collectionBookIds ? Array.from(collectionBookIds) : []
+          }
+        />
       )}
     </div>
   );

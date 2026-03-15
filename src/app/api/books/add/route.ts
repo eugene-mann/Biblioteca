@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { generateSlug } from "@/lib/slug";
+import { logChange } from "@/lib/changelog";
 
 const DEFAULT_USER_ID = "00000000-0000-0000-0000-000000000001";
 
@@ -73,6 +74,14 @@ export async function POST(request: NextRequest) {
     // Increment library version
     await supabase.rpc("increment_library_version", {
       p_user_id: DEFAULT_USER_ID,
+    });
+
+    // Log changelog entry
+    await logChange({
+      bookId: data.id,
+      bookTitle: data.title,
+      bookCoverUrl: data.cover_image_url,
+      action: "added",
     });
 
     return NextResponse.json(data, { status: 201 });

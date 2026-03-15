@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
+import { logChange } from "@/lib/changelog";
+import type { ChangelogAction } from "@/types/database";
 
 // Lookup by UUID or slug
 async function findBook(idOrSlug: string) {
@@ -69,6 +71,14 @@ export async function PATCH(
     updates.date_finished = new Date().toISOString();
   }
 
+  // Track field changes for changelog
+  const trackedFields: { field: string; action: ChangelogAction }[] = [
+    { field: "rating", action: "rating_changed" },
+    { field: "category", action: "category_changed" },
+    { field: "status", action: "status_changed" },
+    { field: "is_favorite", action: "favorite_changed" },
+  ];
+
   const { data, error } = await supabase
     .from("books")
     .update(updates)
@@ -78,6 +88,20 @@ export async function PATCH(
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  // Log changes for tracked fields
+  for (const { field, action } of trackedFields) {
+    if (field in updates && String(book[field] ?? "") !== String(updates[field] ?? "")) {
+      await logChange({
+        bookId: book.id,
+        bookTitle: book.title,
+        bookCoverUrl: book.cover_image_url,
+        action,
+        oldValue: book[field] != null ? String(book[field]) : null,
+        newValue: updates[field] != null ? String(updates[field]) : null,
+      });
+    }
   }
 
   return NextResponse.json(data);
@@ -92,6 +116,14 @@ export async function DELETE(
   if (!book) {
     return NextResponse.json({ error: "Book not found" }, { status: 404 });
   }
+
+  // Log removal before deleting
+  await logChange({
+    bookId: book.id,
+    bookTitle: book.title,
+    bookCoverUrl: book.cover_image_url,
+    action: "removed",
+  });
 
   const { error } = await supabase
     .from("books")
