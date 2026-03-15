@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Search, Plus, Loader2, ArrowRight } from "lucide-react";
 import type { Book } from "@/types/database";
@@ -16,14 +16,9 @@ import {
   type LibrarySearchResult,
 } from "@/lib/book-search";
 
-interface SearchBarProps {
-  libraryBooks: Book[];
-  onBookAdded?: () => void;
-}
-
-export function SearchBar({ libraryBooks, onBookAdded }: SearchBarProps) {
+export function SearchBar() {
   const router = useRouter();
-  const pathname = usePathname();
+  const [libraryBooks, setLibraryBooks] = useState<Book[]>([]);
   const [query, setQuery] = useState("");
   const [libraryResults, setLibraryResults] = useState<LibrarySearchResult[]>([]);
   const [externalResults, setExternalResults] = useState<BookResult[]>([]);
@@ -33,6 +28,20 @@ export function SearchBar({ libraryBooks, onBookAdded }: SearchBarProps) {
   const [error, setError] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Self-load library books for local search + dedup
+  useEffect(() => {
+    async function fetchBooks() {
+      try {
+        const res = await fetch("/api/books");
+        if (res.ok) setLibraryBooks(await res.json());
+      } catch { /* silent */ }
+    }
+    fetchBooks();
+    const handler = () => fetchBooks();
+    window.addEventListener("biblioteca:book-added", handler);
+    return () => window.removeEventListener("biblioteca:book-added", handler);
+  }, []);
 
   const hasResults = libraryResults.length > 0 || externalResults.length > 0;
 
@@ -120,18 +129,6 @@ export function SearchBar({ libraryBooks, onBookAdded }: SearchBarProps) {
     setLibraryResults([]);
     setExternalResults([]);
     setIsOpen(false);
-
-    const isOnLibraryPage = pathname === "/";
-    if (isOnLibraryPage) {
-      // Scroll to book in grid and briefly highlight
-      const el = document.querySelector(`[data-book-id="${book.id}"]`);
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth", block: "center" });
-        el.classList.add("ring-2", "ring-amber", "ring-offset-2");
-        setTimeout(() => el.classList.remove("ring-2", "ring-amber", "ring-offset-2"), 2000);
-        return;
-      }
-    }
     router.push(`/library/${book.slug || book.id}`);
   }
 
@@ -159,7 +156,7 @@ export function SearchBar({ libraryBooks, onBookAdded }: SearchBarProps) {
       setLibraryResults([]);
       setExternalResults([]);
       setIsOpen(false);
-      onBookAdded?.();
+      window.dispatchEvent(new Event("biblioteca:book-added"));
       router.push(`/library/${data.slug || data.id}`);
     } catch {
       setError("Failed to add book. Please try again.");
@@ -169,19 +166,19 @@ export function SearchBar({ libraryBooks, onBookAdded }: SearchBarProps) {
   }
 
   return (
-    <div ref={containerRef} className="relative w-full max-w-2xl">
+    <div ref={containerRef} className="relative w-full max-w-md">
       <div className="relative">
-        <Search className="absolute left-0 top-1/2 h-4 w-4 -translate-y-1/2 text-warm-gray" />
+        <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-warm-gray" />
         <input
           type="text"
           value={query}
           onChange={(e) => handleQueryChange(e.target.value)}
           onFocus={() => hasResults && setIsOpen(true)}
-          placeholder="Search your library or discover new books..."
-          className="w-full border-0 border-b border-warm-border bg-transparent py-3 pl-7 pr-4 font-serif text-lg italic outline-none transition-colors placeholder:text-warm-gray/60 focus:border-amber focus:ring-0"
+          placeholder="Search books..."
+          className="w-full rounded-sm border border-warm-border bg-background/60 py-1.5 pl-9 pr-8 font-sans text-sm outline-none transition-colors placeholder:text-warm-gray/60 focus:border-amber focus:ring-0"
         />
         {isLoadingExternal && (
-          <Loader2 className="absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin text-warm-gray" />
+          <Loader2 className="absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 animate-spin text-warm-gray" />
         )}
       </div>
 

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Heart } from "lucide-react";
+import { Heart, Star } from "lucide-react";
 import { BookCover } from "./book-cover";
 import type { Book } from "@/types/database";
 
@@ -9,19 +9,29 @@ interface BookGridProps {
   books: Book[];
 }
 
-function RatingDots({ rating }: { rating: number | null }) {
-  if (rating === null || rating === undefined) return null;
-  const filled = Math.round(rating);
+function RatingPill({ rating, externalRating }: { rating: number | null; externalRating: number | null }) {
+  if (rating === null && externalRating === null) return null;
   return (
-    <div className="mt-1 flex items-center gap-1">
-      {Array.from({ length: 5 }).map((_, i) => (
-        <span
-          key={i}
-          className={`inline-block h-1.5 w-1.5 rounded-full ${
-            i < filled ? "bg-amber" : "bg-warm-border"
-          }`}
-        />
-      ))}
+    <div className="mt-1.5 inline-flex items-center gap-1 rounded-full border border-warm-border px-2 py-0.5">
+      {externalRating != null && (
+        <>
+          <Star className="h-2.5 w-2.5 fill-amber text-amber" />
+          <span className="font-sans text-[10px] text-foreground">{externalRating}</span>
+          {rating != null && <span className="mx-0.5 text-[10px] text-warm-border">|</span>}
+        </>
+      )}
+      {rating != null && (
+        <div className="flex items-center">
+          {[1, 2, 3, 4, 5].map((n) => (
+            <Star
+              key={n}
+              className={`h-2.5 w-2.5 ${
+                n <= rating ? "fill-amber text-amber" : "text-warm-border"
+              }`}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -80,7 +90,7 @@ export function BookGrid({ books }: BookGridProps) {
                 {book.category}
               </p>
             )}
-            <RatingDots rating={book.rating} />
+            <RatingPill rating={book.rating} externalRating={book.external_rating} />
           </div>
         </Link>
       ))}

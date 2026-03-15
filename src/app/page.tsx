@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { SearchBar } from "@/components/search-bar";
 import { BookGrid, BookGridSkeleton } from "@/components/book-grid";
 import { CollectionCarousel } from "@/components/collection-carousel";
 import { QuoteDivider } from "@/components/quote-carousel";
@@ -9,13 +8,19 @@ import { BookOpen, Heart } from "lucide-react";
 import type { Book, BookStatus, BookCategory } from "@/types/database";
 import { BOOK_CATEGORIES } from "@/types/database";
 
-type SortKey = "date_added" | "title" | "author" | "rating";
+type SortKey = "default" | "date_added" | "title" | "author" | "rating";
+
+const STATUS_ORDER: Record<BookStatus, number> = {
+  read: 0,
+  reading: 1,
+  want_to_read: 2,
+};
 
 export default function LibraryPage() {
   const [books, setBooks] = useState<Book[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<BookStatus | "all">("all");
-  const [sortBy, setSortBy] = useState<SortKey>("date_added");
+  const [sortBy, setSortBy] = useState<SortKey>("default");
   const [showFavorites, setShowFavorites] = useState(false);
   const [categoryFilter, setCategoryFilter] = useState<BookCategory | "all">("all");
   const [selectedCollectionId, setSelectedCollectionId] = useState<string | null>(null);
@@ -37,6 +42,9 @@ export default function LibraryPage() {
 
   useEffect(() => {
     fetchBooks();
+    const handler = () => fetchBooks();
+    window.addEventListener("biblioteca:book-added", handler);
+    return () => window.removeEventListener("biblioteca:book-added", handler);
   }, [fetchBooks]);
 
   useEffect(() => {
@@ -67,10 +75,23 @@ export default function LibraryPage() {
               return a.title.localeCompare(b.title);
             case "author":
               return (a.authors[0] ?? "").localeCompare(b.authors[0] ?? "");
-            case "rating":
-              return (b.rating ?? 0) - (a.rating ?? 0);
-            default:
+            case "rating": {
+              const aScore = a.rating ?? a.external_rating ?? 0;
+              const bScore = b.rating ?? b.external_rating ?? 0;
+              return bScore - aScore;
+            }
+            case "date_added":
               return new Date(b.date_added).getTime() - new Date(a.date_added).getTime();
+            default: {
+              // Default: user rating → external rating → status (read > reading > want_to_read)
+              const aUser = a.rating ?? 0;
+              const bUser = b.rating ?? 0;
+              if (aUser !== bUser) return bUser - aUser;
+              const aExt = a.external_rating ?? 0;
+              const bExt = b.external_rating ?? 0;
+              if (aExt !== bExt) return bExt - aExt;
+              return STATUS_ORDER[a.status] - STATUS_ORDER[b.status];
+            }
           }
         }),
     [books, collectionBookIds, statusFilter, showFavorites, categoryFilter, sortBy]
@@ -84,6 +105,7 @@ export default function LibraryPage() {
   ];
 
   const sortOptions: { value: SortKey; label: string }[] = [
+    { value: "default", label: "Best" },
     { value: "date_added", label: "Date Added" },
     { value: "title", label: "Title" },
     { value: "author", label: "Author" },
@@ -105,8 +127,6 @@ export default function LibraryPage() {
             : "Search for a book to add it to your collection"}
         </p>
       </div>
-
-      <SearchBar libraryBooks={books} onBookAdded={fetchBooks} />
 
       {books.length > 0 && (
         <CollectionCarousel
