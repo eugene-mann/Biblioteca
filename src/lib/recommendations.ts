@@ -27,7 +27,7 @@ function buildPrompt(books: Book[], topic?: string): string {
     ? `Focus your recommendations specifically on the topic: "${topic}". Recommend books related to this topic that would complement this reader's library.`
     : `Give general recommendations based on the reader's overall taste and interests.`;
 
-  return `You are a knowledgeable, warm book curator — like a well-read friend who always knows the perfect next book. Given this reader's personal library, recommend 5 books they haven't read yet.
+  return `You are a knowledgeable, warm book curator — like a well-read friend who always knows the perfect next book. Given this reader's personal library, recommend 10 books they haven't read yet.
 
 ${topicInstruction}
 
