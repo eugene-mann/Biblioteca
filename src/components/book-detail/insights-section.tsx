@@ -225,10 +225,6 @@ export function InsightsSection({ bookId }: InsightsSectionProps) {
                 </div>
               ))}
             </div>
-            <p className="mt-3 flex items-center gap-1.5 font-sans text-[10px] text-warm-gray">
-              <AlertCircle className="h-3 w-3" />
-              AI-generated — quotes may not be verbatim
-            </p>
           </div>
         )}
 
