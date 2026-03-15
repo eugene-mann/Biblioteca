@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Sparkles, RefreshCw, AlertCircle, X, Plus } from "lucide-react";
 import { BookCover } from "@/components/book-cover";
+import { SuggestedBookCard } from "@/components/suggested-book-card";
 import Link from "next/link";
-import type { Book, BookInsight } from "@/types/database";
+import type { Book, BookInsight, SuggestedBook } from "@/types/database";
 
 interface InsightsSectionProps {
   bookId: string;
@@ -24,8 +25,15 @@ export function InsightsSection({ bookId }: InsightsSectionProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [rawSuggestedBooks, setRawSuggestedBooks] = useState<SuggestedBook[]>([]);
   const [newQuote, setNewQuote] = useState("");
   const [isAddingQuote, setIsAddingQuote] = useState(false);
+
+  // Deduplicate suggested books against library books (handles books added after insights generated)
+  const suggestedBooks = useMemo(() => {
+    const libraryTitles = new Set(relatedBooks.map((b) => b.title.toLowerCase()));
+    return rawSuggestedBooks.filter((sb) => !libraryTitles.has(sb.title.toLowerCase()));
+  }, [rawSuggestedBooks, relatedBooks]);
 
   useEffect(() => {
     fetchInsight();
@@ -38,6 +46,7 @@ export function InsightsSection({ bookId }: InsightsSectionProps) {
       if (res.ok) {
         const data = await res.json();
         setInsight(data.insight);
+        setRawSuggestedBooks(data.insight?.suggested_books ?? []);
         if (data.insight?.related_book_ids?.length) {
           fetchRelatedBooks(data.insight.related_book_ids);
         }
@@ -103,6 +112,7 @@ export function InsightsSection({ bookId }: InsightsSectionProps) {
       if (res.ok) {
         const data = await res.json();
         setInsight(data.insight);
+        setRawSuggestedBooks(data.insight?.suggested_books ?? []);
         if (data.insight?.related_book_ids?.length) {
           fetchRelatedBooks(data.insight.related_book_ids);
         }
@@ -286,11 +296,11 @@ export function InsightsSection({ bookId }: InsightsSectionProps) {
           </div>
         )}
 
-        {/* Related in Your Library */}
-        {relatedBooks.length > 0 && (
+        {/* Related Books */}
+        {(relatedBooks.length > 0 || suggestedBooks.length > 0) && (
           <div className="rounded-lg border border-warm-border bg-card p-4">
             <p className="mb-3 font-sans text-[10px] uppercase tracking-widest text-warm-gray">
-              Related in Your Library
+              Related Books
             </p>
             <div className="flex flex-col gap-3">
               {relatedBooks.map((rb) => (
@@ -314,6 +324,13 @@ export function InsightsSection({ bookId }: InsightsSectionProps) {
                     </p>
                   </div>
                 </Link>
+              ))}
+              {suggestedBooks.map((sb) => (
+                <SuggestedBookCard
+                  key={`${sb.title}-${sb.authors[0] ?? ""}`}
+                  book={sb}
+                  variant="detail"
+                />
               ))}
             </div>
           </div>
