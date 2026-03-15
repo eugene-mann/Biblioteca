@@ -60,6 +60,7 @@ export async function POST(
         themes: insights.themes,
         quotes: insights.quotes,
         related_book_ids: insights.related_book_ids,
+        suggested_books: insights.suggested_books,
         generated_at: new Date().toISOString(),
         user_id: DEFAULT_USER_ID,
       },
