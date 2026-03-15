@@ -162,11 +162,16 @@ export default function DiscoverPage() {
               const rec: Recommendation = msg.data;
               if (seen.has(rec.title)) continue;
               seen.add(rec.title);
-              allRecs.push(rec);
-              recPoolRef.current = allRecs;
-              setRecPool([...allRecs]);
-              // Show up to VISIBLE_COUNT
-              setRecommendations(allRecs.slice(0, VISIBLE_COUNT));
+              // Append to pool using functional updates to preserve hydrated covers
+              setRecPool((prev) => {
+                const updated = [...prev, rec];
+                recPoolRef.current = updated;
+                return updated;
+              });
+              // Append to visible recs (up to VISIBLE_COUNT) without clobbering hydrated covers
+              setRecommendations((prev) =>
+                prev.length < VISIBLE_COUNT ? [...prev, rec] : prev
+              );
               // Stop showing loading skeleton after first rec
               setIsLoading(false);
               // Hydrate cover in background
