@@ -116,32 +116,70 @@ export default function DiscoverPage() {
     setIsLoading(true);
     setError(null);
     setDismissedTitles(new Set());
+    setRecommendations([]);
+    setRecPool([]);
+    recPoolRef.current = [];
 
     try {
       const params = new URLSearchParams();
       if (topic) params.set("topic", topic);
       if (prompt) params.set("prompt", prompt);
       const res = await fetch(`/api/recommendations?${params}`);
-      const data = await res.json();
 
-      if (data.error) {
-        setError(data.error);
-      } else {
-        // Deduplicate by title (LLM may return duplicates)
-        const seen = new Set<string>();
-        const allRecs: Recommendation[] = (data.recommendations ?? []).filter((r: Recommendation) => {
-          if (seen.has(r.title)) return false;
-          seen.add(r.title);
-          return true;
-        });
-        setRecPool(allRecs);
-        recPoolRef.current = allRecs;
-        // Show first VISIBLE_COUNT immediately
-        setRecommendations(allRecs.slice(0, VISIBLE_COUNT));
+      // Non-streaming fallback (topics_only, empty library)
+      const contentType = res.headers.get("content-type") ?? "";
+      if (contentType.includes("application/json")) {
+        const data = await res.json();
+        if (data.error) setError(data.error);
         if (data.topics) setTopics(data.topics);
         if (data.message) setEmptyLibrary(true);
-        // Hydrate covers in background
-        allRecs.forEach((rec) => hydrateRec(rec));
+        setIsLoading(false);
+        return;
+      }
+
+      // Streaming response — read line by line
+      const reader = res.body!.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      const seen = new Set<string>();
+      const allRecs: Recommendation[] = [];
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n");
+        buffer = lines.pop() ?? "";
+
+        for (const line of lines) {
+          if (!line.trim()) continue;
+          try {
+            const msg = JSON.parse(line);
+            if (msg.type === "topics") {
+              setTopics(msg.data);
+            } else if (msg.type === "rec" && msg.data) {
+              const rec: Recommendation = msg.data;
+              if (seen.has(rec.title)) continue;
+              seen.add(rec.title);
+              allRecs.push(rec);
+              recPoolRef.current = allRecs;
+              setRecPool([...allRecs]);
+              // Show up to VISIBLE_COUNT
+              setRecommendations(allRecs.slice(0, VISIBLE_COUNT));
+              // Stop showing loading skeleton after first rec
+              setIsLoading(false);
+              // Hydrate cover in background
+              hydrateRec(rec);
+            } else if (msg.type === "done") {
+              // Stream complete
+            } else if (msg.error) {
+              setError(msg.error);
+            }
+          } catch {
+            // Skip malformed lines
+          }
+        }
       }
     } catch {
       setError("Failed to load recommendations. Please try again.");

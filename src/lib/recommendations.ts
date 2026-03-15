@@ -44,6 +44,12 @@ Respond in this exact JSON format (no markdown, no code fences):
 {"recommendations": [{"title": "Book Title", "author": "Author Name", "reasoning": "2-3 sentences explaining why this reader would love this book, referencing specific books from their library.", "inspired_by": ["Title from library that inspired this pick"]}]}`;
 }
 
+function trimBooks(books: Book[]): Book[] {
+  return [...books]
+    .sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0) || new Date(b.date_added).getTime() - new Date(a.date_added).getTime())
+    .slice(0, 30);
+}
+
 export async function getRecommendations(
   books: Book[],
   topic?: string
@@ -53,7 +59,7 @@ export async function getRecommendations(
     throw new Error("ANTHROPIC_API_KEY is not configured");
   }
 
-  const prompt = buildPrompt(books, topic);
+  const prompt = buildPrompt(trimBooks(books), topic);
 
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
@@ -80,6 +86,139 @@ export async function getRecommendations(
 
   const parsed: RecommendationResponse = JSON.parse(text);
   return parsed.recommendations;
+}
+
+/**
+ * Extract complete JSON objects from a partial JSON array string.
+ * Tracks brace depth to find complete {...} objects within the recommendations array.
+ */
+function extractCompleteObjects(text: string): LLMRecommendation[] {
+  const results: LLMRecommendation[] = [];
+  // Find the start of the array
+  const arrayStart = text.indexOf("[");
+  if (arrayStart === -1) return results;
+
+  let depth = 0;
+  let objStart = -1;
+
+  for (let i = arrayStart; i < text.length; i++) {
+    if (text[i] === "{") {
+      if (depth === 0) objStart = i;
+      depth++;
+    } else if (text[i] === "}") {
+      depth--;
+      if (depth === 0 && objStart !== -1) {
+        try {
+          const obj = JSON.parse(text.slice(objStart, i + 1));
+          if (obj.title && obj.author) {
+            results.push(obj);
+          }
+        } catch {
+          // Incomplete object, skip
+        }
+        objStart = -1;
+      }
+    }
+  }
+  return results;
+}
+
+/**
+ * Stream recommendations from Claude API, yielding each rec as it completes.
+ * Returns a ReadableStream that emits newline-delimited JSON objects.
+ */
+export function streamRecommendations(
+  books: Book[],
+  topic?: string
+): ReadableStream<Uint8Array> {
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) {
+    throw new Error("ANTHROPIC_API_KEY is not configured");
+  }
+
+  const prompt = buildPrompt(trimBooks(books), topic);
+  const encoder = new TextEncoder();
+
+  return new ReadableStream({
+    async start(controller) {
+      try {
+        const res = await fetch("https://api.anthropic.com/v1/messages", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": apiKey,
+            "anthropic-version": "2023-06-01",
+          },
+          body: JSON.stringify({
+            model: "claude-sonnet-4-20250514",
+            max_tokens: 2048,
+            stream: true,
+            messages: [{ role: "user", content: prompt }],
+          }),
+        });
+
+        if (!res.ok) {
+          const err = await res.text();
+          controller.enqueue(encoder.encode(JSON.stringify({ error: `Claude API error: ${res.status}` }) + "\n"));
+          controller.close();
+          return;
+        }
+
+        const reader = res.body!.getReader();
+        const decoder = new TextDecoder();
+        let accumulated = "";
+        let emittedCount = 0;
+        let sseBuffer = "";
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          sseBuffer += decoder.decode(value, { stream: true });
+          const lines = sseBuffer.split("\n");
+          sseBuffer = lines.pop() ?? "";
+
+          for (const line of lines) {
+            if (!line.startsWith("data: ")) continue;
+            const data = line.slice(6);
+            if (data === "[DONE]") continue;
+
+            try {
+              const event = JSON.parse(data);
+              if (event.type === "content_block_delta" && event.delta?.text) {
+                accumulated += event.delta.text;
+                const recs = extractCompleteObjects(accumulated);
+                while (emittedCount < recs.length) {
+                  const rec = recs[emittedCount];
+                  controller.enqueue(encoder.encode(JSON.stringify({
+                    type: "rec",
+                    data: {
+                      title: rec.title,
+                      authors: [rec.author],
+                      reasoning: rec.reasoning,
+                      inspired_by: rec.inspired_by,
+                      cover_image_url: null,
+                      isbn: null,
+                      amazon_link: `https://www.amazon.com/s?k=${encodeURIComponent(`${rec.title} ${rec.author}`)}`,
+                    }
+                  }) + "\n"));
+                  emittedCount++;
+                }
+              }
+            } catch {
+              // Skip malformed SSE events
+            }
+          }
+        }
+
+        controller.enqueue(encoder.encode(JSON.stringify({ type: "done" }) + "\n"));
+        controller.close();
+      } catch (err) {
+        controller.enqueue(encoder.encode(JSON.stringify({ error: err instanceof Error ? err.message : "Stream failed" }) + "\n"));
+        controller.close();
+      }
+    },
+  });
 }
 
 /**

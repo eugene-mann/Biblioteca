@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
-import { getRecommendations, extractTopicsFromLibrary, CURATED_TOPICS, HIDDEN_LIBRARY_TOPICS, EXTRA_TOPICS } from "@/lib/recommendations";
+import { streamRecommendations, extractTopicsFromLibrary, CURATED_TOPICS, HIDDEN_LIBRARY_TOPICS, EXTRA_TOPICS } from "@/lib/recommendations";
 
 const DEFAULT_USER_ID = "00000000-0000-0000-0000-000000000001";
 
@@ -41,32 +41,39 @@ export async function GET(request: NextRequest) {
     });
   }
 
-  try {
-    // Get LLM recommendations
-    // Combine topic chip and free-form prompt
-    const combinedTopic = [topic, prompt].filter(Boolean).join(" — ") || undefined;
-    const llmRecs = await getRecommendations(books, combinedTopic);
+  // Stream recommendations — first emit topics, then individual recs
+  const combinedTopic = [topic, prompt].filter(Boolean).join(" — ") || undefined;
+  const encoder = new TextEncoder();
+  const recStream = streamRecommendations(books, combinedTopic);
+  const recReader = recStream.getReader();
 
-    // Return recs immediately without cover hydration — client hydrates async
-    const recs = llmRecs.map((rec) => {
-      const query = encodeURIComponent(`${rec.title} ${rec.author}`);
-      return {
-        title: rec.title,
-        authors: [rec.author],
-        reasoning: rec.reasoning,
-        inspired_by: rec.inspired_by,
-        cover_image_url: null as string | null,
-        isbn: null as string | null,
-        amazon_link: `https://www.amazon.com/s?k=${query}`,
-      };
-    });
+  const stream = new ReadableStream({
+    async start(controller) {
+      // Emit topics first
+      controller.enqueue(encoder.encode(JSON.stringify({
+        type: "topics",
+        data: { library: libraryTopics, curated: CURATED_TOPICS },
+      }) + "\n"));
 
-    return NextResponse.json({
-      recommendations: recs,
-      topics: { library: libraryTopics, curated: CURATED_TOPICS },
-    });
-  } catch (err) {
-    const message = err instanceof Error ? err.message : "Failed to generate recommendations";
-    return NextResponse.json({ error: message }, { status: 500 });
-  }
+      // Pipe rec stream through
+      try {
+        while (true) {
+          const { done, value } = await recReader.read();
+          if (done) break;
+          controller.enqueue(value);
+        }
+      } catch {
+        controller.enqueue(encoder.encode(JSON.stringify({ error: "Stream failed" }) + "\n"));
+      }
+      controller.close();
+    },
+  });
+
+  return new Response(stream, {
+    headers: {
+      "Content-Type": "text/plain; charset=utf-8",
+      "Transfer-Encoding": "chunked",
+      "Cache-Control": "no-cache",
+    },
+  });
 }
