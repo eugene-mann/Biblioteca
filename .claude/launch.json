@@ -6,6 +6,18 @@
       "runtimeExecutable": "bash",
       "runtimeArgs": ["-c", "cd '/Users/eugenemann/Library/Mobile Documents/com~apple~CloudDocs/Repos/Personal/Biblioteca' && npm run dev"],
       "port": 3000
+    },
+    {
+      "name": "wip",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "/Users/eugenemann/Library/Mobile Documents/com~apple~CloudDocs/Repos/Personal/Biblioteca/.superpowers/wip", "-l", "3333", "--no-clipboard"],
+      "port": 3333
+    },
+    {
+      "name": "brainstorm",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["/Users/eugenemann/Library/Mobile Documents/com~apple~CloudDocs/Repos/Claude Skills/plugins/cache/claude-plugins-official/superpowers/5.0.2/skills/brainstorming/scripts/server.js", "--screen-dir", "/Users/eugenemann/Library/Mobile Documents/com~apple~CloudDocs/Repos/Personal/Biblioteca/.superpowers/brainstorm/2598-1773540392"],
+      "port": 52981
     }
   ]
 }

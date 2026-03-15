@@ -2,14 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, Compass, Settings, Info } from "lucide-react";
+import { BookOpen, Sparkles, Compass, Upload, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SearchBar } from "./search-bar";
 
 const navItems = [
   { href: "/", label: "Library", icon: BookOpen },
+  { href: "/explore", label: "Explore", icon: Sparkles },
   { href: "/discover", label: "Discover", icon: Compass },
-  { href: "/settings", label: "Settings", icon: Settings },
+  { href: "/settings", label: "Import", icon: Upload },
   { href: "/about", label: "About", icon: Info },
 ];
 
