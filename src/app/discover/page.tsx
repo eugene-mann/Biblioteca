@@ -1,8 +1,10 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { BookCover } from "@/components/book-cover";
-import { RefreshCw, ExternalLink, Plus, X, Sparkles, Search } from "lucide-react";
+import { RefreshCw, ExternalLink, Plus, X, Sparkles } from "lucide-react";
+
+const VISIBLE_COUNT = 7;
 
 interface Recommendation {
   title: string;
@@ -30,6 +32,9 @@ export default function DiscoverPage() {
   const [dismissedTitles, setDismissedTitles] = useState<Set<string>>(new Set());
   const [emptyLibrary, setEmptyLibrary] = useState(false);
   const [freeformPrompt, setFreeformPrompt] = useState("");
+  // Pool: all recs from LLM. We show VISIBLE_COUNT, rest are backfill.
+  const [recPool, setRecPool] = useState<Recommendation[]>([]);
+  const recPoolRef = useRef<Recommendation[]>([]);
 
   // Load topics on mount
   useEffect(() => {
@@ -51,6 +56,35 @@ export default function DiscoverPage() {
     fetchTopics();
   }, []);
 
+  // Hydrate a single rec's cover in the background
+  async function hydrateRec(rec: Recommendation) {
+    try {
+      const params = new URLSearchParams({ title: rec.title, author: rec.authors[0] ?? "" });
+      const res = await fetch(`/api/recommendations/hydrate?${params}`);
+      if (res.ok) {
+        const data = await res.json();
+        const updater = (r: Recommendation) =>
+          r.title === rec.title
+            ? { ...r, cover_image_url: data.cover_image_url, isbn: data.isbn, amazon_link: data.amazon_link ?? r.amazon_link }
+            : r;
+        setRecPool((prev) => {
+          const updated = prev.map(updater);
+          recPoolRef.current = updated;
+          return updated;
+        });
+        setRecommendations((prev) =>
+          prev.map((r) =>
+            r.title === rec.title
+              ? { ...r, cover_image_url: data.cover_image_url, isbn: data.isbn, amazon_link: data.amazon_link ?? r.amazon_link }
+              : r
+          )
+        );
+      }
+    } catch {
+      // silent
+    }
+  }
+
   async function fetchRecommendations(topic?: string | null, prompt?: string) {
     setIsLoading(true);
     setError(null);
@@ -66,9 +100,15 @@ export default function DiscoverPage() {
       if (data.error) {
         setError(data.error);
       } else {
-        setRecommendations(data.recommendations ?? []);
+        const allRecs: Recommendation[] = data.recommendations ?? [];
+        setRecPool(allRecs);
+        recPoolRef.current = allRecs;
+        // Show first VISIBLE_COUNT immediately
+        setRecommendations(allRecs.slice(0, VISIBLE_COUNT));
         if (data.topics) setTopics(data.topics);
         if (data.message) setEmptyLibrary(true);
+        // Hydrate covers in background
+        allRecs.forEach((rec) => hydrateRec(rec));
       }
     } catch {
       setError("Failed to load recommendations. Please try again.");
@@ -95,7 +135,7 @@ export default function DiscoverPage() {
         }),
       });
       if (res.ok) {
-        setDismissedTitles((prev) => new Set(prev).add(rec.title));
+        dismiss(rec.title);
       }
     } catch {
       // Silent fail
@@ -105,6 +145,15 @@ export default function DiscoverPage() {
 
   function dismiss(title: string) {
     setDismissedTitles((prev) => new Set(prev).add(title));
+    // Replenish from pool using ref to avoid stale closures
+    setRecommendations((recs) => {
+      const shownTitles = new Set(recs.map((r) => r.title));
+      shownTitles.add(title);
+      const backfill = recPoolRef.current.find(
+        (r) => !shownTitles.has(r.title)
+      );
+      return backfill ? [...recs, backfill] : recs;
+    });
   }
 
   // Shuffle library + curated topics together, cap to ~3 rows (~15 chips)

@@ -19,6 +19,14 @@ Personal reading curator — organize books, extract knowledge, and recommend ne
 
 ## Architecture Patterns
 
+### Supabase Joins
+- **No FK on `book_changelog`**: The `book_changelog.book_id` column has no foreign key to `books`. Supabase `.select("*, books:book_id(slug)")` will 500. Use a two-step pattern: fetch changelog rows, then batch-fetch related data with `.in("id", bookIds)` and merge via a map.
+- **`book_insights` has FK**: `book_insights.book_id` references `books(id)` with `ON DELETE CASCADE`, so Supabase joins work there.
+
+### Explore Page
+- **Thematic clustering**: `/api/explore` fetches all `book_insights` + `books`, clusters by 2+ shared themes, picks highest-rated as hero, shuffles cluster order per request.
+- **5 rotating accent colors**: emerald, amber, blue, purple, rose — applied per cluster.
+
 ### Search (EUG-71)
 - **Three-tier search**: Fuse.js instant search (library + popular books cache) → localStorage API cache → Google Books API (debounced 300ms)
 - **SearchBar requires `libraryBooks` prop** from page.tsx for instant local search
@@ -30,6 +38,13 @@ Personal reading curator — organize books, extract knowledge, and recommend ne
 ## Brainstorming
 
 - **Always use visual companion**: When brainstorming features, always enable the browser-based visual companion for mockups and design options. Don't ask — just start it.
+
+## Build & Deploy
+
+- **Always do a local build before pushing**: Run `npx next build` from `/tmp/biblioteca-dev` (after rsync) to catch TypeScript and SSR errors before Vercel deploys. Vercel builds will fail on errors that the dev server ignores.
+- **Commit all new files**: When adding features that introduce new modules (e.g., `src/lib/changelog.ts`), verify all imports resolve on the remote — untracked files that only exist locally cause `Module not found` build failures on Vercel.
+- **React 19 `useRef` requires initial arg**: `useRef<T>()` without an argument is a type error in strict mode. Always pass `useRef<T>(null)` or `useRef<T>(undefined)`.
+- **`useSearchParams` needs Suspense**: Any page using `useSearchParams()` must wrap the component in `<Suspense>` or the production build will fail with a prerender error.
 
 ## Dev Environment
 

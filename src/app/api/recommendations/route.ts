@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { getRecommendations, extractTopicsFromLibrary, CURATED_TOPICS, HIDDEN_LIBRARY_TOPICS, EXTRA_TOPICS } from "@/lib/recommendations";
-import { searchBookByTitleAuthor } from "@/lib/google-books";
-import { searchBookByTitleAuthorOL } from "@/lib/open-library";
 
 const DEFAULT_USER_ID = "00000000-0000-0000-0000-000000000001";
 
@@ -49,59 +47,22 @@ export async function GET(request: NextRequest) {
     const combinedTopic = [topic, prompt].filter(Boolean).join(" — ") || undefined;
     const llmRecs = await getRecommendations(books, combinedTopic);
 
-    // Hydrate with covers — try Open Library first (no rate limit), Google Books as fallback
-    const hydrated = await Promise.all(
-      llmRecs.map(async (rec) => {
-        let cover_image_url: string | null = null;
-        let isbn: string | null = null;
-        let amazon_link: string | null = null;
-
-        // Open Library first — reliable and no rate limits
-        try {
-          const olBook = await searchBookByTitleAuthorOL(rec.title, rec.author);
-          if (olBook) {
-            cover_image_url = olBook.cover_image_url;
-            isbn = olBook.isbn_13;
-            amazon_link = olBook.amazon_link;
-          }
-        } catch {
-          // Open Library failed — silent
-        }
-
-        // Google Books fallback if still missing cover
-        if (!cover_image_url) {
-          try {
-            const apiBook = await searchBookByTitleAuthor(rec.title, rec.author);
-            if (apiBook) {
-              cover_image_url = apiBook.cover_image_url ?? cover_image_url;
-              isbn = isbn ?? apiBook.isbn_13;
-              amazon_link = amazon_link ?? apiBook.amazon_link;
-            }
-          } catch {
-            // Google Books failed — silent
-          }
-        }
-
-        // Fallback Amazon link
-        if (!amazon_link) {
-          const query = encodeURIComponent(`${rec.title} ${rec.author}`);
-          amazon_link = `https://www.amazon.com/s?k=${query}`;
-        }
-
-        return {
-          title: rec.title,
-          authors: [rec.author],
-          reasoning: rec.reasoning,
-          inspired_by: rec.inspired_by,
-          cover_image_url,
-          isbn,
-          amazon_link,
-        };
-      })
-    );
+    // Return recs immediately without cover hydration — client hydrates async
+    const recs = llmRecs.map((rec) => {
+      const query = encodeURIComponent(`${rec.title} ${rec.author}`);
+      return {
+        title: rec.title,
+        authors: [rec.author],
+        reasoning: rec.reasoning,
+        inspired_by: rec.inspired_by,
+        cover_image_url: null as string | null,
+        isbn: null as string | null,
+        amazon_link: `https://www.amazon.com/s?k=${query}`,
+      };
+    });
 
     return NextResponse.json({
-      recommendations: hydrated,
+      recommendations: recs,
       topics: { library: libraryTopics, curated: CURATED_TOPICS },
     });
   } catch (err) {
