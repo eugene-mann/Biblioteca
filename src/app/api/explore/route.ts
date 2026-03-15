@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
-import type { Book, BookInsight } from "@/types/database";
+import type { Book, BookInsight, SuggestedBook } from "@/types/database";
 
 const DEFAULT_USER_ID = "00000000-0000-0000-0000-000000000001";
 
@@ -15,9 +15,10 @@ export interface ExploreCluster {
   clusterName: string;
   heroBook: ExploreBook;
   compactBooks: ExploreBook[];
+  suggestedBooks: SuggestedBook[];
 }
 
-function clusterByThemes(books: ExploreBook[]): ExploreCluster[] {
+function clusterByThemes(books: ExploreBook[], suggestedMap: Map<string, SuggestedBook[]>): ExploreCluster[] {
   const assigned = new Set<string>();
   const clusters: ExploreCluster[] = [];
 
@@ -78,6 +79,7 @@ function clusterByThemes(books: ExploreBook[]): ExploreCluster[] {
       clusterName,
       heroBook: group[0],
       compactBooks: group.slice(1),
+      suggestedBooks: suggestedMap.get(group[0].id) ?? [],
     });
   }
 
@@ -96,7 +98,7 @@ function shuffle<T>(arr: T[]): T[] {
 export async function GET() {
   const { data: insights, error: insightsError } = await supabase
     .from("book_insights")
-    .select("book_id, why_read, themes, quotes")
+    .select("book_id, why_read, themes, quotes, suggested_books")
     .eq("user_id", DEFAULT_USER_ID);
 
   if (insightsError) {
@@ -141,7 +143,15 @@ export async function GET() {
     })
     .filter((b): b is ExploreBook => b !== null);
 
-  const clusters = clusterByThemes(exploreBooks);
+  // Build map of book_id -> suggested_books for cluster enrichment
+  const suggestedMap = new Map<string, SuggestedBook[]>();
+  for (const insight of insights) {
+    if (insight.suggested_books?.length) {
+      suggestedMap.set(insight.book_id, insight.suggested_books as SuggestedBook[]);
+    }
+  }
+
+  const clusters = clusterByThemes(exploreBooks, suggestedMap);
 
   return NextResponse.json(shuffle(clusters));
 }

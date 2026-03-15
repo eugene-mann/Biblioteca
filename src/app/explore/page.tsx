@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { BookOpen } from "lucide-react";
+import { SuggestedBookCard } from "@/components/suggested-book-card";
 import type { ExploreCluster, ExploreBook } from "@/app/api/explore/route";
 
 const ACCENT_CLASSES = [
@@ -232,6 +233,19 @@ export default function ExplorePage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {cluster.compactBooks.map((book) => (
                         <CompactCard key={book.id} book={book} />
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Suggested books */}
+                  {cluster.suggestedBooks?.length > 0 && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                      {cluster.suggestedBooks.map((sb) => (
+                        <SuggestedBookCard
+                          key={`${sb.title}-${sb.authors[0] ?? ""}`}
+                          book={sb}
+                          variant="compact"
+                        />
                       ))}
                     </div>
                   )}

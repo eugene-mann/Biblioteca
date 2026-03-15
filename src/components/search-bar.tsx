@@ -157,6 +157,8 @@ export function SearchBar() {
       setExternalResults([]);
       setIsOpen(false);
       window.dispatchEvent(new Event("biblioteca:book-added"));
+      // Auto-generate insights (non-blocking)
+      fetch(`/api/books/${data.id}/insights`, { method: "POST" }).catch(() => {});
       router.push(`/library/${data.slug || data.id}`);
     } catch {
       setError("Failed to add book. Please try again.");
