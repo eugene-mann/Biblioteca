@@ -298,20 +298,23 @@ export default function LibraryPage() {
         </div>
       ) : (
         <div className="w-full animate-in fade-in duration-300">
-          <BookGrid books={filteredBooks.slice(0, 15)} />
-          {filteredBooks.length > 15 && (
-            <>
-              <div className="my-8">
-                <QuoteDivider />
+          {(() => {
+            const CHUNK_SIZE = 6;
+            const chunks: Book[][] = [];
+            for (let i = 0; i < filteredBooks.length; i += CHUNK_SIZE) {
+              chunks.push(filteredBooks.slice(i, i + CHUNK_SIZE));
+            }
+            return chunks.map((chunk, i) => (
+              <div key={i}>
+                <BookGrid books={chunk} />
+                {(i < chunks.length - 1 || filteredBooks.length <= CHUNK_SIZE) && (
+                  <div className="my-6">
+                    <QuoteDivider colorIndex={i} />
+                  </div>
+                )}
               </div>
-              <BookGrid books={filteredBooks.slice(15)} />
-            </>
-          )}
-          {filteredBooks.length <= 15 && (
-            <div className="mt-8">
-              <QuoteDivider />
-            </div>
-          )}
+            ));
+          })()}
         </div>
       )}
     </div>

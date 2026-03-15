@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 
 interface BookQuote {
@@ -10,29 +10,59 @@ interface BookQuote {
   bookSlug: string;
 }
 
-function shuffleArray<T>(arr: T[]): T[] {
-  const shuffled = [...arr];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  return shuffled;
+const ACCENT_COLORS = [
+  "bg-amber",
+  "bg-[#8B6F4E]",
+  "bg-[#6B8E7B]",
+  "bg-[#9B7B6B]",
+  "bg-[#7B8EA6]",
+  "bg-[#A67B7B]",
+  "bg-[#8B9B6B]",
+  "bg-[#7B6B9B]",
+];
+
+// Shared quote cache — fetched once, reused across instances
+let quotesCache: BookQuote[] | null = null;
+let fetchPromise: Promise<BookQuote[]> | null = null;
+
+function fetchQuotes(): Promise<BookQuote[]> {
+  if (quotesCache) return Promise.resolve(quotesCache);
+  if (fetchPromise) return fetchPromise;
+  fetchPromise = fetch("/api/quotes")
+    .then((r) => r.json())
+    .then((data: BookQuote[]) => {
+      // Shuffle once
+      for (let i = data.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [data[i], data[j]] = [data[j], data[i]];
+      }
+      quotesCache = data;
+      return data;
+    })
+    .catch(() => {
+      fetchPromise = null;
+      return [];
+    });
+  return fetchPromise;
 }
 
-export function QuoteDivider() {
+interface QuoteDividerProps {
+  colorIndex?: number;
+}
+
+export function QuoteDivider({ colorIndex = 0 }: QuoteDividerProps) {
   const [quotes, setQuotes] = useState<BookQuote[]>([]);
   const [index, setIndex] = useState(0);
   const [fade, setFade] = useState(true);
+  const startOffset = useRef(colorIndex * 7); // Different starting quote per instance
 
   useEffect(() => {
-    fetch("/api/quotes")
-      .then((r) => r.json())
-      .then((data: BookQuote[]) => {
-        if (data.length > 0) {
-          setQuotes(shuffleArray(data));
-        }
-      })
-      .catch(() => {});
+    fetchQuotes().then((data) => {
+      if (data.length > 0) {
+        setQuotes(data);
+        setIndex(startOffset.current % data.length);
+      }
+    });
   }, []);
 
   const advance = useCallback(() => {
@@ -45,21 +75,24 @@ export function QuoteDivider() {
 
   useEffect(() => {
     if (quotes.length === 0) return;
-    const timer = setInterval(advance, 12000);
+    // Stagger the auto-advance interval slightly per instance
+    const interval = 12000 + colorIndex * 1500;
+    const timer = setInterval(advance, interval);
     return () => clearInterval(timer);
-  }, [advance, quotes.length]);
+  }, [advance, quotes.length, colorIndex]);
 
   if (quotes.length === 0) return null;
 
   const quote = quotes[index % quotes.length];
+  const accentColor = ACCENT_COLORS[colorIndex % ACCENT_COLORS.length];
 
   return (
     <div className="w-full py-2">
       <div
         className="group relative w-full rounded-sm border border-warm-border bg-card px-8 py-7 shadow-sm transition-shadow hover:shadow-md md:px-12 md:py-9"
       >
-        {/* Amber accent bar */}
-        <div className="absolute left-0 top-4 bottom-4 w-1 rounded-r-full bg-amber" />
+        {/* Accent bar */}
+        <div className={`absolute left-0 top-4 bottom-4 w-1 rounded-r-full ${accentColor}`} />
 
         <div
           className={`transition-opacity duration-400 ${fade ? "opacity-100" : "opacity-0"}`}
