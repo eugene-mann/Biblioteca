@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { BookCover } from "@/components/book-cover";
 import { RefreshCw, ExternalLink, Plus, X, Sparkles, Search } from "lucide-react";
 
@@ -107,6 +107,17 @@ export default function DiscoverPage() {
     setDismissedTitles((prev) => new Set(prev).add(title));
   }
 
+  // Shuffle library + curated topics together, cap to ~3 rows (~15 chips)
+  const shuffledTopics = useMemo(() => {
+    const all = [...topics.library, ...topics.curated];
+    const shuffled = [...all];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled.slice(0, 15);
+  }, [topics.library, topics.curated]);
+
   const visibleRecs = recommendations.filter((r) => !dismissedTitles.has(r.title));
 
   if (emptyLibrary && !isLoading && recommendations.length === 0) {
@@ -142,7 +153,7 @@ export default function DiscoverPage() {
         </button>
       </div>
 
-      {/* Topic chips */}
+      {/* Topic chips — shuffled mix of library + curated, 3 rows */}
       {!isLoadingTopics && (topics.library.length > 0 || topics.curated.length > 0) && (
         <div className="mt-6">
           <div className="flex flex-wrap gap-2">
@@ -159,23 +170,7 @@ export default function DiscoverPage() {
             >
               For You
             </button>
-            {topics.library.map((topic) => (
-              <button
-                key={topic}
-                onClick={() => {
-                  setSelectedTopic(topic);
-                  if (recommendations.length > 0) fetchRecommendations(topic, freeformPrompt || undefined);
-                }}
-                className={`rounded-sm px-3 py-1.5 text-xs font-medium transition-colors ${
-                  selectedTopic === topic
-                    ? "bg-amber text-amber-foreground"
-                    : "border border-warm-border text-warm-gray hover:text-foreground"
-                }`}
-              >
-                {topic}
-              </button>
-            ))}
-            {topics.curated.map((topic) => (
+            {shuffledTopics.map((topic) => (
               <button
                 key={topic}
                 onClick={() => {

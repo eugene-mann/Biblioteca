@@ -105,11 +105,29 @@ export function extractTopicsFromLibrary(books: Book[]): string[] {
  * Curated reading lists for topic steering.
  */
 export const CURATED_TOPICS = [
-  "Bill Gates Reading List",
-  "Obama Summer Reading",
+  // Award lists
   "Hugo Award Winners",
   "Pulitzer Fiction",
+  "National Book Award",
+  "Man Booker Prize",
+  "Nebula Award Winners",
+  "Nobel Literature Laureates",
+  // Celebrity picks
+  "Bill Gates Reading List",
+  "Obama Summer Reading",
+  "Oprah Book Club",
   "NYT Best of 2025",
+  // Genre exploration
+  "Epic Fantasy",
+  "Hard Sci-Fi",
+  "True Crime",
+  "Narrative Nonfiction",
+  "Military History",
+  "Ancient Civilizations",
+  "Startup & Entrepreneurship",
+  "Stoicism & Philosophy",
+  "Space Exploration",
+  "Economics & Markets",
 ];
 
 /**
