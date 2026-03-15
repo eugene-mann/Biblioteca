@@ -111,3 +111,18 @@ export const CURATED_TOPICS = [
   "Pulitzer Fiction",
   "NYT Best of 2025",
 ];
+
+/**
+ * Library topics to hide from the chip display.
+ */
+export const HIDDEN_LIBRARY_TOPICS = [
+  "Self-Help",
+  "Political Science",
+];
+
+/**
+ * Extra topics always shown in the chip list (in addition to library-derived ones).
+ */
+export const EXTRA_TOPICS = [
+  "Artificial Intelligence",
+];

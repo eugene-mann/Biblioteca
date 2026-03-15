@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { BookCover } from "@/components/book-cover";
-import { RefreshCw, ExternalLink, Plus, X, Sparkles } from "lucide-react";
+import { RefreshCw, ExternalLink, Plus, X, Sparkles, Search } from "lucide-react";
 
 interface Recommendation {
   title: string;
@@ -29,6 +29,7 @@ export default function DiscoverPage() {
   const [addingTitle, setAddingTitle] = useState<string | null>(null);
   const [dismissedTitles, setDismissedTitles] = useState<Set<string>>(new Set());
   const [emptyLibrary, setEmptyLibrary] = useState(false);
+  const [freeformPrompt, setFreeformPrompt] = useState("");
 
   // Load topics on mount
   useEffect(() => {
@@ -50,7 +51,7 @@ export default function DiscoverPage() {
     fetchTopics();
   }, []);
 
-  async function fetchRecommendations(topic?: string | null) {
+  async function fetchRecommendations(topic?: string | null, prompt?: string) {
     setIsLoading(true);
     setError(null);
     setDismissedTitles(new Set());
@@ -58,6 +59,7 @@ export default function DiscoverPage() {
     try {
       const params = new URLSearchParams();
       if (topic) params.set("topic", topic);
+      if (prompt) params.set("prompt", prompt);
       const res = await fetch(`/api/recommendations?${params}`);
       const data = await res.json();
 
@@ -131,7 +133,7 @@ export default function DiscoverPage() {
           </p>
         </div>
         <button
-          onClick={() => fetchRecommendations(selectedTopic)}
+          onClick={() => fetchRecommendations(selectedTopic, freeformPrompt || undefined)}
           disabled={isLoading}
           className="flex items-center gap-2 rounded-sm bg-foreground px-4 py-2 font-sans text-sm font-medium text-background transition-colors hover:bg-foreground/90 disabled:opacity-50"
         >
@@ -147,7 +149,7 @@ export default function DiscoverPage() {
             <button
               onClick={() => {
                 setSelectedTopic(null);
-                if (recommendations.length > 0) fetchRecommendations(null);
+                if (recommendations.length > 0) fetchRecommendations(null, freeformPrompt || undefined);
               }}
               className={`rounded-sm px-3 py-1.5 text-xs font-medium transition-colors ${
                 selectedTopic === null
@@ -162,7 +164,7 @@ export default function DiscoverPage() {
                 key={topic}
                 onClick={() => {
                   setSelectedTopic(topic);
-                  if (recommendations.length > 0) fetchRecommendations(topic);
+                  if (recommendations.length > 0) fetchRecommendations(topic, freeformPrompt || undefined);
                 }}
                 className={`rounded-sm px-3 py-1.5 text-xs font-medium transition-colors ${
                   selectedTopic === topic
@@ -178,7 +180,7 @@ export default function DiscoverPage() {
                 key={topic}
                 onClick={() => {
                   setSelectedTopic(topic);
-                  if (recommendations.length > 0) fetchRecommendations(topic);
+                  if (recommendations.length > 0) fetchRecommendations(topic, freeformPrompt || undefined);
                 }}
                 className={`rounded-sm px-3 py-1.5 text-xs font-medium transition-colors ${
                   selectedTopic === topic
@@ -189,6 +191,34 @@ export default function DiscoverPage() {
                 {topic}
               </button>
             ))}
+          </div>
+        </div>
+      )}
+
+      {/* Free-form prompt input */}
+      {!isLoadingTopics && (
+        <div className="mt-4">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="h-px flex-1 bg-warm-border" />
+            <span className="text-[11px] font-medium uppercase tracking-[0.15em] text-warm-gray">
+              or describe what you want
+            </span>
+            <div className="h-px flex-1 bg-warm-border" />
+          </div>
+          <div className="relative">
+            <Sparkles className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-warm-gray" />
+            <input
+              type="text"
+              value={freeformPrompt}
+              onChange={(e) => setFreeformPrompt(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && freeformPrompt.trim()) {
+                  fetchRecommendations(selectedTopic, freeformPrompt);
+                }
+              }}
+              placeholder='e.g. "Books about the fall of civilizations"'
+              className="w-full rounded-sm border border-warm-border bg-card py-3 pl-10 pr-4 font-serif text-sm italic outline-none transition-colors placeholder:text-warm-gray/60 focus:border-amber focus:ring-0"
+            />
           </div>
         </div>
       )}
@@ -313,7 +343,7 @@ export default function DiscoverPage() {
             All recommendations dismissed.
           </p>
           <button
-            onClick={() => fetchRecommendations(selectedTopic)}
+            onClick={() => fetchRecommendations(selectedTopic, freeformPrompt || undefined)}
             className="font-sans text-sm font-medium underline"
           >
             Get fresh recommendations

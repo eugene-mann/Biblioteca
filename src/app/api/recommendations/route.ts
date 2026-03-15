@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
-import { getRecommendations, extractTopicsFromLibrary, CURATED_TOPICS } from "@/lib/recommendations";
+import { getRecommendations, extractTopicsFromLibrary, CURATED_TOPICS, HIDDEN_LIBRARY_TOPICS, EXTRA_TOPICS } from "@/lib/recommendations";
 import { searchBookByTitleAuthor } from "@/lib/google-books";
 
 const DEFAULT_USER_ID = "00000000-0000-0000-0000-000000000001";
 
 export async function GET(request: NextRequest) {
   const topic = request.nextUrl.searchParams.get("topic") ?? undefined;
+  const prompt = request.nextUrl.searchParams.get("prompt") ?? undefined;
 
   // Fetch user's library
   const { data: books, error } = await supabase
@@ -27,8 +28,12 @@ export async function GET(request: NextRequest) {
     });
   }
 
-  // Extract topics from library
-  const libraryTopics = extractTopicsFromLibrary(books);
+  // Extract topics from library, filtering hidden ones and adding extras
+  const rawLibraryTopics = extractTopicsFromLibrary(books);
+  const libraryTopics = [
+    ...rawLibraryTopics.filter((t) => !HIDDEN_LIBRARY_TOPICS.includes(t)),
+    ...EXTRA_TOPICS.filter((t) => !rawLibraryTopics.includes(t)),
+  ];
 
   // If only topics were requested (no generation)
   if (request.nextUrl.searchParams.get("topics_only") === "true") {
@@ -39,7 +44,9 @@ export async function GET(request: NextRequest) {
 
   try {
     // Get LLM recommendations
-    const llmRecs = await getRecommendations(books, topic);
+    // Combine topic chip and free-form prompt
+    const combinedTopic = [topic, prompt].filter(Boolean).join(" — ") || undefined;
+    const llmRecs = await getRecommendations(books, combinedTopic);
 
     // Hydrate with covers via Google Books API
     const hydrated = await Promise.all(
