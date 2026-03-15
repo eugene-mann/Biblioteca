@@ -310,7 +310,7 @@ export default function DiscoverPage() {
             </span>
             <div className="h-px flex-1 bg-warm-border" />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex flex-col gap-4">
             {suggestedBooks.map((sb) => (
               <SuggestedBookCard
                 key={`${sb.title}-${sb.authors[0] ?? ""}`}
