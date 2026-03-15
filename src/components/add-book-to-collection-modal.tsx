@@ -89,7 +89,7 @@ export function AddBookToCollectionModal({
   const [addedBookIds, setAddedBookIds] = useState<Set<string>>(new Set());
   const [addingBookId, setAddingBookId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+  const debounceRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   // Reset state when modal opens
   useEffect(() => {

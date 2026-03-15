@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { Suspense, useState, useEffect, useCallback, useMemo } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { BookGrid, BookGridSkeleton } from "@/components/book-grid";
 import { CollectionCarousel } from "@/components/collection-carousel";
@@ -56,6 +56,14 @@ function useUrlState() {
 }
 
 export default function LibraryPage() {
+  return (
+    <Suspense fallback={<BookGridSkeleton />}>
+      <LibraryPageContent />
+    </Suspense>
+  );
+}
+
+function LibraryPageContent() {
   const { getParam, setParams } = useUrlState();
 
   const statusFilter = getParam("status", "all", VALID_STATUSES) as BookStatus | "all";
