@@ -136,6 +136,7 @@ export async function searchBooks(query: string): Promise<Omit<Book, "id" | "dat
   if (!query.trim()) return [];
 
   const apiKey = process.env.GOOGLE_BOOKS_API_KEY;
+  console.log(`[search] API key present: ${!!apiKey}, length: ${apiKey?.length ?? 0}`);
   const params = new URLSearchParams({
     q: query,
     maxResults: "10",
@@ -143,10 +144,9 @@ export async function searchBooks(query: string): Promise<Omit<Book, "id" | "dat
   });
   if (apiKey) params.set("key", apiKey);
 
-  let res = await fetch(
-    `https://www.googleapis.com/books/v1/volumes?${params}`,
-    { cache: "no-store" }
-  );
+  const url = `https://www.googleapis.com/books/v1/volumes?${params}`;
+  console.log(`[search] Fetching: ${url.replace(apiKey ?? "", "***")}`);
+  let res = await fetch(url, { cache: "no-store" });
 
   // Retry once after a short delay on rate limit
   if (res.status === 429) {
@@ -157,16 +157,18 @@ export async function searchBooks(query: string): Promise<Omit<Book, "id" | "dat
     );
   }
 
+  console.log(`[search] Response status: ${res.status}`);
   if (!res.ok) {
     if (res.status === 429) {
       throw new Error("Search is temporarily unavailable. Please try again in a moment.");
     }
-    // Return empty results instead of showing raw API errors to users
-    console.error(`Google Books API error: ${res.status}`, await res.text().catch(() => ""));
+    const body = await res.text().catch(() => "");
+    console.error(`Google Books API error: ${res.status}`, body);
     return [];
   }
 
   const data: GoogleBooksResponse = await res.json();
+  console.log(`[search] Total items: ${data.totalItems}, results: ${data.items?.length ?? 0}`);
   if (!data.items) return [];
 
   return data.items.map((vol) => volumeToBookPartial(vol));
