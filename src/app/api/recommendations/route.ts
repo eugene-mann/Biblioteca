@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { getRecommendations, extractTopicsFromLibrary, CURATED_TOPICS, HIDDEN_LIBRARY_TOPICS, EXTRA_TOPICS } from "@/lib/recommendations";
 import { searchBookByTitleAuthor } from "@/lib/google-books";
+import { searchBookByTitleAuthorOL } from "@/lib/open-library";
 
 const DEFAULT_USER_ID = "00000000-0000-0000-0000-000000000001";
 
@@ -63,7 +64,21 @@ export async function GET(request: NextRequest) {
             amazon_link = apiBook.amazon_link;
           }
         } catch {
-          // Hydration failed — proceed without cover
+          // Google Books failed — silent
+        }
+
+        // Fallback to Open Library if no cover found
+        if (!cover_image_url) {
+          try {
+            const olBook = await searchBookByTitleAuthorOL(rec.title, rec.author);
+            if (olBook) {
+              cover_image_url = olBook.cover_image_url ?? cover_image_url;
+              isbn = isbn ?? olBook.isbn_13;
+              amazon_link = amazon_link ?? olBook.amazon_link;
+            }
+          } catch {
+            // Open Library also failed — proceed without cover
+          }
         }
 
         // Fallback Amazon link
