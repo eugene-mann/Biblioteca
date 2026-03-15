@@ -7,6 +7,7 @@ import type { Book } from "@/types/database";
 
 interface BookGridProps {
   books: Book[];
+  renderAfter?: React.ReactNode;
 }
 
 function RatingPill({ rating, externalRating }: { rating: number | null; externalRating: number | null }) {
@@ -55,8 +56,8 @@ export function BookGridSkeleton({ count = 10 }: { count?: number }) {
   );
 }
 
-export function BookGrid({ books }: BookGridProps) {
-  if (books.length === 0) return null;
+export function BookGrid({ books, renderAfter }: BookGridProps) {
+  if (books.length === 0 && !renderAfter) return null;
 
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
@@ -94,6 +95,7 @@ export function BookGrid({ books }: BookGridProps) {
           </div>
         </Link>
       ))}
+      {renderAfter}
     </div>
   );
 }

@@ -27,6 +27,10 @@ Personal reading curator — organize books, extract knowledge, and recommend ne
 - **Book grid uses `data-book-id` attributes** for scroll-to-highlight from search results
 - **Fuse.js type caveat**: Don't use `as const` on the full options object — Fuse expects mutable arrays. Use `as const` on individual key `name` properties instead.
 
+## Brainstorming
+
+- **Always use visual companion**: When brainstorming features, always enable the browser-based visual companion for mockups and design options. Don't ask — just start it.
+
 ## Dev Environment
 
 - **Spaces in path**: The repo lives under iCloud Drive (`Mobile Documents/com~apple~CloudDocs`). Next.js Turbopack crashes on paths with spaces. Workaround: copy to `/tmp/biblioteca-dev` and run `npm run dev` from there. The `.claude/launch.json` is configured for this.
