@@ -159,9 +159,11 @@ export async function searchBooks(query: string): Promise<Omit<Book, "id" | "dat
 
   if (!res.ok) {
     if (res.status === 429) {
-      throw new Error("Google Books API rate limit reached. Please wait a moment and try again.");
+      throw new Error("Search is temporarily unavailable. Please try again in a moment.");
     }
-    throw new Error(`Google Books API error: ${res.status}`);
+    // Return empty results instead of showing raw API errors to users
+    console.error(`Google Books API error: ${res.status}`, await res.text().catch(() => ""));
+    return [];
   }
 
   const data: GoogleBooksResponse = await res.json();
