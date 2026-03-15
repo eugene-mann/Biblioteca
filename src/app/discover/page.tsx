@@ -100,7 +100,13 @@ export default function DiscoverPage() {
       if (data.error) {
         setError(data.error);
       } else {
-        const allRecs: Recommendation[] = data.recommendations ?? [];
+        // Deduplicate by title (LLM may return duplicates)
+        const seen = new Set<string>();
+        const allRecs: Recommendation[] = (data.recommendations ?? []).filter((r: Recommendation) => {
+          if (seen.has(r.title)) return false;
+          seen.add(r.title);
+          return true;
+        });
         setRecPool(allRecs);
         recPoolRef.current = allRecs;
         // Show first VISIBLE_COUNT immediately
