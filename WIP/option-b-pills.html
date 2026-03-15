@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Option B: Filter Pills with Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Franklin:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #FAF7F2; color: #2C2416; font-family: 'Libre Franklin', sans-serif; }
+
+  .nav { display: flex; justify-content: space-between; align-items: center; padding: 16px 32px; border-bottom: 1px solid #E8DFD3; }
+  .nav-logo { font-family: 'Playfair Display', serif; font-size: 20px; font-style: italic; color: #C8956C; }
+  .nav-links { display: flex; gap: 32px; }
+  .nav-links a { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; color: #8B7355; }
+  .nav-links a.active { color: #2C2416; font-weight: 600; border-bottom: 2px solid #2C2416; padding-bottom: 2px; }
+
+  .page { max-width: 1200px; margin: 0 auto; padding: 40px 32px; }
+  .page-title { font-family: 'Playfair Display', serif; font-size: 32px; text-align: center; margin-bottom: 4px; }
+  .page-subtitle { font-size: 12px; letter-spacing: 1px; text-align: center; color: #8B7355; margin-bottom: 32px; }
+
+  .search { display: flex; align-items: center; gap: 12px; max-width: 640px; margin: 0 auto 40px; padding: 10px 16px; border-bottom: 1px solid #D4C4B0; }
+  .search-icon { color: #8B7355; font-size: 14px; }
+  .search input { flex: 1; border: none; background: none; font-family: 'Libre Franklin', sans-serif; font-size: 14px; color: #2C2416; outline: none; }
+  .search input::placeholder { color: #B8A898; }
+
+  /* Collections Pills */
+  .collections-section { margin-bottom: 32px; }
+  .collections-label { font-family: 'Playfair Display', serif; font-size: 11px; text-transform: uppercase; letter-spacing: 2.5px; color: #8B7355; margin-bottom: 14px; }
+
+  .pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; padding: 7px 16px; border-radius: 999px; font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+  .pill-count { font-size: 10px; opacity: 0.5; }
+
+  .pill.active { background: #2C2416; color: #FAF7F2; border: 1px solid #2C2416; }
+  .pill.active .pill-count { opacity: 0.6; }
+  .pill.inactive { background: transparent; color: #2C2416; border: 1px solid #D4C4B0; }
+  .pill.inactive:hover { border-color: #C8956C; color: #C8956C; }
+  .pill.inactive:hover .pill-count { color: #C8956C; }
+  .pill.create { background: transparent; color: #8B7355; border: 1px dashed #D4C4B0; }
+  .pill.create:hover { border-color: #C8956C; color: #C8956C; }
+
+  /* Cover preview strip */
+  .cover-preview { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: #F3EDE4; border-radius: 10px; }
+  .cover-stack { display: flex; align-items: center; }
+  .cover-thumb { width: 32px; height: 46px; border-radius: 3px; border: 2px solid #F3EDE4; object-fit: cover; box-shadow: 1px 2px 4px rgba(0,0,0,0.1); }
+  .cover-thumb:not(:first-child) { margin-left: -8px; }
+  .cover-preview-text { font-size: 12px; color: #8B7355; }
+  .cover-preview-text strong { color: #2C2416; font-weight: 500; }
+
+  .divider { height: 1px; background: #E8DFD3; margin: 32px 0; }
+
+  .filters { display: flex; align-items: center; gap: 16px; margin-bottom: 28px; }
+  .filter-tab { font-size: 13px; color: #8B7355; cursor: pointer; padding-bottom: 2px; text-decoration: none; }
+  .filter-tab.active { color: #C8956C; border-bottom: 1px solid #C8956C; }
+  .filter-sep { color: #D4C4B0; font-size: 12px; }
+  .filter-heart { color: #8B7355; cursor: pointer; font-size: 16px; }
+  .filter-right { margin-left: auto; display: flex; gap: 12px; }
+  .filter-select { border: 1px solid #D4C4B0; border-radius: 6px; padding: 6px 12px; font-size: 12px; background: white; color: #2C2416; font-family: 'Libre Franklin', sans-serif; }
+
+  .book-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 28px 20px; }
+  .book-card { text-align: center; cursor: pointer; }
+  .book-cover { width: 100%; aspect-ratio: 2/3; border-radius: 4px; box-shadow: 2px 4px 12px rgba(0,0,0,0.12); transition: transform 0.2s, box-shadow 0.2s; }
+  .book-cover:hover { transform: translateY(-4px); box-shadow: 2px 8px 20px rgba(0,0,0,0.18); }
+  .book-title { font-family: 'Libre Franklin', sans-serif; font-size: 12px; font-weight: 500; margin-top: 10px; color: #2C2416; }
+  .book-author { font-size: 11px; color: #8B7355; margin-top: 2px; }
+  .book-category { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: #B8A898; margin-top: 4px; }
+
+  .badge { position: fixed; bottom: 16px; right: 16px; background: #2C2416; color: #FAF7F2; padding: 8px 16px; border-radius: 999px; font-size: 12px; font-weight: 500; z-index: 100; }
+
+  /* Interactive states */
+  .pill.active .pill-count { opacity: 0.6; color: #FAF7F2; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo">Biblioteca</div>
+  <div class="nav-links">
+    <a href="#" class="active">LIBRARY</a>
+    <a href="#">DISCOVER</a>
+    <a href="#">SETTINGS</a>
+  </div>
+</nav>
+
+<div class="page">
+  <h1 class="page-title">Your Library</h1>
+  <p class="page-subtitle">487 volumes</p>
+
+  <div class="search">
+    <span class="search-icon">&#x1F50D;</span>
+    <input type="text" placeholder="Search for a book...">
+  </div>
+
+  <!-- Collections as Pills -->
+  <div class="collections-section">
+    <div class="collections-label">Collections</div>
+    <div class="pills">
+      <div class="pill active">All Books <span class="pill-count">487</span></div>
+      <div class="pill inactive">Favorites <span class="pill-count">5</span></div>
+      <div class="pill inactive">Hugo Award Winners <span class="pill-count">27</span></div>
+      <div class="pill inactive">Pulitzer Prize Winners <span class="pill-count">8</span></div>
+      <div class="pill inactive">History <span class="pill-count">2</span></div>
+      <div class="pill inactive">Sci-Fi Favorites <span class="pill-count">2</span></div>
+      <div class="pill create">+ New</div>
+    </div>
+
+    <!-- Cover preview strip -->
+    <div class="cover-preview">
+      <div class="cover-stack">
+        <div class="cover-thumb" style="background: linear-gradient(135deg, #1a3a4a, #2a5a3a);"></div>
+        <div class="cover-thumb" style="background: linear-gradient(135deg, #4a2a1a, #8a5a3a);"></div>
+        <div class="cover-thumb" style="background: linear-gradient(135deg, #1a2a4a, #3a5a8a);"></div>
+        <div class="cover-thumb" style="background: linear-gradient(135deg, #3a2a4a, #5a4a6a);"></div>
+        <div class="cover-thumb" style="background: linear-gradient(135deg, #2a4a2a, #4a6a3a);"></div>
+      </div>
+      <div class="cover-preview-text"><strong>487 volumes</strong> in All Books</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="filters">
+    <a class="filter-tab active">All</a>
+    <span class="filter-sep">/</span>
+    <a class="filter-tab">Want to Read</a>
+    <span class="filter-sep">/</span>
+    <a class="filter-tab">Reading</a>
+    <span class="filter-sep">/</span>
+    <a class="filter-tab">Read</a>
+    <span class="filter-heart">&#9825;</span>
+    <div class="filter-right">
+      <select class="filter-select"><option>All Categories</option></select>
+      <select class="filter-select"><option>Sort: Date Added</option></select>
+    </div>
+  </div>
+
+  <div class="book-grid">
+    <div class="book-card">
+      <div class="book-cover" style="background: linear-gradient(135deg, #1a3a4a, #2a5a3a);"></div>
+      <div class="book-title">Feersum Endjinn</div>
+      <div class="book-author">Iain M. Banks</div>
+      <div class="book-category">FICTION</div>
+    </div>
+    <div class="book-card">
+      <div class="book-cover" style="background: linear-gradient(135deg, #4a2a1a, #8a5a3a);"></div>
+      <div class="book-title">Against a Dark Background</div>
+      <div class="book-author">Iain M. Banks</div>
+      <div class="book-category">FICTION</div>
+    </div>
+    <div class="book-card">
+      <div class="book-cover" style="background: linear-gradient(135deg, #1a2a4a, #3a5a8a);"></div>
+      <div class="book-title">The Hydrogen Sonata</div>
+      <div class="book-author">Iain M. Banks</div>
+      <div class="book-category">FICTION</div>
+    </div>
+    <div class="book-card">
+      <div class="book-cover" style="background: linear-gradient(135deg, #3a2a4a, #5a4a6a);"></div>
+      <div class="book-title">Matter</div>
+      <div class="book-author">Iain M. Banks</div>
+      <div class="book-category">FICTION</div>
+    </div>
+    <div class="book-card">
+      <div class="book-cover" style="background: linear-gradient(135deg, #2a4a2a, #4a6a3a);"></div>
+      <div class="book-title">Inversions</div>
+      <div class="book-author">Iain M Banks</div>
+      <div class="book-category">FICTION</div>
+    </div>
+  </div>
+</div>
+
+<div class="badge">Option B: Filter Pills with Preview</div>
+</body>
+</html>

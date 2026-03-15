@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biblioteca — About (Option B: The Editorial)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Archivo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F0E8;
+    --ink: #1A1408;
+    --terracotta: #C4704B;
+    --sage: #6B7F5E;
+    --gold: #B8963E;
+    --stone: #9A8E7E;
+    --parchment: #EDE6D8;
+    --deep-brown: #3D2E1E;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Archivo', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ── Masthead ── */
+  .masthead {
+    padding: 2rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(26, 20, 8, 0.08);
+  }
+
+  .masthead-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .masthead-nav {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .masthead-nav a {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--stone);
+    transition: color 0.3s;
+  }
+
+  .masthead-nav a:hover { color: var(--terracotta); }
+
+  /* ── Hero Spread ── */
+  .spread {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 85vh;
+    border-bottom: 1px solid rgba(26, 20, 8, 0.08);
+  }
+
+  @media (max-width: 768px) {
+    .spread { grid-template-columns: 1fr; min-height: auto; }
+    .spread-visual { min-height: 50vh; }
+  }
+
+  .spread-visual {
+    background: var(--deep-brown);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .spread-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 30% 70%, rgba(196, 112, 75, 0.2) 0%, transparent 50%),
+      radial-gradient(circle at 70% 30%, rgba(184, 150, 62, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, rgba(107, 127, 94, 0.1) 0%, transparent 60%);
+  }
+
+  /* Book stack illustration */
+  .book-stack {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    transform: rotate(-3deg);
+    opacity: 0;
+    animation: stackReveal 1.2s ease forwards 0.5s;
+  }
+
+  .book-spine {
+    height: 18px;
+    border-radius: 2px;
+    opacity: 0.85;
+  }
+
+  .book-spine:nth-child(1) { width: 180px; background: var(--terracotta); }
+  .book-spine:nth-child(2) { width: 200px; background: var(--sage); height: 22px; }
+  .book-spine:nth-child(3) { width: 160px; background: var(--gold); }
+  .book-spine:nth-child(4) { width: 190px; background: #8B6F5E; height: 20px; }
+  .book-spine:nth-child(5) { width: 170px; background: #5E6B7F; }
+  .book-spine:nth-child(6) { width: 210px; background: var(--terracotta); opacity: 0.6; height: 24px; }
+  .book-spine:nth-child(7) { width: 175px; background: var(--sage); opacity: 0.7; }
+  .book-spine:nth-child(8) { width: 195px; background: var(--gold); opacity: 0.5; height: 16px; }
+
+  .spread-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 5rem 4rem;
+  }
+
+  .spread-issue {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    margin-bottom: 2rem;
+  }
+
+  .spread-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 300;
+    line-height: 1.1;
+    margin-bottom: 2rem;
+    letter-spacing: -0.02em;
+  }
+
+  .spread-title strong {
+    font-weight: 700;
+    font-style: italic;
+  }
+
+  .spread-deck {
+    font-size: 0.95rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--stone);
+    max-width: 400px;
+    margin-bottom: 3rem;
+  }
+
+  .spread-byline {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .byline-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--terracotta), var(--gold));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: white;
+  }
+
+  .byline-text {
+    font-size: 0.7rem;
+    color: var(--stone);
+    letter-spacing: 0.05em;
+  }
+
+  .byline-text strong {
+    display: block;
+    color: var(--ink);
+    font-weight: 600;
+    font-size: 0.75rem;
+  }
+
+  /* ── Pull Quote ── */
+  .pull-quote {
+    padding: 5rem 3rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(26, 20, 8, 0.08);
+    background: var(--parchment);
+    position: relative;
+  }
+
+  .pull-quote::before,
+  .pull-quote::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 40px;
+    background: var(--terracotta);
+    opacity: 0.3;
+  }
+
+  .pull-quote::before { top: 0; }
+  .pull-quote::after { bottom: 0; }
+
+  .pull-quote blockquote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.4rem, 3vw, 2.2rem);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.5;
+    max-width: 700px;
+    margin: 0 auto;
+    color: var(--deep-brown);
+  }
+
+  /* ── Feature Articles Grid ── */
+  .articles {
+    padding: 5rem 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .articles-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 3rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .articles-section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+  }
+
+  .articles-count {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+
+  .articles-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    border: 1px solid rgba(26, 20, 8, 0.1);
+  }
+
+  @media (max-width: 768px) {
+    .articles-grid { grid-template-columns: 1fr; }
+  }
+
+  .article-card {
+    padding: 2.5rem;
+    border: 1px solid rgba(26, 20, 8, 0.06);
+    position: relative;
+    transition: background 0.4s ease;
+    cursor: default;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .article-card.visible {
+    animation: fadeUp 0.6s ease forwards;
+  }
+
+  .article-card:hover {
+    background: var(--parchment);
+  }
+
+  .article-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+  }
+
+  .article-card:nth-child(1) .article-icon { background: rgba(196, 112, 75, 0.12); color: var(--terracotta); }
+  .article-card:nth-child(2) .article-icon { background: rgba(107, 127, 94, 0.12); color: var(--sage); }
+  .article-card:nth-child(3) .article-icon { background: rgba(184, 150, 62, 0.12); color: var(--gold); }
+  .article-card:nth-child(4) .article-icon { background: rgba(139, 111, 94, 0.12); color: #8B6F5E; }
+
+  .article-num {
+    font-size: 0.55rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--stone);
+    margin-bottom: 1rem;
+  }
+
+  .article-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+
+  .article-excerpt {
+    font-size: 0.85rem;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--stone);
+  }
+
+  /* ── Roadmap Timeline ── */
+  .roadmap {
+    padding: 5rem 3rem;
+    max-width: 800px;
+    margin: 0 auto;
+    border-top: 1px solid rgba(26, 20, 8, 0.08);
+  }
+
+  .roadmap-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .roadmap-label {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    margin-bottom: 1rem;
+  }
+
+  .roadmap-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 300;
+  }
+
+  .timeline {
+    position: relative;
+    padding-left: 3rem;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--terracotta);
+    opacity: 0.2;
+  }
+
+  .timeline-item {
+    position: relative;
+    padding-bottom: 3rem;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .timeline-item.visible {
+    animation: fadeUp 0.6s ease forwards;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -3rem;
+    top: 6px;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border: 2px solid var(--terracotta);
+    background: var(--cream);
+  }
+
+  .timeline-item.active::before {
+    background: var(--terracotta);
+    box-shadow: 0 0 0 4px rgba(196, 112, 75, 0.15);
+  }
+
+  .timeline-phase {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    margin-bottom: 0.5rem;
+  }
+
+  .timeline-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+  }
+
+  .timeline-text {
+    font-size: 0.85rem;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--stone);
+    max-width: 500px;
+  }
+
+  /* ── Stack Bar ── */
+  .stack-bar {
+    background: var(--deep-brown);
+    color: var(--parchment);
+    padding: 3rem;
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+  }
+
+  .stack-bar-label {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    flex-shrink: 0;
+  }
+
+  .stack-bar-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  .stack-bar-item {
+    font-size: 0.75rem;
+    font-weight: 400;
+    opacity: 0.6;
+    transition: opacity 0.3s;
+    cursor: default;
+  }
+
+  .stack-bar-item:hover { opacity: 1; }
+
+  .stack-bar-sep {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--terracotta);
+    opacity: 0.4;
+  }
+
+  /* ── Contribute ── */
+  .contribute {
+    padding: 6rem 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4rem;
+    flex-wrap: wrap;
+  }
+
+  .contribute-text-block {
+    max-width: 400px;
+  }
+
+  .contribute-label {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin-bottom: 1.5rem;
+  }
+
+  .contribute-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+    font-weight: 300;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+
+  .contribute-title strong {
+    font-weight: 700;
+    font-style: italic;
+  }
+
+  .contribute-desc {
+    font-size: 0.9rem;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--stone);
+  }
+
+  .contribute-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .github-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.25rem 3rem;
+    background: var(--ink);
+    color: var(--cream);
+    text-decoration: none;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    border-radius: 0;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .github-btn:hover {
+    background: var(--terracotta);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(196, 112, 75, 0.2);
+  }
+
+  .github-btn svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+  }
+
+  .contribute-hint {
+    font-size: 0.65rem;
+    color: var(--stone);
+    letter-spacing: 0.1em;
+  }
+
+  /* ── Colophon ── */
+  .colophon {
+    padding: 2.5rem 3rem;
+    border-top: 1px solid rgba(26, 20, 8, 0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .colophon-left {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.85rem;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--stone);
+  }
+
+  .colophon-right {
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+
+  /* ── Animations ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes stackReveal {
+    from { opacity: 0; transform: rotate(-3deg) translateY(40px); }
+    to { opacity: 1; transform: rotate(-3deg) translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<!-- Masthead -->
+<header class="masthead">
+  <div class="masthead-logo">Biblioteca</div>
+  <nav>
+    <ul class="masthead-nav">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#roadmap">Roadmap</a></li>
+      <li><a href="#contribute">Contribute</a></li>
+    </ul>
+  </nav>
+</header>
+
+<!-- Hero Spread -->
+<section class="spread">
+  <div class="spread-visual">
+    <div class="book-stack">
+      <div class="book-spine"></div>
+      <div class="book-spine"></div>
+      <div class="book-spine"></div>
+      <div class="book-spine"></div>
+      <div class="book-spine"></div>
+      <div class="book-spine"></div>
+      <div class="book-spine"></div>
+      <div class="book-spine"></div>
+    </div>
+  </div>
+  <div class="spread-content">
+    <p class="spread-issue">About &mdash; Issue No. 01</p>
+    <h1 class="spread-title">Your Personal <strong>Reading Curator</strong></h1>
+    <p class="spread-deck">
+      A web app that helps you organize your books, enrich them with metadata, display them beautifully, and discover what to read next via an LLM-powered recommendation engine.
+    </p>
+    <div class="spread-byline">
+      <div class="byline-avatar">EM</div>
+      <div class="byline-text">
+        <strong>Eugene Mann</strong>
+        Creator & Maintainer
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Pull Quote -->
+<section class="pull-quote">
+  <blockquote>
+    &ldquo;Your bookshelf is a portrait of your mind &mdash; a curated gallery of the ideas that shaped you.&rdquo;
+  </blockquote>
+</section>
+
+<!-- Features -->
+<section class="articles" id="features">
+  <div class="articles-header">
+    <h2 class="articles-section-title">Core Surfaces</h2>
+    <span class="articles-count">Four Features</span>
+  </div>
+  <div class="articles-grid">
+    <div class="article-card" data-animate>
+      <div class="article-icon">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      </div>
+      <p class="article-num">Feature 01</p>
+      <h3 class="article-title">Smart Ingestion</h3>
+      <p class="article-excerpt">Search via Google Books API, import from Kindle, or upload a CSV. Multiple paths into your library, all enriched with metadata automatically.</p>
+    </div>
+    <div class="article-card" data-animate style="animation-delay: 0.1s">
+      <div class="article-icon">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+      </div>
+      <p class="article-num">Feature 02</p>
+      <h3 class="article-title">Gallery Library</h3>
+      <p class="article-excerpt">A grid of covers organized into collections you define. Filter, sort, and search instantly. Every book exactly where you left it.</p>
+    </div>
+    <div class="article-card" data-animate style="animation-delay: 0.2s">
+      <div class="article-icon">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+      </div>
+      <p class="article-num">Feature 03</p>
+      <h3 class="article-title">Deep Book Detail</h3>
+      <p class="article-excerpt">Full metadata, key quotes, and AI-enriched insights. Rate books, track your reading status, and link directly to purchase.</p>
+    </div>
+    <div class="article-card" data-animate style="animation-delay: 0.3s">
+      <div class="article-icon">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+      </div>
+      <p class="article-num">Feature 04</p>
+      <h3 class="article-title">LLM Discovery</h3>
+      <p class="article-excerpt">An AI recommendation engine that learns your taste. Steer by topic, explore curated lists, and find your next obsession with Claude.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Roadmap -->
+<section class="roadmap" id="roadmap">
+  <div class="roadmap-header">
+    <p class="roadmap-label">Product Roadmap</p>
+    <h2 class="roadmap-title">Where we&rsquo;re headed</h2>
+  </div>
+  <div class="timeline">
+    <div class="timeline-item active" data-animate>
+      <p class="timeline-phase">Version 1 &mdash; Now</p>
+      <h3 class="timeline-title">Personal Curator</h3>
+      <p class="timeline-text">Beauty, discovery, and depth in equal measure. Smart search ingestion, grid gallery display, and LLM-powered topic-steered recommendations.</p>
+    </div>
+    <div class="timeline-item" data-animate style="animation-delay: 0.15s">
+      <p class="timeline-phase">Version 2 &mdash; Next</p>
+      <h3 class="timeline-title">Social Library</h3>
+      <p class="timeline-text">Share libraries with friends and family. See what others are reading, recommend books to each other, and build a bookshelf view that feels like visiting a friend&rsquo;s home.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Tech Stack Bar -->
+<section class="stack-bar">
+  <span class="stack-bar-label">Built With</span>
+  <div class="stack-bar-items">
+    <span class="stack-bar-item">Next.js</span>
+    <span class="stack-bar-sep"></span>
+    <span class="stack-bar-item">React</span>
+    <span class="stack-bar-sep"></span>
+    <span class="stack-bar-item">TypeScript</span>
+    <span class="stack-bar-sep"></span>
+    <span class="stack-bar-item">Tailwind CSS</span>
+    <span class="stack-bar-sep"></span>
+    <span class="stack-bar-item">shadcn/ui</span>
+    <span class="stack-bar-sep"></span>
+    <span class="stack-bar-item">Supabase</span>
+    <span class="stack-bar-sep"></span>
+    <span class="stack-bar-item">Google Books API</span>
+    <span class="stack-bar-sep"></span>
+    <span class="stack-bar-item">Claude API</span>
+    <span class="stack-bar-sep"></span>
+    <span class="stack-bar-item">Vercel</span>
+  </div>
+</section>
+
+<!-- Contribute -->
+<section class="contribute" id="contribute">
+  <div class="contribute-text-block">
+    <p class="contribute-label">Open Source</p>
+    <h2 class="contribute-title">Help us build <strong>the shelf</strong></h2>
+    <p class="contribute-desc">
+      Biblioteca is open source and welcoming contributors. Whether you care about design, code, or reading &mdash; there&rsquo;s a place for you here.
+    </p>
+  </div>
+  <div class="contribute-cta">
+    <a href="https://github.com/eugene-mann/Biblioteca" class="github-btn" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+      View on GitHub
+    </a>
+    <span class="contribute-hint">Issues, PRs, and ideas welcome</span>
+  </div>
+</section>
+
+<!-- Colophon -->
+<footer class="colophon">
+  <span class="colophon-left">Biblioteca &mdash; A project by Eugene Mann</span>
+  <span class="colophon-right">MMXXVI</span>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+
+  document.querySelectorAll('[data-animate]').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
