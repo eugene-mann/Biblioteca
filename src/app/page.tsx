@@ -299,7 +299,7 @@ export default function LibraryPage() {
       ) : (
         <div className="w-full animate-in fade-in duration-300">
           {(() => {
-            const CHUNK_SIZE = 6;
+            const CHUNK_SIZE = 15;
             const chunks: Book[][] = [];
             for (let i = 0; i < filteredBooks.length; i += CHUNK_SIZE) {
               chunks.push(filteredBooks.slice(i, i + CHUNK_SIZE));
