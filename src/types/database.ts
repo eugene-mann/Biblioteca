@@ -111,6 +111,14 @@ export interface CollectionWithCovers extends Collection {
   cover_urls: (string | null)[];
 }
 
+export interface SuggestedBook {
+  title: string;
+  authors: string[];
+  cover_image_url?: string;
+  isbn_13?: string;
+  reasoning: string;
+}
+
 export interface BookInsight {
   id: string;
   book_id: string;
@@ -118,6 +126,7 @@ export interface BookInsight {
   themes: string[];
   quotes: string[];
   related_book_ids: string[];
+  suggested_books: SuggestedBook[];
   generated_at: string;
   user_id: string;
 }
