@@ -98,7 +98,7 @@ function shuffle<T>(arr: T[]): T[] {
 export async function GET() {
   const { data: insights, error: insightsError } = await supabase
     .from("book_insights")
-    .select("book_id, why_read, themes, quotes, suggested_books")
+    .select("*")
     .eq("user_id", DEFAULT_USER_ID);
 
   if (insightsError) {
