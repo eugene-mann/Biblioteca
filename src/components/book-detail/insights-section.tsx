@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Sparkles, RefreshCw, AlertCircle } from "lucide-react";
+import { Sparkles, RefreshCw, AlertCircle, X } from "lucide-react";
 import { BookCover } from "@/components/book-cover";
 import Link from "next/link";
 import type { Book, BookInsight } from "@/types/database";
@@ -65,6 +65,17 @@ export function InsightsSection({ bookId }: InsightsSectionProps) {
       }
     }
     setRelatedBooks(books);
+  }
+
+  async function removeQuote(index: number) {
+    if (!insight) return;
+    const updated = insight.quotes.filter((_, i) => i !== index);
+    setInsight({ ...insight, quotes: updated });
+    await fetch(`/api/books/${bookId}/insights`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ quotes: updated }),
+    });
   }
 
   async function generate() {
@@ -200,12 +211,18 @@ export function InsightsSection({ bookId }: InsightsSectionProps) {
             </p>
             <div className="space-y-3">
               {insight!.quotes.map((quote, i) => (
-                <blockquote
-                  key={i}
-                  className="border-l-2 border-amber pl-4 font-sans text-sm italic leading-relaxed text-foreground"
-                >
-                  &ldquo;{quote}&rdquo;
-                </blockquote>
+                <div key={i} className="group flex items-start gap-2">
+                  <blockquote className="flex-1 border-l-2 border-amber pl-4 font-sans text-sm italic leading-relaxed text-foreground">
+                    &ldquo;{quote}&rdquo;
+                  </blockquote>
+                  <button
+                    onClick={() => removeQuote(i)}
+                    className="mt-0.5 shrink-0 rounded-sm p-0.5 text-warm-gray opacity-0 transition-opacity hover:text-foreground group-hover:opacity-100"
+                    aria-label="Remove quote"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </div>
               ))}
             </div>
             <p className="mt-3 flex items-center gap-1.5 font-sans text-[10px] text-warm-gray">

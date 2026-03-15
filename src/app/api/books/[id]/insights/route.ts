@@ -74,3 +74,32 @@ export async function POST(
 
   return NextResponse.json({ insight: data });
 }
+
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+  const body = await request.json();
+
+  const updates: Record<string, unknown> = {};
+  if ("quotes" in body) updates.quotes = body.quotes;
+  if ("themes" in body) updates.themes = body.themes;
+
+  if (Object.keys(updates).length === 0) {
+    return NextResponse.json({ error: "No valid fields to update" }, { status: 400 });
+  }
+
+  const { data, error } = await supabase
+    .from("book_insights")
+    .update(updates)
+    .eq("book_id", id)
+    .select()
+    .single();
+
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  return NextResponse.json({ insight: data });
+}
