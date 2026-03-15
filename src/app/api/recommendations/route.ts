@@ -49,35 +49,36 @@ export async function GET(request: NextRequest) {
     const combinedTopic = [topic, prompt].filter(Boolean).join(" — ") || undefined;
     const llmRecs = await getRecommendations(books, combinedTopic);
 
-    // Hydrate with covers via Google Books API
+    // Hydrate with covers — try Open Library first (no rate limit), Google Books as fallback
     const hydrated = await Promise.all(
       llmRecs.map(async (rec) => {
         let cover_image_url: string | null = null;
         let isbn: string | null = null;
         let amazon_link: string | null = null;
 
+        // Open Library first — reliable and no rate limits
         try {
-          const apiBook = await searchBookByTitleAuthor(rec.title, rec.author);
-          if (apiBook) {
-            cover_image_url = apiBook.cover_image_url;
-            isbn = apiBook.isbn_13;
-            amazon_link = apiBook.amazon_link;
+          const olBook = await searchBookByTitleAuthorOL(rec.title, rec.author);
+          if (olBook) {
+            cover_image_url = olBook.cover_image_url;
+            isbn = olBook.isbn_13;
+            amazon_link = olBook.amazon_link;
           }
         } catch {
-          // Google Books failed — silent
+          // Open Library failed — silent
         }
 
-        // Fallback to Open Library if no cover found
+        // Google Books fallback if still missing cover
         if (!cover_image_url) {
           try {
-            const olBook = await searchBookByTitleAuthorOL(rec.title, rec.author);
-            if (olBook) {
-              cover_image_url = olBook.cover_image_url ?? cover_image_url;
-              isbn = isbn ?? olBook.isbn_13;
-              amazon_link = amazon_link ?? olBook.amazon_link;
+            const apiBook = await searchBookByTitleAuthor(rec.title, rec.author);
+            if (apiBook) {
+              cover_image_url = apiBook.cover_image_url ?? cover_image_url;
+              isbn = isbn ?? apiBook.isbn_13;
+              amazon_link = amazon_link ?? apiBook.amazon_link;
             }
           } catch {
-            // Open Library also failed — proceed without cover
+            // Google Books failed — silent
           }
         }
 

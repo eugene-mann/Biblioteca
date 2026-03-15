@@ -125,12 +125,20 @@ export async function searchBooksOpenLibrary(
   return data.docs.map(docToBookPartial);
 }
 
+function titleMatches(resultTitle: string, searchTitle: string): boolean {
+  const normalize = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const a = normalize(resultTitle);
+  const b = normalize(searchTitle);
+  return a.includes(b) || b.includes(a);
+}
+
 export async function searchBookByTitleAuthorOL(
   title: string,
   author?: string
 ): Promise<Omit<Book, "id" | "date_added" | "user_id"> | null> {
   const query = author ? `${title} ${author}` : title;
   const results = await searchBooksOpenLibrary(query);
-  // Find first result with a cover
-  return results.find((r) => r.cover_image_url) ?? results[0] ?? null;
+  // Find first result with matching title AND a cover
+  const matched = results.filter((r) => titleMatches(r.title, title));
+  return matched.find((r) => r.cover_image_url) ?? matched[0] ?? null;
 }
