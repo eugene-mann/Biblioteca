@@ -60,7 +60,7 @@ export default function LibraryPage() {
   const sortBy = getParam("sort", "default", VALID_SORTS) as SortKey;
   const showFavorites = getParam("favorites", "") === "1";
   const categoryFilter = getParam("category", "all") as BookCategory | "all";
-  const selectedCollectionId = getParam("collection", "") || null;
+  const selectedCollectionSlug = getParam("collection", "") || null;
 
   const setStatusFilter = useCallback(
     (v: BookStatus | "all") => setParams({ status: v === "all" ? null : v }),
@@ -81,13 +81,17 @@ export default function LibraryPage() {
     (v: BookCategory | "all") => setParams({ category: v === "all" ? null : v }),
     [setParams]
   );
-  const setSelectedCollectionId = useCallback(
-    (v: string | null) => setParams({ collection: v }),
+  const handleSelectCollection = useCallback(
+    (slug: string | null, id: string | null) => {
+      setParams({ collection: slug });
+      setSelectedCollectionId(id);
+    },
     [setParams]
   );
 
   const [books, setBooks] = useState<Book[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedCollectionId, setSelectedCollectionId] = useState<string | null>(null);
   const [collectionBookIds, setCollectionBookIds] = useState<Set<string> | null>(null);
   const [collectionKey, setCollectionKey] = useState(0);
 
@@ -195,8 +199,8 @@ export default function LibraryPage() {
       {books.length > 0 && (
         <CollectionCarousel
           key={collectionKey}
-          selectedCollectionId={selectedCollectionId}
-          onSelectCollection={setSelectedCollectionId}
+          selectedCollectionSlug={selectedCollectionSlug}
+          onSelectCollection={handleSelectCollection}
           onCollectionChange={() => setCollectionKey((k) => k + 1)}
         />
       )}

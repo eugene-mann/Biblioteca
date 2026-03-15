@@ -20,9 +20,13 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import type { CollectionWithCovers } from "@/types/database";
 
+function toSlug(name: string): string {
+  return name.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+}
+
 interface CollectionCarouselProps {
-  selectedCollectionId: string | null;
-  onSelectCollection: (id: string | null) => void;
+  selectedCollectionSlug: string | null;
+  onSelectCollection: (slug: string | null, id: string | null) => void;
   onCollectionChange: () => void;
 }
 
@@ -152,7 +156,7 @@ function SortableGalleryCard({
 }
 
 export function CollectionCarousel({
-  selectedCollectionId,
+  selectedCollectionSlug,
   onSelectCollection,
   onCollectionChange,
 }: CollectionCarouselProps) {
@@ -182,6 +186,16 @@ export function CollectionCarousel({
     fetchCollections();
   }, [fetchCollections]);
 
+  // Resolve slug → ID on initial load for URL-based navigation
+  useEffect(() => {
+    if (selectedCollectionSlug && collections.length > 0) {
+      const match = collections.find((c) => toSlug(c.name) === selectedCollectionSlug);
+      if (match) {
+        onSelectCollection(selectedCollectionSlug, match.id);
+      }
+    }
+  }, [collections, selectedCollectionSlug]); // eslint-disable-line react-hooks/exhaustive-deps
+
   useEffect(() => {
     if (isCreating && inputRef.current) {
       inputRef.current.focus();
@@ -209,9 +223,10 @@ export function CollectionCarousel({
     try {
       const res = await fetch(`/api/collections/${id}`, { method: "DELETE" });
       if (res.ok) {
+        const deleted = collections.find((c) => c.id === id);
         setCollections((prev) => prev.filter((c) => c.id !== id));
-        if (selectedCollectionId === id) {
-          onSelectCollection(null);
+        if (deleted && selectedCollectionSlug === toSlug(deleted.name)) {
+          onSelectCollection(null, null);
         }
         onCollectionChange();
       }
@@ -250,9 +265,9 @@ export function CollectionCarousel({
       <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-5">
         {/* All Books card */}
         <button
-          onClick={() => onSelectCollection(null)}
+          onClick={() => onSelectCollection(null, null)}
           className={`relative flex h-[120px] cursor-pointer flex-col justify-end overflow-hidden rounded-xl bg-gradient-to-br from-[#2C2416] to-[#4A3828] p-4 transition-all hover:-translate-y-0.5 hover:shadow-lg ${
-            selectedCollectionId === null
+            selectedCollectionSlug === null
               ? "ring-2 ring-amber ring-offset-2 ring-offset-background"
               : ""
           }`}
@@ -281,9 +296,9 @@ export function CollectionCarousel({
               <SortableGalleryCard
                 key={collection.id}
                 collection={collection}
-                isSelected={selectedCollectionId === collection.id}
+                isSelected={selectedCollectionSlug === toSlug(collection.name)}
                 gradientIndex={i + 1}
-                onSelect={() => onSelectCollection(collection.id)}
+                onSelect={() => onSelectCollection(toSlug(collection.name), collection.id)}
                 onDelete={handleDelete}
               />
             ))}
