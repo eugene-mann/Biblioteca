@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { BookGrid, BookGridSkeleton } from "@/components/book-grid";
 import { CollectionCarousel } from "@/components/collection-carousel";
 import { QuoteDivider } from "@/components/quote-carousel";
@@ -16,14 +17,77 @@ const STATUS_ORDER: Record<BookStatus, number> = {
   want_to_read: 2,
 };
 
+const VALID_STATUSES = new Set<string>(["all", "want_to_read", "reading", "read"]);
+const VALID_SORTS = new Set<string>(["default", "date_added", "title", "author", "rating"]);
+
+function useUrlState() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const getParam = useCallback(
+    (key: string, fallback: string, valid?: Set<string>) => {
+      const val = searchParams.get(key);
+      if (!val) return fallback;
+      if (valid && !valid.has(val)) return fallback;
+      return val;
+    },
+    [searchParams]
+  );
+
+  const setParams = useCallback(
+    (updates: Record<string, string | null>) => {
+      const params = new URLSearchParams(searchParams.toString());
+      for (const [key, value] of Object.entries(updates)) {
+        if (value === null || value === "") {
+          params.delete(key);
+        } else {
+          params.set(key, value);
+        }
+      }
+      const str = params.toString();
+      router.replace(str ? `?${str}` : "/", { scroll: false });
+    },
+    [searchParams, router]
+  );
+
+  return { getParam, setParams, searchParams };
+}
+
 export default function LibraryPage() {
+  const { getParam, setParams } = useUrlState();
+
+  const statusFilter = getParam("status", "all", VALID_STATUSES) as BookStatus | "all";
+  const sortBy = getParam("sort", "default", VALID_SORTS) as SortKey;
+  const showFavorites = getParam("favorites", "") === "1";
+  const categoryFilter = getParam("category", "all") as BookCategory | "all";
+  const selectedCollectionId = getParam("collection", "") || null;
+
+  const setStatusFilter = useCallback(
+    (v: BookStatus | "all") => setParams({ status: v === "all" ? null : v }),
+    [setParams]
+  );
+  const setSortBy = useCallback(
+    (v: SortKey) => setParams({ sort: v === "default" ? null : v }),
+    [setParams]
+  );
+  const setShowFavorites = useCallback(
+    (v: boolean | ((prev: boolean) => boolean)) => {
+      const next = typeof v === "function" ? v(showFavorites) : v;
+      setParams({ favorites: next ? "1" : null });
+    },
+    [setParams, showFavorites]
+  );
+  const setCategoryFilter = useCallback(
+    (v: BookCategory | "all") => setParams({ category: v === "all" ? null : v }),
+    [setParams]
+  );
+  const setSelectedCollectionId = useCallback(
+    (v: string | null) => setParams({ collection: v }),
+    [setParams]
+  );
+
   const [books, setBooks] = useState<Book[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [statusFilter, setStatusFilter] = useState<BookStatus | "all">("all");
-  const [sortBy, setSortBy] = useState<SortKey>("default");
-  const [showFavorites, setShowFavorites] = useState(false);
-  const [categoryFilter, setCategoryFilter] = useState<BookCategory | "all">("all");
-  const [selectedCollectionId, setSelectedCollectionId] = useState<string | null>(null);
   const [collectionBookIds, setCollectionBookIds] = useState<Set<string> | null>(null);
   const [collectionKey, setCollectionKey] = useState(0);
 
@@ -222,12 +286,7 @@ export default function LibraryPage() {
             No books match the current filter.
           </p>
           <button
-            onClick={() => {
-              setStatusFilter("all");
-              setShowFavorites(false);
-              setCategoryFilter("all");
-              setSelectedCollectionId(null);
-            }}
+            onClick={() => setParams({ status: null, favorites: null, category: null, collection: null, sort: null })}
             className="font-sans text-sm font-medium text-amber underline"
           >
             Show all books
