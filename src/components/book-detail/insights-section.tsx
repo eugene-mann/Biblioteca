@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Sparkles, RefreshCw, AlertCircle, X } from "lucide-react";
+import { Sparkles, RefreshCw, AlertCircle, X, Plus } from "lucide-react";
 import { BookCover } from "@/components/book-cover";
 import Link from "next/link";
 import type { Book, BookInsight } from "@/types/database";
@@ -24,6 +24,8 @@ export function InsightsSection({ bookId }: InsightsSectionProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [newQuote, setNewQuote] = useState("");
+  const [isAddingQuote, setIsAddingQuote] = useState(false);
 
   useEffect(() => {
     fetchInsight();
@@ -71,6 +73,19 @@ export function InsightsSection({ bookId }: InsightsSectionProps) {
     if (!insight) return;
     const updated = insight.quotes.filter((_, i) => i !== index);
     setInsight({ ...insight, quotes: updated });
+    await fetch(`/api/books/${bookId}/insights`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ quotes: updated }),
+    });
+  }
+
+  async function addQuote() {
+    if (!insight || !newQuote.trim()) return;
+    const updated = [...insight.quotes, newQuote.trim()];
+    setInsight({ ...insight, quotes: updated });
+    setNewQuote("");
+    setIsAddingQuote(false);
     await fetch(`/api/books/${bookId}/insights`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -225,6 +240,49 @@ export function InsightsSection({ bookId }: InsightsSectionProps) {
                 </div>
               ))}
             </div>
+            {isAddingQuote ? (
+              <div className="mt-3 flex gap-2">
+                <input
+                  type="text"
+                  value={newQuote}
+                  onChange={(e) => setNewQuote(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") addQuote();
+                    if (e.key === "Escape") {
+                      setIsAddingQuote(false);
+                      setNewQuote("");
+                    }
+                  }}
+                  placeholder="Enter a quote..."
+                  autoFocus
+                  className="flex-1 rounded-md border border-warm-border bg-background px-3 py-1.5 font-sans text-sm text-foreground placeholder:text-warm-gray/50 focus:border-amber focus:outline-none"
+                />
+                <button
+                  onClick={addQuote}
+                  disabled={!newQuote.trim()}
+                  className="rounded-md bg-amber px-3 py-1.5 font-sans text-xs font-medium text-white transition-colors hover:bg-amber/90 disabled:opacity-50"
+                >
+                  Add
+                </button>
+                <button
+                  onClick={() => {
+                    setIsAddingQuote(false);
+                    setNewQuote("");
+                  }}
+                  className="rounded-md border border-warm-border px-3 py-1.5 font-sans text-xs text-warm-gray transition-colors hover:text-foreground"
+                >
+                  Cancel
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => setIsAddingQuote(true)}
+                className="mt-3 flex items-center gap-1.5 font-sans text-xs text-warm-gray transition-colors hover:text-amber"
+              >
+                <Plus className="h-3 w-3" />
+                Add quote
+              </button>
+            )}
           </div>
         )}
 
