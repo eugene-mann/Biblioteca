@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Collections Redesign — Compare Options</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Franklin:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #FAF7F2; color: #2C2416; font-family: 'Libre Franklin', sans-serif; padding: 40px; }
+  h1 { font-family: 'Playfair Display', serif; font-size: 28px; text-align: center; margin-bottom: 8px; }
+  .subtitle { text-align: center; color: #8B7355; font-size: 14px; margin-bottom: 40px; }
+  .options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1100px; margin: 0 auto; }
+  .option-card {
+    border: 2px solid #E8DFD3;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.25s;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  .option-card:hover { border-color: #C8956C; transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+  .option-card iframe { width: 100%; height: 500px; border: none; pointer-events: none; transform: scale(0.5); transform-origin: top left; width: 200%; height: 1000px; }
+  .option-card .frame { height: 500px; overflow: hidden; }
+  .option-label { padding: 16px 20px; border-top: 1px solid #E8DFD3; }
+  .option-label h2 { font-family: 'Playfair Display', serif; font-size: 18px; margin-bottom: 4px; }
+  .option-label p { font-size: 12px; color: #8B7355; line-height: 1.5; }
+  .rec { display: inline-block; background: #C8956C; color: white; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 999px; margin-left: 8px; vertical-align: middle; }
+</style>
+</head>
+<body>
+
+<h1>Collections Redesign</h1>
+<p class="subtitle">Click any option to view the full-page mockup</p>
+
+<div class="options">
+  <a class="option-card" href="option-a-bookshelf.html">
+    <div class="frame">
+      <iframe src="option-a-bookshelf.html" loading="lazy"></iframe>
+    </div>
+    <div class="option-label">
+      <h2>A: Bookshelf Shelves</h2>
+      <p>Vertical rows of book spines on wooden shelves. Maximum library personality — feels like browsing a real bookcase.</p>
+    </div>
+  </a>
+
+  <a class="option-card" href="option-b-pills.html">
+    <div class="frame">
+      <iframe src="option-b-pills.html" loading="lazy"></iframe>
+    </div>
+    <div class="option-label">
+      <h2>B: Filter Pills <span class="rec">Recommended</span></h2>
+      <p>Wrapped pill tags with a cover preview strip. Most space-efficient, wraps at any width, clean and modern.</p>
+    </div>
+  </a>
+
+  <a class="option-card" href="option-c-gallery.html">
+    <div class="frame">
+      <iframe src="option-c-gallery.html" loading="lazy"></iframe>
+    </div>
+    <div class="option-label">
+      <h2>C: Dark Gallery Cards</h2>
+      <p>Rich dark gradient cards in a 3-column grid. Premium Spotify-playlist energy with scattered cover thumbnails.</p>
+    </div>
+  </a>
+</div>
+
+</body>
+</html>

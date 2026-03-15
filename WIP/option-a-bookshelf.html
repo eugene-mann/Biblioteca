@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Option A: Bookshelf Shelves</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Franklin:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #FAF7F2; color: #2C2416; font-family: 'Libre Franklin', sans-serif; }
+
+  /* Nav */
+  .nav { display: flex; justify-content: space-between; align-items: center; padding: 16px 32px; border-bottom: 1px solid #E8DFD3; }
+  .nav-logo { font-family: 'Playfair Display', serif; font-size: 20px; font-style: italic; color: #C8956C; }
+  .nav-links { display: flex; gap: 32px; }
+  .nav-links a { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; color: #8B7355; }
+  .nav-links a.active { color: #2C2416; font-weight: 600; border-bottom: 2px solid #2C2416; padding-bottom: 2px; }
+
+  /* Page */
+  .page { max-width: 1200px; margin: 0 auto; padding: 40px 32px; }
+  .page-title { font-family: 'Playfair Display', serif; font-size: 32px; text-align: center; margin-bottom: 4px; }
+  .page-subtitle { font-size: 12px; letter-spacing: 1px; text-align: center; color: #8B7355; margin-bottom: 32px; }
+
+  /* Search */
+  .search { display: flex; align-items: center; gap: 12px; max-width: 640px; margin: 0 auto 40px; padding: 10px 16px; border-bottom: 1px solid #D4C4B0; }
+  .search-icon { color: #8B7355; font-size: 14px; }
+  .search input { flex: 1; border: none; background: none; font-family: 'Libre Franklin', sans-serif; font-size: 14px; color: #2C2416; outline: none; }
+  .search input::placeholder { color: #B8A898; }
+
+  /* Collections - Bookshelf */
+  .collections-label { font-family: 'Playfair Display', serif; font-size: 11px; text-transform: uppercase; letter-spacing: 2.5px; color: #8B7355; margin-bottom: 20px; }
+
+  .shelf { margin-bottom: 4px; cursor: pointer; transition: all 0.2s; border-radius: 8px; padding: 8px 12px; }
+  .shelf:hover { background: rgba(200, 149, 108, 0.06); }
+  .shelf.selected { background: rgba(200, 149, 108, 0.1); }
+
+  .shelf-inner { display: flex; align-items: flex-end; gap: 0; height: 64px; padding-bottom: 8px; }
+  .shelf-spines { display: flex; gap: 3px; align-items: flex-end; height: 100%; }
+  .spine { border-radius: 2px; box-shadow: 1px 0 2px rgba(0,0,0,0.1); transition: transform 0.2s; }
+  .shelf:hover .spine { transform: translateY(-2px); }
+
+  .shelf-info { margin-left: auto; display: flex; align-items: center; gap: 8px; padding-bottom: 4px; }
+  .shelf-name { font-family: 'Libre Franklin', sans-serif; font-size: 13px; font-weight: 500; color: #2C2416; }
+  .shelf-count { font-size: 11px; color: #8B7355; }
+
+  .shelf-line { height: 2px; background: linear-gradient(90deg, #D4C4B0 0%, #E8DFD3 60%, transparent 100%); margin-top: 0; }
+
+  .shelf.selected .shelf-name { color: #C8956C; }
+  .shelf.selected .shelf-line { background: linear-gradient(90deg, #C8956C 0%, #D4C4B0 60%, transparent 100%); }
+
+  .new-shelf { display: flex; align-items: center; gap: 8px; padding: 12px; border-radius: 8px; border: 1px dashed #D4C4B0; cursor: pointer; transition: all 0.2s; margin-top: 8px; color: #8B7355; font-size: 13px; }
+  .new-shelf:hover { border-color: #C8956C; color: #C8956C; background: rgba(200, 149, 108, 0.04); }
+
+  /* Divider */
+  .divider { height: 1px; background: #E8DFD3; margin: 32px 0; }
+
+  /* Filters row */
+  .filters { display: flex; align-items: center; gap: 16px; margin-bottom: 28px; }
+  .filter-tab { font-size: 13px; color: #8B7355; cursor: pointer; padding-bottom: 2px; text-decoration: none; }
+  .filter-tab.active { color: #C8956C; border-bottom: 1px solid #C8956C; }
+  .filter-sep { color: #D4C4B0; font-size: 12px; }
+  .filter-heart { color: #8B7355; cursor: pointer; font-size: 16px; }
+  .filter-right { margin-left: auto; display: flex; gap: 12px; }
+  .filter-select { border: 1px solid #D4C4B0; border-radius: 6px; padding: 6px 12px; font-size: 12px; background: white; color: #2C2416; font-family: 'Libre Franklin', sans-serif; }
+
+  /* Book grid */
+  .book-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 28px 20px; }
+  .book-card { text-align: center; cursor: pointer; }
+  .book-cover { width: 100%; aspect-ratio: 2/3; border-radius: 4px; object-fit: cover; box-shadow: 2px 4px 12px rgba(0,0,0,0.12); transition: transform 0.2s, box-shadow 0.2s; }
+  .book-cover:hover { transform: translateY(-4px); box-shadow: 2px 8px 20px rgba(0,0,0,0.18); }
+  .book-title { font-family: 'Libre Franklin', sans-serif; font-size: 12px; font-weight: 500; margin-top: 10px; color: #2C2416; }
+  .book-author { font-size: 11px; color: #8B7355; margin-top: 2px; }
+  .book-category { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: #B8A898; margin-top: 4px; }
+
+  /* Badge */
+  .badge { position: fixed; bottom: 16px; right: 16px; background: #2C2416; color: #FAF7F2; padding: 8px 16px; border-radius: 999px; font-size: 12px; font-weight: 500; z-index: 100; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo">Biblioteca</div>
+  <div class="nav-links">
+    <a href="#" class="active">LIBRARY</a>
+    <a href="#">DISCOVER</a>
+    <a href="#">SETTINGS</a>
+  </div>
+</nav>
+
+<div class="page">
+  <h1 class="page-title">Your Library</h1>
+  <p class="page-subtitle">487 volumes</p>
+
+  <div class="search">
+    <span class="search-icon">&#x1F50D;</span>
+    <input type="text" placeholder="Search for a book...">
+  </div>
+
+  <!-- Bookshelf Collections -->
+  <div class="collections-label">Collections</div>
+
+  <div class="shelf selected">
+    <div class="shelf-inner">
+      <div class="shelf-spines">
+        <div class="spine" style="width: 14px; height: 48px; background: #C8956C;"></div>
+        <div class="spine" style="width: 18px; height: 52px; background: #A0785C; transform: skewY(-0.5deg);"></div>
+        <div class="spine" style="width: 12px; height: 44px; background: #D4A574;"></div>
+        <div class="spine" style="width: 16px; height: 56px; background: #8B6F47; transform: skewY(0.5deg);"></div>
+        <div class="spine" style="width: 14px; height: 46px; background: #B8956E;"></div>
+        <div class="spine" style="width: 18px; height: 50px; background: #C4A882; transform: skewY(-0.3deg);"></div>
+        <div class="spine" style="width: 12px; height: 42px; background: #9E8060;"></div>
+        <div class="spine" style="width: 16px; height: 54px; background: #BFA07A;"></div>
+      </div>
+      <div class="shelf-info">
+        <span class="shelf-name">All Books</span>
+        <span class="shelf-count">487</span>
+      </div>
+    </div>
+    <div class="shelf-line"></div>
+  </div>
+
+  <div class="shelf">
+    <div class="shelf-inner">
+      <div class="shelf-spines">
+        <div class="spine" style="width: 16px; height: 50px; background: #7B4A8E;"></div>
+        <div class="spine" style="width: 14px; height: 46px; background: #5C7A9E; transform: skewY(0.5deg);"></div>
+        <div class="spine" style="width: 18px; height: 54px; background: #8E5C7A;"></div>
+        <div class="spine" style="width: 12px; height: 42px; background: #4A7B6E;"></div>
+        <div class="spine" style="width: 16px; height: 48px; background: #9E7B4A; transform: skewY(-0.5deg);"></div>
+      </div>
+      <div class="shelf-info">
+        <span class="shelf-name">Favorites</span>
+        <span class="shelf-count">5</span>
+      </div>
+    </div>
+    <div class="shelf-line"></div>
+  </div>
+
+  <div class="shelf">
+    <div class="shelf-inner">
+      <div class="shelf-spines">
+        <div class="spine" style="width: 14px; height: 52px; background: #2D5F8A;"></div>
+        <div class="spine" style="width: 18px; height: 48px; background: #1A4570; transform: skewY(-0.5deg);"></div>
+        <div class="spine" style="width: 12px; height: 44px; background: #3A7AB0;"></div>
+        <div class="spine" style="width: 16px; height: 56px; background: #4A8BC4;"></div>
+        <div class="spine" style="width: 14px; height: 50px; background: #2A5A84; transform: skewY(0.3deg);"></div>
+        <div class="spine" style="width: 18px; height: 46px; background: #1E4E78;"></div>
+        <div class="spine" style="width: 12px; height: 52px; background: #3670A0;"></div>
+        <div class="spine" style="width: 16px; height: 44px; background: #2D5F8A;"></div>
+        <div class="spine" style="width: 14px; height: 48px; background: #4A8BC4; transform: skewY(-0.3deg);"></div>
+        <div class="spine" style="width: 18px; height: 54px; background: #1A4570;"></div>
+        <div class="spine" style="width: 12px; height: 42px; background: #3A7AB0;"></div>
+        <div class="spine" style="width: 16px; height: 50px; background: #2A5A84;"></div>
+        <div class="spine" style="width: 14px; height: 46px; background: #1E4E78; transform: skewY(0.5deg);"></div>
+        <div class="spine" style="width: 18px; height: 52px; background: #3670A0;"></div>
+        <div class="spine" style="width: 12px; height: 44px; background: #4A8BC4;"></div>
+        <div class="spine" style="width: 16px; height: 48px; background: #2D5F8A;"></div>
+        <div class="spine" style="width: 14px; height: 54px; background: #1A4570; transform: skewY(-0.5deg);"></div>
+        <div class="spine" style="width: 18px; height: 46px; background: #3A7AB0;"></div>
+        <div class="spine" style="width: 12px; height: 50px; background: #2A5A84;"></div>
+      </div>
+      <div class="shelf-info">
+        <span class="shelf-name">Hugo Award Winners</span>
+        <span class="shelf-count">27</span>
+      </div>
+    </div>
+    <div class="shelf-line"></div>
+  </div>
+
+  <div class="shelf">
+    <div class="shelf-inner">
+      <div class="shelf-spines">
+        <div class="spine" style="width: 16px; height: 50px; background: #6B8E5C;"></div>
+        <div class="spine" style="width: 14px; height: 46px; background: #4A7B3E; transform: skewY(0.5deg);"></div>
+        <div class="spine" style="width: 18px; height: 54px; background: #7BA06B;"></div>
+        <div class="spine" style="width: 12px; height: 42px; background: #5C8E4A;"></div>
+        <div class="spine" style="width: 16px; height: 48px; background: #3E6B30; transform: skewY(-0.3deg);"></div>
+        <div class="spine" style="width: 14px; height: 52px; background: #6BA05C;"></div>
+        <div class="spine" style="width: 18px; height: 44px; background: #4A7B3E;"></div>
+        <div class="spine" style="width: 12px; height: 50px; background: #5C8E4A;"></div>
+      </div>
+      <div class="shelf-info">
+        <span class="shelf-name">Pulitzer Prize Winners</span>
+        <span class="shelf-count">8</span>
+      </div>
+    </div>
+    <div class="shelf-line"></div>
+  </div>
+
+  <div class="shelf">
+    <div class="shelf-inner">
+      <div class="shelf-spines">
+        <div class="spine" style="width: 16px; height: 48px; background: #8E6B4A;"></div>
+        <div class="spine" style="width: 14px; height: 52px; background: #A07B5C; transform: skewY(-0.5deg);"></div>
+      </div>
+      <div class="shelf-info">
+        <span class="shelf-name">History</span>
+        <span class="shelf-count">2</span>
+      </div>
+    </div>
+    <div class="shelf-line"></div>
+  </div>
+
+  <div class="shelf">
+    <div class="shelf-inner">
+      <div class="shelf-spines">
+        <div class="spine" style="width: 14px; height: 50px; background: #4A6B8E;"></div>
+        <div class="spine" style="width: 18px; height: 46px; background: #5C7BA0; transform: skewY(0.5deg);"></div>
+      </div>
+      <div class="shelf-info">
+        <span class="shelf-name">Sci-Fi Favorites</span>
+        <span class="shelf-count">2</span>
+      </div>
+    </div>
+    <div class="shelf-line"></div>
+  </div>
+
+  <div class="new-shelf">
+    <span>+</span> New Collection
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Filters -->
+  <div class="filters">
+    <a class="filter-tab active">All</a>
+    <span class="filter-sep">/</span>
+    <a class="filter-tab">Want to Read</a>
+    <span class="filter-sep">/</span>
+    <a class="filter-tab">Reading</a>
+    <span class="filter-sep">/</span>
+    <a class="filter-tab">Read</a>
+    <span class="filter-heart">&#9825;</span>
+    <div class="filter-right">
+      <select class="filter-select"><option>All Categories</option></select>
+      <select class="filter-select"><option>Sort: Date Added</option></select>
+    </div>
+  </div>
+
+  <!-- Book Grid -->
+  <div class="book-grid">
+    <div class="book-card">
+      <div class="book-cover" style="background: linear-gradient(135deg, #1a3a4a, #2a5a3a);"></div>
+      <div class="book-title">Feersum Endjinn</div>
+      <div class="book-author">Iain M. Banks</div>
+      <div class="book-category">FICTION</div>
+    </div>
+    <div class="book-card">
+      <div class="book-cover" style="background: linear-gradient(135deg, #4a2a1a, #8a5a3a);"></div>
+      <div class="book-title">Against a Dark Background</div>
+      <div class="book-author">Iain M. Banks</div>
+      <div class="book-category">FICTION</div>
+    </div>
+    <div class="book-card">
+      <div class="book-cover" style="background: linear-gradient(135deg, #1a2a4a, #3a5a8a);"></div>
+      <div class="book-title">The Hydrogen Sonata</div>
+      <div class="book-author">Iain M. Banks</div>
+      <div class="book-category">FICTION</div>
+    </div>
+    <div class="book-card">
+      <div class="book-cover" style="background: linear-gradient(135deg, #3a2a4a, #5a4a6a);"></div>
+      <div class="book-title">Matter</div>
+      <div class="book-author">Iain M. Banks</div>
+      <div class="book-category">FICTION</div>
+    </div>
+    <div class="book-card">
+      <div class="book-cover" style="background: linear-gradient(135deg, #2a4a2a, #4a6a3a);"></div>
+      <div class="book-title">Inversions</div>
+      <div class="book-author">Iain M Banks</div>
+      <div class="book-category">FICTION</div>
+    </div>
+  </div>
+</div>
+
+<div class="badge">Option A: Bookshelf Shelves</div>
+</body>
+</html>

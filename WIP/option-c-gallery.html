@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Option C: Dark Gallery Cards</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Franklin:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #FAF7F2; color: #2C2416; font-family: 'Libre Franklin', sans-serif; }
+
+  .nav { display: flex; justify-content: space-between; align-items: center; padding: 16px 32px; border-bottom: 1px solid #E8DFD3; }
+  .nav-logo { font-family: 'Playfair Display', serif; font-size: 20px; font-style: italic; color: #C8956C; }
+  .nav-links { display: flex; gap: 32px; }
+  .nav-links a { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; color: #8B7355; }
+  .nav-links a.active { color: #2C2416; font-weight: 600; border-bottom: 2px solid #2C2416; padding-bottom: 2px; }
+
+  .page { max-width: 1200px; margin: 0 auto; padding: 40px 32px; }
+  .page-title { font-family: 'Playfair Display', serif; font-size: 32px; text-align: center; margin-bottom: 4px; }
+  .page-subtitle { font-size: 12px; letter-spacing: 1px; text-align: center; color: #8B7355; margin-bottom: 32px; }
+
+  .search { display: flex; align-items: center; gap: 12px; max-width: 640px; margin: 0 auto 40px; padding: 10px 16px; border-bottom: 1px solid #D4C4B0; }
+  .search-icon { color: #8B7355; font-size: 14px; }
+  .search input { flex: 1; border: none; background: none; font-family: 'Libre Franklin', sans-serif; font-size: 14px; color: #2C2416; outline: none; }
+  .search input::placeholder { color: #B8A898; }
+
+  /* Gallery Cards */
+  .collections-label { font-family: 'Playfair Display', serif; font-size: 11px; text-transform: uppercase; letter-spacing: 2.5px; color: #8B7355; margin-bottom: 16px; }
+
+  .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 32px; }
+
+  .gallery-card {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    height: 120px;
+    cursor: pointer;
+    transition: all 0.25s;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 16px;
+  }
+  .gallery-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+  .gallery-card.selected { outline: 2px solid #C8956C; outline-offset: 2px; }
+
+  /* Scattered covers in corner */
+  .gallery-covers {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: flex;
+    align-items: flex-start;
+  }
+  .gallery-cover {
+    width: 28px;
+    height: 40px;
+    border-radius: 3px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  .gallery-cover:nth-child(1) { transform: rotate(-10deg); z-index: 1; }
+  .gallery-cover:nth-child(2) { transform: rotate(3deg); margin-left: -8px; z-index: 2; }
+  .gallery-cover:nth-child(3) { transform: rotate(-4deg); margin-left: -8px; z-index: 3; }
+
+  .gallery-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #FAF7F2;
+    line-height: 1.2;
+    position: relative;
+    z-index: 2;
+  }
+  .gallery-count {
+    font-size: 11px;
+    color: #C8956C;
+    margin-top: 2px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Color themes for cards */
+  .card-espresso { background: linear-gradient(145deg, #2C2416 0%, #4A3828 60%, #3D2E1E 100%); }
+  .card-midnight { background: linear-gradient(145deg, #1A2030 0%, #2A3548 60%, #1E2838 100%); }
+  .card-forest { background: linear-gradient(145deg, #1A2E20 0%, #2A4A30 60%, #1E3828 100%); }
+  .card-wine { background: linear-gradient(145deg, #2E1A20 0%, #4A2A30 60%, #381E28 100%); }
+  .card-slate { background: linear-gradient(145deg, #2A2A2E 0%, #3E3E44 60%, #333338 100%); }
+  .card-amber { background: linear-gradient(145deg, #3A2810 0%, #5A4020 60%, #4A3418 100%); }
+
+  /* New collection card */
+  .gallery-new {
+    border-radius: 12px;
+    height: 120px;
+    border: 1px dashed #D4C4B0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    color: #8B7355;
+    font-size: 13px;
+    transition: all 0.2s;
+  }
+  .gallery-new:hover { border-color: #C8956C; color: #C8956C; background: rgba(200, 149, 108, 0.04); }
+  .gallery-new span { font-size: 18px; }
+
+  /* Subtle pattern overlay */
+  .gallery-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,0.4) 100%);
+    z-index: 1;
+  }
+
+  .divider { height: 1px; background: #E8DFD3; margin: 32px 0; }
+
+  .filters { display: flex; align-items: center; gap: 16px; margin-bottom: 28px; }
+  .filter-tab { font-size: 13px; color: #8B7355; cursor: pointer; padding-bottom: 2px; text-decoration: none; }
+  .filter-tab.active { color: #C8956C; border-bottom: 1px solid #C8956C; }
+  .filter-sep { color: #D4C4B0; font-size: 12px; }
+  .filter-heart { color: #8B7355; cursor: pointer; font-size: 16px; }
+  .filter-right { margin-left: auto; display: flex; gap: 12px; }
+  .filter-select { border: 1px solid #D4C4B0; border-radius: 6px; padding: 6px 12px; font-size: 12px; background: white; color: #2C2416; font-family: 'Libre Franklin', sans-serif; }
+
+  .book-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 28px 20px; }
+  .book-card { text-align: center; cursor: pointer; }
+  .book-cover { width: 100%; aspect-ratio: 2/3; border-radius: 4px; box-shadow: 2px 4px 12px rgba(0,0,0,0.12); transition: transform 0.2s, box-shadow 0.2s; }
+  .book-cover:hover { transform: translateY(-4px); box-shadow: 2px 8px 20px rgba(0,0,0,0.18); }
+  .book-title { font-family: 'Libre Franklin', sans-serif; font-size: 12px; font-weight: 500; margin-top: 10px; color: #2C2416; }
+  .book-author { font-size: 11px; color: #8B7355; margin-top: 2px; }
+  .book-category { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: #B8A898; margin-top: 4px; }
+
+  .badge { position: fixed; bottom: 16px; right: 16px; background: #2C2416; color: #FAF7F2; padding: 8px 16px; border-radius: 999px; font-size: 12px; font-weight: 500; z-index: 100; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo">Biblioteca</div>
+  <div class="nav-links">
+    <a href="#" class="active">LIBRARY</a>
+    <a href="#">DISCOVER</a>
+    <a href="#">SETTINGS</a>
+  </div>
+</nav>
+
+<div class="page">
+  <h1 class="page-title">Your Library</h1>
+  <p class="page-subtitle">487 volumes</p>
+
+  <div class="search">
+    <span class="search-icon">&#x1F50D;</span>
+    <input type="text" placeholder="Search for a book...">
+  </div>
+
+  <!-- Gallery Collections -->
+  <div class="collections-label">Collections</div>
+
+  <div class="gallery-grid">
+    <div class="gallery-card card-espresso selected">
+      <div class="gallery-covers">
+        <div class="gallery-cover" style="background: #C8956C;"></div>
+        <div class="gallery-cover" style="background: #A0785C;"></div>
+        <div class="gallery-cover" style="background: #D4A574;"></div>
+      </div>
+      <div class="gallery-name">All Books</div>
+      <div class="gallery-count">487 books</div>
+    </div>
+
+    <div class="gallery-card card-wine">
+      <div class="gallery-covers">
+        <div class="gallery-cover" style="background: #7B4A8E;"></div>
+        <div class="gallery-cover" style="background: #8E5C7A;"></div>
+      </div>
+      <div class="gallery-name">Favorites</div>
+      <div class="gallery-count">5 books</div>
+    </div>
+
+    <div class="gallery-card card-midnight">
+      <div class="gallery-covers">
+        <div class="gallery-cover" style="background: #2D5F8A;"></div>
+        <div class="gallery-cover" style="background: #4A8BC4;"></div>
+        <div class="gallery-cover" style="background: #3A7AB0;"></div>
+      </div>
+      <div class="gallery-name">Hugo Award Winners</div>
+      <div class="gallery-count">27 books</div>
+    </div>
+
+    <div class="gallery-card card-forest">
+      <div class="gallery-covers">
+        <div class="gallery-cover" style="background: #6B8E5C;"></div>
+        <div class="gallery-cover" style="background: #7BA06B;"></div>
+      </div>
+      <div class="gallery-name">Pulitzer Prize Winners</div>
+      <div class="gallery-count">8 books</div>
+    </div>
+
+    <div class="gallery-card card-amber">
+      <div class="gallery-covers">
+        <div class="gallery-cover" style="background: #8E6B4A;"></div>
+        <div class="gallery-cover" style="background: #A07B5C;"></div>
+      </div>
+      <div class="gallery-name">History</div>
+      <div class="gallery-count">2 books</div>
+    </div>
+
+    <div class="gallery-card card-slate">
+      <div class="gallery-covers">
+        <div class="gallery-cover" style="background: #4A6B8E;"></div>
+        <div class="gallery-cover" style="background: #5C7BA0;"></div>
+      </div>
+      <div class="gallery-name">Sci-Fi Favorites</div>
+      <div class="gallery-count">2 books</div>
+    </div>
+
+    <div class="gallery-new">
+      <span>+</span> New Collection
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="filters">
+    <a class="filter-tab active">All</a>
+    <span class="filter-sep">/</span>
+    <a class="filter-tab">Want to Read</a>
+    <span class="filter-sep">/</span>
+    <a class="filter-tab">Reading</a>
+    <span class="filter-sep">/</span>
+    <a class="filter-tab">Read</a>
+    <span class="filter-heart">&#9825;</span>
+    <div class="filter-right">
+      <select class="filter-select"><option>All Categories</option></select>
+      <select class="filter-select"><option>Sort: Date Added</option></select>
+    </div>
+  </div>
+
+  <div class="book-grid">
+    <div class="book-card">
+      <div class="book-cover" style="background: linear-gradient(135deg, #1a3a4a, #2a5a3a);"></div>
+      <div class="book-title">Feersum Endjinn</div>
+      <div class="book-author">Iain M. Banks</div>
+      <div class="book-category">FICTION</div>
+    </div>
+    <div class="book-card">
+      <div class="book-cover" style="background: linear-gradient(135deg, #4a2a1a, #8a5a3a);"></div>
+      <div class="book-title">Against a Dark Background</div>
+      <div class="book-author">Iain M. Banks</div>
+      <div class="book-category">FICTION</div>
+    </div>
+    <div class="book-card">
+      <div class="book-cover" style="background: linear-gradient(135deg, #1a2a4a, #3a5a8a);"></div>
+      <div class="book-title">The Hydrogen Sonata</div>
+      <div class="book-author">Iain M. Banks</div>
+      <div class="book-category">FICTION</div>
+    </div>
+    <div class="book-card">
+      <div class="book-cover" style="background: linear-gradient(135deg, #3a2a4a, #5a4a6a);"></div>
+      <div class="book-title">Matter</div>
+      <div class="book-author">Iain M. Banks</div>
+      <div class="book-category">FICTION</div>
+    </div>
+    <div class="book-card">
+      <div class="book-cover" style="background: linear-gradient(135deg, #2a4a2a, #4a6a3a);"></div>
+      <div class="book-title">Inversions</div>
+      <div class="book-author">Iain M Banks</div>
+      <div class="book-category">FICTION</div>
+    </div>
+  </div>
+</div>
+
+<div class="badge">Option C: Dark Gallery Cards</div>
+</body>
+</html>

@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biblioteca — About (Option A: The Manifesto)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Libre+Franklin:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F8F5F0;
+    --fg: #2C2416;
+    --amber: #C8956C;
+    --burgundy: #7A2E2E;
+    --warm-gray: #8A7E6F;
+    --border: #E0D8CC;
+    --card: #FFFFFF;
+    --ink: #1A1408;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Libre Franklin', sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 80%, rgba(200, 149, 108, 0.08) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 50% at 80% 20%, rgba(122, 46, 46, 0.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.2s;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: clamp(3.5rem, 10vw, 9rem);
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 0.4s;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--amber);
+  }
+
+  .hero-subtitle {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    font-weight: 300;
+    color: var(--warm-gray);
+    max-width: 480px;
+    line-height: 1.7;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 0.7s;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 1.2s;
+  }
+
+  .scroll-hint span {
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 40px;
+    background: var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scroll-line::after {
+    content: '';
+    position: absolute;
+    top: -100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--amber);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+
+  /* ── Manifesto Section ── */
+  .manifesto {
+    padding: 8rem 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .manifesto-statement {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    line-height: 1.35;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 3rem;
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  .manifesto-statement.visible {
+    animation: fadeUp 0.8s ease forwards;
+  }
+
+  .manifesto-statement .highlight {
+    color: var(--amber);
+    font-style: italic;
+  }
+
+  .manifesto-divider {
+    width: 60px;
+    height: 2px;
+    background: var(--amber);
+    margin: 4rem 0;
+    opacity: 0;
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  .manifesto-divider.visible {
+    animation: scaleIn 0.6s ease forwards;
+  }
+
+  /* ── Features Strip ── */
+  .features-strip {
+    background: var(--ink);
+    color: var(--bg);
+    padding: 6rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .features-strip::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  .features-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .features-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 4rem;
+  }
+
+  .feature-row {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 2rem;
+    padding: 2.5rem 0;
+    border-top: 1px solid rgba(248, 245, 240, 0.08);
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .feature-row.visible {
+    animation: fadeUp 0.6s ease forwards;
+  }
+
+  .feature-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: rgba(200, 149, 108, 0.3);
+    line-height: 1;
+  }
+
+  .feature-content h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: var(--bg);
+  }
+
+  .feature-content p {
+    font-size: 0.9rem;
+    font-weight: 300;
+    line-height: 1.7;
+    color: rgba(248, 245, 240, 0.6);
+    max-width: 500px;
+  }
+
+  /* ── Vision Section ── */
+  .vision {
+    padding: 8rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  @media (max-width: 768px) {
+    .vision { grid-template-columns: 1fr; gap: 3rem; }
+  }
+
+  .vision-card {
+    padding: 3rem;
+    border: 1px solid var(--border);
+    position: relative;
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  .vision-card.visible {
+    animation: fadeUp 0.8s ease forwards;
+  }
+
+  .vision-card::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: var(--amber);
+  }
+
+  .vision-label {
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 1.5rem;
+  }
+
+  .vision-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .vision-text {
+    font-size: 0.9rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--warm-gray);
+  }
+
+  .vision-text em {
+    font-style: italic;
+    color: var(--fg);
+  }
+
+  /* ── Tech Stack ── */
+  .stack {
+    padding: 6rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    border-top: 1px solid var(--border);
+  }
+
+  .stack-label {
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    margin-bottom: 2.5rem;
+  }
+
+  .stack-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .stack-tag {
+    padding: 0.5rem 1.25rem;
+    border: 1px solid var(--border);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    color: var(--warm-gray);
+    transition: all 0.3s ease;
+    cursor: default;
+  }
+
+  .stack-tag:hover {
+    border-color: var(--amber);
+    color: var(--amber);
+  }
+
+  /* ── Contribute CTA ── */
+  .contribute {
+    padding: 8rem 2rem;
+    text-align: center;
+    position: relative;
+  }
+
+  .contribute::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 80px;
+    background: linear-gradient(to bottom, var(--border), transparent);
+  }
+
+  .contribute-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 1.5rem;
+    color: var(--ink);
+  }
+
+  .contribute-text {
+    font-size: 0.95rem;
+    font-weight: 300;
+    color: var(--warm-gray);
+    max-width: 420px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.7;
+  }
+
+  .contribute-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2.5rem;
+    background: var(--ink);
+    color: var(--bg);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .contribute-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--amber);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.4s ease;
+  }
+
+  .contribute-link:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  .contribute-link:hover {
+    background: var(--fg);
+  }
+
+  .contribute-link svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    padding: 3rem 2rem;
+    text-align: center;
+    border-top: 1px solid var(--border);
+  }
+
+  .footer-text {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+  }
+
+  .footer-text a {
+    color: var(--amber);
+    text-decoration: none;
+  }
+
+  /* ── Animations ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes scaleIn {
+    from { opacity: 0; transform: scaleX(0); }
+    to { opacity: 1; transform: scaleX(1); }
+  }
+
+  @keyframes scrollPulse {
+    0% { top: -100%; }
+    50% { top: 100%; }
+    100% { top: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<section class="hero">
+  <p class="hero-eyebrow">A Personal Reading Curator</p>
+  <h1 class="hero-title">Biblio<em>teca</em></h1>
+  <p class="hero-subtitle">
+    Organize your books. Enrich them with meaning.<br>
+    Discover what to read next.
+  </p>
+  <div class="scroll-hint">
+    <span>Read more</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- Manifesto -->
+<section class="manifesto">
+  <p class="manifesto-statement" data-animate>
+    We believe your bookshelf is a <span class="highlight">portrait of your mind</span> &mdash; a curated gallery of the ideas that shaped you.
+  </p>
+  <div class="manifesto-divider" data-animate></div>
+  <p class="manifesto-statement" data-animate>
+    Yet most reading tools treat books like inventory. A title. A date. A checkbox. <span class="highlight">Where&rsquo;s the depth?</span>
+  </p>
+  <div class="manifesto-divider" data-animate></div>
+  <p class="manifesto-statement" data-animate>
+    Biblioteca is built for readers who care about <span class="highlight">beauty, discovery, and meaning</span> in equal measure.
+  </p>
+</section>
+
+<!-- Features -->
+<section class="features-strip">
+  <div class="features-inner">
+    <p class="features-label">Core Surfaces</p>
+
+    <div class="feature-row" data-animate>
+      <span class="feature-num">01</span>
+      <div class="feature-content">
+        <h3>Add</h3>
+        <p>Smart search powered by Google Books. Import your Kindle highlights, upload a CSV, or add books one by one. Your library, your way in.</p>
+      </div>
+    </div>
+
+    <div class="feature-row" data-animate>
+      <span class="feature-num">02</span>
+      <div class="feature-content">
+        <h3>Library</h3>
+        <p>A grid gallery of covers, organized into collections you define. Filter by status, sort by rating, search instantly. Every book exactly where you left it.</p>
+      </div>
+    </div>
+
+    <div class="feature-row" data-animate>
+      <span class="feature-num">03</span>
+      <div class="feature-content">
+        <h3>Book Detail</h3>
+        <p>Full metadata, key quotes, and insights enriched automatically. Rate, track status, and link directly to purchase. The full picture of every read.</p>
+      </div>
+    </div>
+
+    <div class="feature-row" data-animate>
+      <span class="feature-num">04</span>
+      <div class="feature-content">
+        <h3>Discover</h3>
+        <p>An LLM-powered recommendation engine that knows your taste. Steer by topic, explore curated lists, and find your next obsession.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Vision -->
+<section class="vision">
+  <div class="vision-card" data-animate>
+    <p class="vision-label">Now &mdash; v1</p>
+    <h3 class="vision-title">Personal Curator</h3>
+    <p class="vision-text">
+      <em>Beauty, discovery, and depth in equal measure.</em> Smart search ingestion, a gallery display that makes browsing a pleasure, and LLM-powered topic-steered recommendations that surface books you didn't know you needed.
+    </p>
+  </div>
+  <div class="vision-card" data-animate style="animation-delay: 0.15s">
+    <p class="vision-label">Next &mdash; v2</p>
+    <h3 class="vision-title">Social Library</h3>
+    <p class="vision-text">
+      <em>Share libraries, see what friends are reading.</em> Recommend books to each other, extract quotes from Kindle clippings, and build a bookshelf view that feels like visiting a friend's home.
+    </p>
+  </div>
+</section>
+
+<!-- Tech Stack -->
+<section class="stack">
+  <p class="stack-label">Built With</p>
+  <div class="stack-grid">
+    <span class="stack-tag">Next.js</span>
+    <span class="stack-tag">React</span>
+    <span class="stack-tag">TypeScript</span>
+    <span class="stack-tag">Tailwind CSS</span>
+    <span class="stack-tag">shadcn/ui</span>
+    <span class="stack-tag">Supabase</span>
+    <span class="stack-tag">Google Books API</span>
+    <span class="stack-tag">Claude API</span>
+    <span class="stack-tag">Vercel</span>
+  </div>
+</section>
+
+<!-- Contribute -->
+<section class="contribute">
+  <h2 class="contribute-title">Join the shelf.</h2>
+  <p class="contribute-text">
+    Biblioteca is open source. Whether you&rsquo;re a reader, a designer, or a developer &mdash; there&rsquo;s room on this shelf for you.
+  </p>
+  <a href="https://github.com/eugene-mann/Biblioteca" class="contribute-link" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+    Contribute on GitHub
+  </a>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <p class="footer-text">Biblioteca &mdash; A project by <a href="https://github.com/eugene-mann">Eugene Mann</a></p>
+</footer>
+
+<script>
+  // Intersection Observer for scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+
+  document.querySelectorAll('[data-animate]').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

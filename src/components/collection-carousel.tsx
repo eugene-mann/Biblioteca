@@ -13,7 +13,7 @@ import {
 } from "@dnd-kit/core";
 import {
   SortableContext,
-  horizontalListSortingStrategy,
+  rectSortingStrategy,
   useSortable,
   arrayMove,
 } from "@dnd-kit/sortable";
@@ -26,56 +26,40 @@ interface CollectionCarouselProps {
   onCollectionChange: () => void;
 }
 
-function CoverStack({ coverUrls }: { coverUrls: (string | null)[] }) {
-  const covers = coverUrls.slice(0, 3);
-  const placeholderColors = ["bg-amber/30", "bg-secondary", "bg-warm-border"];
+const CARD_GRADIENTS = [
+  "from-[#2C2416] to-[#4A3828]",
+  "from-[#1A2030] to-[#2A3548]",
+  "from-[#1A2E20] to-[#2A4A30]",
+  "from-[#2E1A20] to-[#4A2A30]",
+  "from-[#2A2A2E] to-[#3E3E44]",
+  "from-[#3A2810] to-[#5A4020]",
+  "from-[#1A2A3A] to-[#2A4050]",
+  "from-[#2A1A2E] to-[#4A3050]",
+];
 
-  if (covers.length === 0) {
-    return (
-      <div className="relative mx-auto h-[72px] w-[60px]">
-        {[0, 1, 2].map((i) => (
-          <div
-            key={i}
-            className={`absolute rounded-sm shadow-sm ${placeholderColors[i]}`}
-            style={{
-              width: 40,
-              height: 56,
-              left: 10 + i * 4,
-              top: 8 - i * 4,
-              transform: `rotate(${(i - 1) * 5}deg)`,
-              zIndex: i,
-            }}
-          />
-        ))}
-      </div>
-    );
-  }
+function GalleryCovers({ coverUrls }: { coverUrls: (string | null)[] }) {
+  const covers = coverUrls.slice(0, 3);
+  const placeholderColors = ["bg-amber/40", "bg-amber/25", "bg-amber/15"];
+  const rotations = ["-rotate-[10deg]", "rotate-[3deg]", "-rotate-[4deg]"];
 
   return (
-    <div className="relative mx-auto h-[72px] w-[60px]">
-      {covers.map((url, i) => (
+    <div className="absolute right-3 top-3 flex items-start">
+      {(covers.length > 0 ? covers : [null, null]).map((url, i) => (
         <div
           key={i}
-          className="absolute overflow-hidden rounded-sm shadow-sm"
-          style={{
-            width: 40,
-            height: 56,
-            left: 10 + i * 4,
-            top: 8 - i * 4,
-            transform: `rotate(${(i - 1) * 5}deg)`,
-            zIndex: i,
-          }}
+          className={`h-[40px] w-[28px] overflow-hidden rounded-[3px] border border-white/15 shadow-md ${rotations[i]} ${i > 0 ? "-ml-2" : ""}`}
+          style={{ zIndex: i + 1 }}
         >
           {url ? (
             <Image
               src={url}
               alt=""
-              width={40}
-              height={56}
+              width={28}
+              height={40}
               className="h-full w-full object-cover"
             />
           ) : (
-            <div className={`h-full w-full ${placeholderColors[i] ?? "bg-muted"}`} />
+            <div className={`h-full w-full ${placeholderColors[i] ?? "bg-amber/20"}`} />
           )}
         </div>
       ))}
@@ -83,14 +67,16 @@ function CoverStack({ coverUrls }: { coverUrls: (string | null)[] }) {
   );
 }
 
-function SortableCollectionCard({
+function SortableGalleryCard({
   collection,
   isSelected,
+  gradientIndex,
   onSelect,
   onDelete,
 }: {
   collection: CollectionWithCovers;
   isSelected: boolean;
+  gradientIndex: number;
   onSelect: () => void;
   onDelete: (id: string) => void;
 }) {
@@ -104,27 +90,29 @@ function SortableCollectionCard({
     opacity: isDragging ? 0.5 : 1,
   };
 
+  const gradient = CARD_GRADIENTS[gradientIndex % CARD_GRADIENTS.length];
+
   return (
     <div
       ref={setNodeRef}
       style={style}
-      className={`group relative w-[140px] flex-shrink-0 rounded-sm border text-center transition-colors bg-card ${
-        isSelected ? "border-2 border-amber" : "border-warm-border"
+      className={`group relative h-[120px] overflow-hidden rounded-xl bg-gradient-to-br ${gradient} transition-all hover:-translate-y-0.5 hover:shadow-lg ${
+        isSelected ? "ring-2 ring-amber ring-offset-2 ring-offset-background" : ""
       }`}
     >
       {confirmDelete ? (
-        <div className="flex h-full flex-col items-center justify-center gap-2 p-2">
-          <p className="font-sans text-xs text-warm-gray">Delete?</p>
+        <div className="flex h-full flex-col items-center justify-center gap-2">
+          <p className="font-sans text-xs text-white/70">Delete?</p>
           <div className="flex gap-2">
             <button
               onClick={() => onDelete(collection.id)}
-              className="rounded-sm bg-destructive px-2 py-1 text-xs font-medium text-white"
+              className="rounded-md bg-destructive px-3 py-1 text-xs font-medium text-white"
             >
               Yes
             </button>
             <button
               onClick={() => setConfirmDelete(false)}
-              className="rounded-sm border border-warm-border px-2 py-1 text-xs font-medium"
+              className="rounded-md border border-white/20 px-3 py-1 text-xs font-medium text-white/70"
             >
               No
             </button>
@@ -137,7 +125,7 @@ function SortableCollectionCard({
               e.stopPropagation();
               setConfirmDelete(true);
             }}
-            className="absolute right-1 top-1 z-10 rounded-full p-0.5 text-warm-gray opacity-0 transition-opacity hover:text-destructive group-hover:opacity-100"
+            className="absolute right-1.5 top-1.5 z-10 rounded-full p-0.5 text-white/40 opacity-0 transition-opacity hover:text-white group-hover:opacity-100"
           >
             <X className="h-3.5 w-3.5" />
           </button>
@@ -145,14 +133,18 @@ function SortableCollectionCard({
             {...attributes}
             {...listeners}
             onClick={onSelect}
-            className="w-full cursor-pointer p-2"
+            className="flex h-full w-full cursor-pointer flex-col justify-end p-4"
           >
-            <CoverStack coverUrls={collection.cover_urls} />
-            <p className="mt-1.5 truncate font-serif text-sm font-medium">{collection.name}</p>
-            <p className="text-xs text-warm-gray">
+            <GalleryCovers coverUrls={collection.cover_urls} />
+            <p className="relative z-[2] truncate font-serif text-[15px] font-semibold text-white">
+              {collection.name}
+            </p>
+            <p className="relative z-[2] text-[11px] text-amber">
               {collection.book_count} {collection.book_count === 1 ? "book" : "books"}
             </p>
           </button>
+          {/* Bottom gradient overlay for text readability */}
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
         </>
       )}
     </div>
@@ -252,92 +244,94 @@ export function CollectionCarousel({
 
   return (
     <div className="w-full">
-      <div className="flex items-center gap-4">
-        <span className="flex-shrink-0 font-serif text-sm font-medium uppercase tracking-wider text-warm-gray">
-          Collections
-        </span>
-        <div className="flex gap-3 overflow-x-auto pb-3 scrollbar-hide">
-          {/* All Books card */}
-          <button
-            onClick={() => onSelectCollection(null)}
-            className={`w-[140px] flex-shrink-0 cursor-pointer rounded-sm border p-2 text-center transition-colors bg-card ${
-              selectedCollectionId === null ? "border-2 border-amber" : "border-warm-border"
-            }`}
-          >
-            <div className="relative mx-auto flex h-[72px] w-[60px] items-center justify-center">
-              <Book className="h-8 w-8 text-warm-gray" />
-            </div>
-            <p className="mt-1.5 truncate font-serif text-sm font-medium">All Books</p>
-            <p className="text-xs text-warm-gray">&nbsp;</p>
-          </button>
+      <p className="mb-3 font-serif text-[11px] uppercase tracking-[2.5px] text-warm-gray">
+        Collections
+      </p>
+      <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-5">
+        {/* All Books card */}
+        <button
+          onClick={() => onSelectCollection(null)}
+          className={`relative flex h-[120px] cursor-pointer flex-col justify-end overflow-hidden rounded-xl bg-gradient-to-br from-[#2C2416] to-[#4A3828] p-4 transition-all hover:-translate-y-0.5 hover:shadow-lg ${
+            selectedCollectionId === null
+              ? "ring-2 ring-amber ring-offset-2 ring-offset-background"
+              : ""
+          }`}
+        >
+          <div className="absolute right-3 top-3">
+            <Book className="h-6 w-6 text-white/20" />
+          </div>
+          <p className="relative z-[2] font-serif text-[15px] font-semibold text-white">
+            All Books
+          </p>
+          <p className="relative z-[2] text-[11px] text-amber">&nbsp;</p>
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+        </button>
 
-          {/* Sortable collection cards */}
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragEnd={handleDragEnd}
+        {/* Sortable collection cards */}
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext
+            items={collections.map((c) => c.id)}
+            strategy={rectSortingStrategy}
           >
-            <SortableContext
-              items={collections.map((c) => c.id)}
-              strategy={horizontalListSortingStrategy}
-            >
-              {collections.map((collection) => (
-                <SortableCollectionCard
-                  key={collection.id}
-                  collection={collection}
-                  isSelected={selectedCollectionId === collection.id}
-                  onSelect={() => onSelectCollection(collection.id)}
-                  onDelete={handleDelete}
-                />
-              ))}
-            </SortableContext>
-          </DndContext>
-
-          {/* New Collection card */}
-          {isCreating ? (
-            <div className="flex w-[140px] flex-shrink-0 flex-col items-center justify-center rounded-sm border border-dashed border-warm-border p-2">
-              <input
-                ref={inputRef}
-                type="text"
-                value={newName}
-                onChange={(e) => setNewName(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") handleCreate();
-                  if (e.key === "Escape") {
-                    setIsCreating(false);
-                    setNewName("");
-                  }
-                }}
-                onBlur={() => {
-                  if (!newName.trim()) {
-                    setIsCreating(false);
-                    setNewName("");
-                  }
-                }}
-                placeholder="Name..."
-                className="w-full rounded-sm border border-warm-border bg-background px-2 py-1 text-center text-sm focus:border-amber focus:outline-none"
-                disabled={isSubmitting}
+            {collections.map((collection, i) => (
+              <SortableGalleryCard
+                key={collection.id}
+                collection={collection}
+                isSelected={selectedCollectionId === collection.id}
+                gradientIndex={i + 1}
+                onSelect={() => onSelectCollection(collection.id)}
+                onDelete={handleDelete}
               />
-              <button
-                onClick={handleCreate}
-                disabled={!newName.trim() || isSubmitting}
-                className="mt-2 text-xs font-medium text-amber hover:text-amber/80 disabled:opacity-50"
-              >
-                Create
-              </button>
-            </div>
-          ) : (
+            ))}
+          </SortableContext>
+        </DndContext>
+
+        {/* New Collection card */}
+        {isCreating ? (
+          <div className="flex h-[120px] flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-warm-border p-3">
+            <input
+              ref={inputRef}
+              type="text"
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleCreate();
+                if (e.key === "Escape") {
+                  setIsCreating(false);
+                  setNewName("");
+                }
+              }}
+              onBlur={() => {
+                if (!newName.trim()) {
+                  setIsCreating(false);
+                  setNewName("");
+                }
+              }}
+              placeholder="Name..."
+              className="w-full rounded-md border border-warm-border bg-background px-2 py-1.5 text-center font-sans text-sm focus:border-amber focus:outline-none"
+              disabled={isSubmitting}
+            />
             <button
-              onClick={() => setIsCreating(true)}
-              className="flex w-[140px] flex-shrink-0 flex-col items-center justify-center rounded-sm border border-dashed border-warm-border p-2 text-center transition-colors hover:border-amber hover:bg-card"
+              onClick={handleCreate}
+              disabled={!newName.trim() || isSubmitting}
+              className="text-xs font-medium text-amber hover:text-amber/80 disabled:opacity-50"
             >
-              <div className="flex h-[72px] w-[60px] items-center justify-center">
-                <Plus className="h-6 w-6 text-warm-gray" />
-              </div>
-              <p className="mt-1.5 text-sm text-warm-gray">New Collection</p>
+              Create
             </button>
-          )}
-        </div>
+          </div>
+        ) : (
+          <button
+            onClick={() => setIsCreating(true)}
+            className="flex h-[120px] flex-col items-center justify-center gap-1 rounded-xl border border-dashed border-warm-border transition-all hover:border-amber hover:text-amber"
+          >
+            <Plus className="h-5 w-5 text-warm-gray" />
+            <span className="font-sans text-xs text-warm-gray">New Collection</span>
+          </button>
+        )}
       </div>
     </div>
   );

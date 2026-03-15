@@ -2,8 +2,10 @@
 
 import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { ActionPills } from "@/components/book-detail/action-pills";
+import { AuthorBooksSection } from "@/components/book-detail/author-books-section";
 import { CoverEditor } from "@/components/book-detail/cover-editor";
 import { DescriptionSection } from "@/components/book-detail/description-section";
 import { InsightsSection } from "@/components/book-detail/insights-section";
@@ -114,7 +116,18 @@ export default function BookDetailPage({
               <p className="mt-1 font-sans text-base text-warm-gray">{book.subtitle}</p>
             )}
             <p className="mt-1.5 font-sans text-sm text-warm-gray">
-              by {book.authors.join(", ")}
+              by{" "}
+              {book.authors.map((author, i) => (
+                <span key={author}>
+                  {i > 0 && ", "}
+                  <Link
+                    href={`/author/${encodeURIComponent(author)}`}
+                    className="text-warm-gray underline decoration-warm-border underline-offset-2 transition-colors hover:text-amber hover:decoration-amber"
+                  >
+                    {author}
+                  </Link>
+                </span>
+              ))}
             </p>
           </div>
 
@@ -135,6 +148,16 @@ export default function BookDetailPage({
 
       {/* Insights & Quotes */}
       <InsightsSection bookId={book.id} />
+
+      {/* More by Author */}
+      {book.authors.length > 0 && (
+        <div className="mt-6">
+          <AuthorBooksSection
+            authorName={book.authors[0]}
+            currentBookId={book.id}
+          />
+        </div>
+      )}
 
       {/* Divider */}
       <div className="my-8 border-t border-warm-border" />

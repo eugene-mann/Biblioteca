@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biblioteca — About (Option C: The Curator's Note)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --linen: #FAF6F1;
+    --espresso: #2A1F14;
+    --rust: #A0522D;
+    --moss: #5B6B4A;
+    --clay: #C49A6C;
+    --dove: #A69B8D;
+    --whisper: #F0EAE0;
+    --paper: #FDFBF8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'EB Garamond', serif;
+    background: var(--linen);
+    color: var(--espresso);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ── Page wrapper — like a letter ── */
+  .page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+  }
+
+  @media (min-width: 768px) {
+    .page { padding: 5rem 2rem; }
+  }
+
+  /* ── Letterhead ── */
+  .letterhead {
+    text-align: center;
+    padding-bottom: 3rem;
+    margin-bottom: 3rem;
+    border-bottom: 1px solid var(--whisper);
+    opacity: 0;
+    animation: letterFade 1s ease forwards 0.2s;
+  }
+
+  .letterhead-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border: 1.5px solid var(--clay);
+    border-radius: 50%;
+    margin-bottom: 2rem;
+    position: relative;
+  }
+
+  .letterhead-mark::before {
+    content: 'B';
+    font-family: 'EB Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 500;
+    font-style: italic;
+    color: var(--rust);
+  }
+
+  .letterhead-name {
+    font-size: 0.65rem;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: var(--dove);
+    margin-bottom: 0.5rem;
+  }
+
+  .letterhead-title {
+    font-size: clamp(2.5rem, 6vw, 3.5rem);
+    font-weight: 400;
+    font-style: italic;
+    line-height: 1.15;
+    color: var(--espresso);
+  }
+
+  /* ── The Letter ── */
+  .letter {
+    margin-bottom: 4rem;
+  }
+
+  .letter-date {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--dove);
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: letterFade 0.8s ease forwards 0.5s;
+  }
+
+  .letter-salutation {
+    font-size: 1.2rem;
+    font-style: italic;
+    color: var(--rust);
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: letterFade 0.8s ease forwards 0.7s;
+  }
+
+  .letter-body {
+    opacity: 0;
+    animation: letterFade 0.8s ease forwards 0.9s;
+  }
+
+  .letter-body p {
+    font-size: 1.15rem;
+    line-height: 1.85;
+    margin-bottom: 1.5rem;
+    color: var(--espresso);
+  }
+
+  .letter-body p .accent {
+    color: var(--rust);
+    font-style: italic;
+  }
+
+  .letter-body p .em-dash {
+    color: var(--dove);
+  }
+
+  .letter-sign-off {
+    margin-top: 3rem;
+    opacity: 0;
+    animation: letterFade 0.8s ease forwards 1.1s;
+  }
+
+  .sign-off-line {
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--rust);
+    margin-bottom: 0.5rem;
+  }
+
+  .sign-off-name {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: var(--espresso);
+  }
+
+  /* ── Ornament Divider ── */
+  .ornament {
+    text-align: center;
+    padding: 2rem 0;
+    margin: 0 0 3rem;
+    position: relative;
+  }
+
+  .ornament::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--whisper);
+  }
+
+  .ornament-symbol {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--linen);
+    padding: 0 1.5rem;
+    color: var(--clay);
+    font-size: 0.7rem;
+    letter-spacing: 0.5em;
+  }
+
+  .ornament-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--clay);
+    opacity: 0.5;
+  }
+
+  /* ── What We Offer Cards ── */
+  .offerings {
+    margin-bottom: 4rem;
+  }
+
+  .offerings-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.45em;
+    text-transform: uppercase;
+    color: var(--dove);
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .offering-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--whisper);
+    border: 1px solid var(--whisper);
+  }
+
+  .offering-item {
+    background: var(--paper);
+    padding: 2rem 2.5rem;
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 1.5rem;
+    align-items: start;
+    transition: background 0.3s ease;
+    cursor: default;
+    opacity: 0;
+    transform: translateY(15px);
+  }
+
+  .offering-item.visible {
+    animation: fadeUp 0.5s ease forwards;
+  }
+
+  .offering-item:hover {
+    background: var(--linen);
+  }
+
+  .offering-num {
+    font-size: 2rem;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--clay);
+    line-height: 1;
+    opacity: 0.6;
+  }
+
+  .offering-content h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+  }
+
+  .offering-content p {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--dove);
+  }
+
+  /* ── Vision ── */
+  .vision-section {
+    margin-bottom: 4rem;
+  }
+
+  .vision-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+
+  @media (max-width: 600px) {
+    .vision-pair { grid-template-columns: 1fr; }
+  }
+
+  .vision-block {
+    padding: 2rem;
+    border-left: 2px solid var(--whisper);
+    opacity: 0;
+    transform: translateY(15px);
+  }
+
+  .vision-block.visible {
+    animation: fadeUp 0.6s ease forwards;
+  }
+
+  .vision-block.active {
+    border-left-color: var(--rust);
+  }
+
+  .vision-phase {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.55rem;
+    font-weight: 600;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 1rem;
+  }
+
+  .vision-heading {
+    font-size: 1.4rem;
+    font-weight: 500;
+    font-style: italic;
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+  }
+
+  .vision-desc {
+    font-size: 0.95rem;
+    line-height: 1.75;
+    color: var(--dove);
+  }
+
+  /* ── Colophon (tech) ── */
+  .colophon-section {
+    margin-bottom: 4rem;
+    text-align: center;
+  }
+
+  .colophon-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.45em;
+    text-transform: uppercase;
+    color: var(--dove);
+    margin-bottom: 1.5rem;
+  }
+
+  .colophon-text {
+    font-size: 1rem;
+    font-style: italic;
+    line-height: 2;
+    color: var(--dove);
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .colophon-text .tech {
+    color: var(--espresso);
+    font-style: normal;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  /* ── Contribute ── */
+  .contribute-section {
+    text-align: center;
+    padding: 4rem 2rem;
+    margin: 0 -2rem;
+    background: var(--paper);
+    border-top: 1px solid var(--whisper);
+    border-bottom: 1px solid var(--whisper);
+    margin-bottom: 3rem;
+  }
+
+  .contribute-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(160, 82, 45, 0.06);
+    margin-bottom: 1.5rem;
+  }
+
+  .contribute-icon svg {
+    width: 22px;
+    height: 22px;
+    fill: var(--rust);
+  }
+
+  .contribute-heading {
+    font-size: 1.8rem;
+    font-weight: 400;
+    font-style: italic;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .contribute-copy {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: var(--dove);
+    max-width: 400px;
+    margin: 0 auto 2rem;
+  }
+
+  .contribute-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.85rem 2rem;
+    border: 1.5px solid var(--espresso);
+    background: transparent;
+    color: var(--espresso);
+    text-decoration: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    transition: all 0.35s ease;
+    cursor: pointer;
+  }
+
+  .contribute-btn:hover {
+    background: var(--espresso);
+    color: var(--linen);
+  }
+
+  .contribute-btn svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+    transition: fill 0.35s;
+  }
+
+  /* ── Footer ── */
+  .page-footer {
+    text-align: center;
+    padding-bottom: 3rem;
+  }
+
+  .footer-mark {
+    font-size: 1.4rem;
+    font-style: italic;
+    color: var(--clay);
+    margin-bottom: 0.75rem;
+  }
+
+  .footer-note {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--dove);
+  }
+
+  .footer-note a {
+    color: var(--rust);
+    text-decoration: none;
+  }
+
+  /* ── Animations ── */
+  @keyframes letterFade {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- Letterhead -->
+  <header class="letterhead">
+    <div class="letterhead-mark"></div>
+    <p class="letterhead-name">Biblioteca</p>
+    <h1 class="letterhead-title">A Curator&rsquo;s Note</h1>
+  </header>
+
+  <!-- The Letter -->
+  <section class="letter">
+    <p class="letter-date">March 2026</p>
+    <p class="letter-salutation">Dear reader,</p>
+
+    <div class="letter-body">
+      <p>
+        I built Biblioteca because I believe your bookshelf is a <span class="accent">portrait of your mind</span> <span class="em-dash">&mdash;</span> a curated gallery of the ideas that shaped you. And yet, most reading tools treat books like inventory. A title. A date. A checkbox.
+      </p>
+      <p>
+        Where&rsquo;s the <span class="accent">depth</span>? Where&rsquo;s the beauty? Where&rsquo;s the thrill of discovering your next obsession?
+      </p>
+      <p>
+        Biblioteca is a personal reading curator <span class="em-dash">&mdash;</span> a web app that helps you organize your books, enrich them with metadata and meaning, display them in a way that feels like browsing a beautiful bookshop, and discover what to read next through an AI recommendation engine that actually understands your taste.
+      </p>
+      <p>
+        It&rsquo;s built for readers who want <span class="accent">beauty, discovery, and meaning</span> in equal measure.
+      </p>
+    </div>
+
+    <div class="letter-sign-off">
+      <p class="sign-off-line">With care,</p>
+      <p class="sign-off-name">Eugene Mann</p>
+    </div>
+  </section>
+
+  <!-- Divider -->
+  <div class="ornament">
+    <span class="ornament-symbol">
+      <span class="ornament-dot"></span>
+      <span class="ornament-dot"></span>
+      <span class="ornament-dot"></span>
+    </span>
+  </div>
+
+  <!-- Offerings -->
+  <section class="offerings">
+    <p class="offerings-title">What Biblioteca Offers</p>
+    <div class="offering-list">
+      <div class="offering-item" data-animate>
+        <span class="offering-num">i.</span>
+        <div class="offering-content">
+          <h3>Smart Ingestion</h3>
+          <p>Add books via Google Books search, import your Kindle library, or upload a CSV. Every path into your library is enriched with metadata automatically.</p>
+        </div>
+      </div>
+      <div class="offering-item" data-animate style="animation-delay: 0.08s">
+        <span class="offering-num">ii.</span>
+        <div class="offering-content">
+          <h3>A Gallery, Not a List</h3>
+          <p>Your library displayed as a grid of covers, organized into collections you define. Filter by status, sort by rating, search instantly.</p>
+        </div>
+      </div>
+      <div class="offering-item" data-animate style="animation-delay: 0.16s">
+        <span class="offering-num">iii.</span>
+        <div class="offering-content">
+          <h3>Deep Book Detail</h3>
+          <p>Full metadata, key quotes, and insights enriched automatically. Rate, track status, and link directly to purchase. The complete picture of every read.</p>
+        </div>
+      </div>
+      <div class="offering-item" data-animate style="animation-delay: 0.24s">
+        <span class="offering-num">iv.</span>
+        <div class="offering-content">
+          <h3>AI-Powered Discovery</h3>
+          <p>An LLM recommendation engine that knows your taste. Steer by topic, explore curated reading lists, and find your next obsession.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Divider -->
+  <div class="ornament">
+    <span class="ornament-symbol">
+      <span class="ornament-dot"></span>
+      <span class="ornament-dot"></span>
+      <span class="ornament-dot"></span>
+    </span>
+  </div>
+
+  <!-- Vision -->
+  <section class="vision-section">
+    <div class="vision-pair">
+      <div class="vision-block active" data-animate>
+        <p class="vision-phase">Version 1 &mdash; Now</p>
+        <h3 class="vision-heading">Personal Curator</h3>
+        <p class="vision-desc">Beauty, discovery, and depth in equal measure. Smart search, a gallery display that makes browsing a pleasure, and LLM-powered recommendations.</p>
+      </div>
+      <div class="vision-block" data-animate style="animation-delay: 0.12s">
+        <p class="vision-phase">Version 2 &mdash; Next</p>
+        <h3 class="vision-heading">Social Library</h3>
+        <p class="vision-desc">Share libraries, see what friends are reading, recommend books to each other, and build a bookshelf view that feels like visiting a friend&rsquo;s home.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Colophon -->
+  <section class="colophon-section">
+    <p class="colophon-label">Colophon</p>
+    <p class="colophon-text">
+      Built with <span class="tech">Next.js</span> and <span class="tech">React</span>, styled with <span class="tech">Tailwind CSS</span> and <span class="tech">shadcn/ui</span>, powered by <span class="tech">Supabase</span>, enriched by the <span class="tech">Google Books API</span>, guided by <span class="tech">Claude</span>, and hosted on <span class="tech">Vercel</span>.
+    </p>
+  </section>
+
+  <!-- Contribute -->
+  <section class="contribute-section">
+    <div class="contribute-icon">
+      <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+    </div>
+    <h2 class="contribute-heading">Contribute</h2>
+    <p class="contribute-copy">
+      Biblioteca is open source. Whether you&rsquo;re a reader, a designer, or a developer &mdash; there&rsquo;s room on this shelf for you.
+    </p>
+    <a href="https://github.com/eugene-mann/Biblioteca" class="contribute-btn" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+      View on GitHub
+    </a>
+  </section>
+
+  <!-- Footer -->
+  <footer class="page-footer">
+    <p class="footer-mark">B</p>
+    <p class="footer-note">Biblioteca &mdash; A project by <a href="https://github.com/eugene-mann">Eugene Mann</a></p>
+  </footer>
+
+</div>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -30px 0px' });
+
+  document.querySelectorAll('[data-animate]').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

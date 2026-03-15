@@ -2,13 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, Compass, Settings } from "lucide-react";
+import { BookOpen, Compass, Settings, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { SearchBar } from "./search-bar";
 
 const navItems = [
   { href: "/", label: "Library", icon: BookOpen },
   { href: "/discover", label: "Discover", icon: Compass },
   { href: "/settings", label: "Settings", icon: Settings },
+  { href: "/about", label: "About", icon: Info },
 ];
 
 export function Nav() {
@@ -17,14 +19,15 @@ export function Nav() {
   return (
     <>
       {/* Desktop top nav — sticky frosted glass */}
-      <nav className="hidden md:flex items-center justify-between sticky top-0 z-50 border-b border-warm-border bg-background/92 backdrop-blur-md px-8 py-4">
+      <nav className="hidden md:flex items-center gap-6 sticky top-0 z-50 border-b border-warm-border bg-background/92 backdrop-blur-md px-8 py-3">
         <Link
           href="/"
-          className="font-serif italic text-xl font-semibold text-amber"
+          className="shrink-0 font-serif italic text-xl font-semibold text-amber"
         >
           Biblioteca
         </Link>
-        <div className="flex items-center gap-6">
+        <SearchBar />
+        <div className="flex shrink-0 items-center gap-6">
           {navItems.map((item) => {
             const isActive =
               item.href === "/"
