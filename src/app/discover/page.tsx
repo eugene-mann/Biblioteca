@@ -2,7 +2,9 @@
 
 import { useState, useEffect, useMemo, useRef } from "react";
 import { BookCover } from "@/components/book-cover";
+import { SuggestedBookCard } from "@/components/suggested-book-card";
 import { RefreshCw, ExternalLink, Plus, X, Sparkles } from "lucide-react";
+import type { SuggestedBook } from "@/types/database";
 
 const VISIBLE_COUNT = 7;
 
@@ -32,11 +34,12 @@ export default function DiscoverPage() {
   const [dismissedTitles, setDismissedTitles] = useState<Set<string>>(new Set());
   const [emptyLibrary, setEmptyLibrary] = useState(false);
   const [freeformPrompt, setFreeformPrompt] = useState("");
+  const [suggestedBooks, setSuggestedBooks] = useState<SuggestedBook[]>([]);
   // Pool: all recs from LLM. We show VISIBLE_COUNT, rest are backfill.
   const [recPool, setRecPool] = useState<Recommendation[]>([]);
   const recPoolRef = useRef<Recommendation[]>([]);
 
-  // Load topics on mount
+  // Load topics and suggested books on mount
   useEffect(() => {
     async function fetchTopics() {
       try {
@@ -53,7 +56,31 @@ export default function DiscoverPage() {
       }
       setIsLoadingTopics(false);
     }
+    async function fetchSuggested() {
+      try {
+        const res = await fetch("/api/explore");
+        if (!res.ok) return;
+        const clusters = await res.json();
+        if (!Array.isArray(clusters)) return;
+        // Flatten and deduplicate suggested books from all clusters
+        const seen = new Set<string>();
+        const all: SuggestedBook[] = [];
+        for (const cluster of clusters) {
+          for (const sb of cluster.suggestedBooks ?? []) {
+            const key = sb.title.toLowerCase();
+            if (!seen.has(key)) {
+              seen.add(key);
+              all.push(sb);
+            }
+          }
+        }
+        setSuggestedBooks(all);
+      } catch {
+        // Non-critical
+      }
+    }
     fetchTopics();
+    fetchSuggested();
   }, []);
 
   // Hydrate a single rec's cover in the background
@@ -269,6 +296,28 @@ export default function DiscoverPage() {
               placeholder='e.g. "Books about the fall of civilizations"'
               className="w-full rounded-sm border border-warm-border bg-card py-3 pl-10 pr-4 font-serif text-sm italic outline-none transition-colors placeholder:text-warm-gray/60 focus:border-amber focus:ring-0"
             />
+          </div>
+        </div>
+      )}
+
+      {/* Suggested books from insights — zero state */}
+      {!isLoading && !error && recommendations.length === 0 && suggestedBooks.length > 0 && (
+        <div className="mt-10">
+          <div className="flex items-center gap-3 mb-5">
+            <div className="h-px flex-1 bg-warm-border" />
+            <span className="text-[11px] font-medium uppercase tracking-[0.15em] text-warm-gray">
+              Books you might enjoy
+            </span>
+            <div className="h-px flex-1 bg-warm-border" />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {suggestedBooks.map((sb) => (
+              <SuggestedBookCard
+                key={`${sb.title}-${sb.authors[0] ?? ""}`}
+                book={sb}
+                variant="compact"
+              />
+            ))}
           </div>
         </div>
       )}
