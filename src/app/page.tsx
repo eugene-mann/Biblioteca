@@ -327,6 +327,8 @@ function LibraryPageContent() {
               <div key={i}>
                 <BookGrid
                   books={chunk}
+                  priority={i === 0}
+                  lazy={i > 0}
                   renderAfter={
                     isLastChunk(i) && selectedCollectionId ? (
                       <AddBookCard onClick={() => setAddBookModalOpen(true)} />

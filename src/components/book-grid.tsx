@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import { Heart, Star } from "lucide-react";
 import { BookCover } from "./book-cover";
@@ -8,6 +9,10 @@ import type { Book } from "@/types/database";
 interface BookGridProps {
   books: Book[];
   renderAfter?: React.ReactNode;
+  /** Eagerly load images (for first visible chunk) */
+  priority?: boolean;
+  /** Defer rendering until visible in viewport */
+  lazy?: boolean;
 }
 
 function RatingPill({ rating, externalRating }: { rating: number | null; externalRating: number | null }) {
@@ -56,11 +61,37 @@ export function BookGridSkeleton({ count = 10 }: { count?: number }) {
   );
 }
 
-export function BookGrid({ books, renderAfter }: BookGridProps) {
+export function BookGrid({ books, renderAfter, priority = false, lazy = false }: BookGridProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(!lazy);
+
+  useEffect(() => {
+    if (!lazy || visible) return;
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "200px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [lazy, visible]);
+
   if (books.length === 0 && !renderAfter) return null;
 
+  if (!visible) {
+    // Reserve space: estimate ~260px per row, 5 cols on desktop
+    const rows = Math.ceil(books.length / 5);
+    return <div ref={ref} style={{ minHeight: rows * 260 }} />;
+  }
+
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+    <div ref={ref} className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
       {books.map((book, index) => (
         <Link
           key={book.id}
@@ -74,6 +105,7 @@ export function BookGrid({ books, renderAfter }: BookGridProps) {
               title={book.title}
               coverUrl={book.cover_image_url}
               size="md"
+              priority={priority}
             />
             {book.is_favorite && (
               <div className="absolute right-1.5 top-1.5">

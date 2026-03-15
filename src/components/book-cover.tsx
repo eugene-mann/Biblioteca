@@ -7,6 +7,7 @@ interface BookCoverProps {
   coverUrl: string | null;
   size?: "sm" | "md" | "lg";
   className?: string;
+  priority?: boolean;
 }
 
 const sizes = {
@@ -15,7 +16,7 @@ const sizes = {
   lg: { width: 200, height: 300, text: "text-base" },
 };
 
-export function BookCover({ title, coverUrl, size = "md", className = "" }: BookCoverProps) {
+export function BookCover({ title, coverUrl, size = "md", className = "", priority = false }: BookCoverProps) {
   const { width, height, text } = sizes[size];
   const initials = title
     .split(" ")
@@ -33,6 +34,8 @@ export function BookCover({ title, coverUrl, size = "md", className = "" }: Book
         height={height}
         className={`rounded-sm object-cover shadow-md ${className}`}
         style={{ width, height }}
+        loading={priority ? "eager" : "lazy"}
+        priority={priority}
       />
     );
   }
