@@ -106,7 +106,7 @@ export default function LibraryPage() {
         </p>
       </div>
 
-      <SearchBar onBookAdded={fetchBooks} />
+      <SearchBar libraryBooks={books} onBookAdded={fetchBooks} />
 
       {books.length > 0 && (
         <CollectionCarousel

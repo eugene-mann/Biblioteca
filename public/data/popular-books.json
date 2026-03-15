@@ -1,0 +1,4012 @@
+[
+  {
+    "title": "To Kill a Mockingbird",
+    "authors": [
+      "Harper Lee"
+    ],
+    "isbn_13": "9780061120084",
+    "category": "Fiction"
+  },
+  {
+    "title": "1984",
+    "authors": [
+      "George Orwell"
+    ],
+    "isbn_13": "9780451524935",
+    "category": "Fiction"
+  },
+  {
+    "title": "Pride and Prejudice",
+    "authors": [
+      "Jane Austen"
+    ],
+    "isbn_13": "9780141439518",
+    "category": "Fiction"
+  },
+  {
+    "title": "The Great Gatsby",
+    "authors": [
+      "F. Scott Fitzgerald"
+    ],
+    "isbn_13": "9780743273565",
+    "category": "Fiction"
+  },
+  {
+    "title": "One Hundred Years of Solitude",
+    "authors": [
+      "Gabriel García Márquez"
+    ],
+    "isbn_13": "9780060883287",
+    "category": "Fiction"
+  },
+  {
+    "title": "The Catcher in the Rye",
+    "authors": [
+      "J.D. Salinger"
+    ],
+    "isbn_13": "9780316769488",
+    "category": "Fiction"
+  },
+  {
+    "title": "Brave New World",
+    "authors": [
+      "Aldous Huxley"
+    ],
+    "isbn_13": "9780060850524",
+    "category": "Fiction"
+  },
+  {
+    "title": "The Road",
+    "authors": [
+      "Cormac McCarthy"
+    ],
+    "isbn_13": "9780307387899",
+    "category": "Fiction"
+  },
+  {
+    "title": "Beloved",
+    "authors": [
+      "Toni Morrison"
+    ],
+    "isbn_13": "9781400033416",
+    "category": "Fiction"
+  },
+  {
+    "title": "The Kite Runner",
+    "authors": [
+      "Khaled Hosseini"
+    ],
+    "isbn_13": "9781594631931",
+    "category": "Fiction"
+  },
+  {
+    "title": "The Book Thief",
+    "authors": [
+      "Markus Zusak"
+    ],
+    "isbn_13": "9780375842207",
+    "category": "Fiction"
+  },
+  {
+    "title": "A Thousand Splendid Suns",
+    "authors": [
+      "Khaled Hosseini"
+    ],
+    "isbn_13": "9781594489501",
+    "category": "Fiction"
+  },
+  {
+    "title": "East of Eden",
+    "authors": [
+      "John Steinbeck"
+    ],
+    "isbn_13": "9780140186390",
+    "category": "Fiction"
+  },
+  {
+    "title": "The Grapes of Wrath",
+    "authors": [
+      "John Steinbeck"
+    ],
+    "isbn_13": "9780143039433",
+    "category": "Fiction"
+  },
+  {
+    "title": "Catch-22",
+    "authors": [
+      "Joseph Heller"
+    ],
+    "isbn_13": "9781451626650",
+    "category": "Fiction"
+  },
+  {
+    "title": "Slaughterhouse-Five",
+    "authors": [
+      "Kurt Vonnegut"
+    ],
+    "isbn_13": "9780385333481",
+    "category": "Fiction"
+  },
+  {
+    "title": "The Bell Jar",
+    "authors": [
+      "Sylvia Plath"
+    ],
+    "isbn_13": "9780060837020",
+    "category": "Fiction"
+  },
+  {
+    "title": "Invisible Man",
+    "authors": [
+      "Ralph Ellison"
+    ],
+    "isbn_13": "9780679732761",
+    "category": "Fiction"
+  },
+  {
+    "title": "The Color Purple",
+    "authors": [
+      "Alice Walker"
+    ],
+    "isbn_13": "9780156028356",
+    "category": "Fiction"
+  },
+  {
+    "title": "Anna Karenina",
+    "authors": [
+      "Leo Tolstoy"
+    ],
+    "isbn_13": "9780143035008",
+    "category": "Fiction"
+  },
+  {
+    "title": "Crime and Punishment",
+    "authors": [
+      "Fyodor Dostoevsky"
+    ],
+    "isbn_13": "9780486415871",
+    "category": "Fiction"
+  },
+  {
+    "title": "The Brothers Karamazov",
+    "authors": [
+      "Fyodor Dostoevsky"
+    ],
+    "isbn_13": "9780374528379",
+    "category": "Fiction"
+  },
+  {
+    "title": "War and Peace",
+    "authors": [
+      "Leo Tolstoy"
+    ],
+    "isbn_13": "9781400079988",
+    "category": "Fiction"
+  },
+  {
+    "title": "Wuthering Heights",
+    "authors": [
+      "Emily Brontë"
+    ],
+    "isbn_13": "9780141439556",
+    "category": "Fiction"
+  },
+  {
+    "title": "Jane Eyre",
+    "authors": [
+      "Charlotte Brontë"
+    ],
+    "isbn_13": "9780141441146",
+    "category": "Fiction"
+  },
+  {
+    "title": "Great Expectations",
+    "authors": [
+      "Charles Dickens"
+    ],
+    "isbn_13": "9780141439563",
+    "category": "Fiction"
+  },
+  {
+    "title": "Moby-Dick",
+    "authors": [
+      "Herman Melville"
+    ],
+    "isbn_13": "9780142437247",
+    "category": "Fiction"
+  },
+  {
+    "title": "Don Quixote",
+    "authors": [
+      "Miguel de Cervantes"
+    ],
+    "isbn_13": "9780060934347",
+    "category": "Fiction"
+  },
+  {
+    "title": "Middlemarch",
+    "authors": [
+      "George Eliot"
+    ],
+    "isbn_13": "9780141439549",
+    "category": "Fiction"
+  },
+  {
+    "title": "The Count of Monte Cristo",
+    "authors": [
+      "Alexandre Dumas"
+    ],
+    "isbn_13": "9780140449266",
+    "category": "Fiction"
+  },
+  {
+    "title": "Les Misérables",
+    "authors": [
+      "Victor Hugo"
+    ],
+    "isbn_13": "9780451419439",
+    "category": "Fiction"
+  },
+  {
+    "title": "A Tale of Two Cities",
+    "authors": [
+      "Charles Dickens"
+    ],
+    "isbn_13": "9780141439600",
+    "category": "Fiction"
+  },
+  {
+    "title": "The Picture of Dorian Gray",
+    "authors": [
+      "Oscar Wilde"
+    ],
+    "isbn_13": "9780141439570",
+    "category": "Fiction"
+  },
+  {
+    "title": "Frankenstein",
+    "authors": [
+      "Mary Shelley"
+    ],
+    "isbn_13": "9780141439471",
+    "category": "Fiction"
+  },
+  {
+    "title": "The Alchemist",
+    "authors": [
+      "Paulo Coelho"
+    ],
+    "isbn_13": "9780062315007",
+    "category": "Fiction"
+  },
+  {
+    "title": "Life of Pi",
+    "authors": [
+      "Yann Martel"
+    ],
+    "isbn_13": "9780156027328",
+    "category": "Fiction"
+  },
+  {
+    "title": "The Handmaid's Tale",
+    "authors": [
+      "Margaret Atwood"
+    ],
+    "isbn_13": "9780385490818",
+    "category": "Fiction"
+  },
+  {
+    "title": "Normal People",
+    "authors": [
+      "Sally Rooney"
+    ],
+    "isbn_13": "9781984822185",
+    "category": "Fiction"
+  },
+  {
+    "title": "Where the Crawdads Sing",
+    "authors": [
+      "Delia Owens"
+    ],
+    "isbn_13": "9780735219106",
+    "category": "Fiction"
+  },
+  {
+    "title": "Circe",
+    "authors": [
+      "Madeline Miller"
+    ],
+    "isbn_13": "9780316556347",
+    "category": "Fiction"
+  },
+  {
+    "title": "The Song of Achilles",
+    "authors": [
+      "Madeline Miller"
+    ],
+    "isbn_13": "9780062060624",
+    "category": "Fiction"
+  },
+  {
+    "title": "The Goldfinch",
+    "authors": [
+      "Donna Tartt"
+    ],
+    "isbn_13": "9780316055437",
+    "category": "Fiction"
+  },
+  {
+    "title": "The Secret History",
+    "authors": [
+      "Donna Tartt"
+    ],
+    "isbn_13": "9781400031702",
+    "category": "Fiction"
+  },
+  {
+    "title": "A Little Life",
+    "authors": [
+      "Hanya Yanagihara"
+    ],
+    "isbn_13": "9780385539258",
+    "category": "Fiction"
+  },
+  {
+    "title": "The Remains of the Day",
+    "authors": [
+      "Kazuo Ishiguro"
+    ],
+    "isbn_13": "9780679731726",
+    "category": "Fiction"
+  },
+  {
+    "title": "Never Let Me Go",
+    "authors": [
+      "Kazuo Ishiguro"
+    ],
+    "isbn_13": "9781400078776",
+    "category": "Fiction"
+  },
+  {
+    "title": "The Unbearable Lightness of Being",
+    "authors": [
+      "Milan Kundera"
+    ],
+    "isbn_13": "9780061148521",
+    "category": "Fiction"
+  },
+  {
+    "title": "Norwegian Wood",
+    "authors": [
+      "Haruki Murakami"
+    ],
+    "isbn_13": "9780375704024",
+    "category": "Fiction"
+  },
+  {
+    "title": "Kafka on the Shore",
+    "authors": [
+      "Haruki Murakami"
+    ],
+    "isbn_13": "9781400079278",
+    "category": "Fiction"
+  },
+  {
+    "title": "The Wind-Up Bird Chronicle",
+    "authors": [
+      "Haruki Murakami"
+    ],
+    "isbn_13": "9780679775430",
+    "category": "Fiction"
+  },
+  {
+    "title": "Pachinko",
+    "authors": [
+      "Min Jin Lee"
+    ],
+    "isbn_13": "9781455563920",
+    "category": "Fiction"
+  },
+  {
+    "title": "All the Light We Cannot See",
+    "authors": [
+      "Anthony Doerr"
+    ],
+    "isbn_13": "9781501173219",
+    "category": "Fiction"
+  },
+  {
+    "title": "The Nightingale",
+    "authors": [
+      "Kristin Hannah"
+    ],
+    "isbn_13": "9780312577223",
+    "category": "Fiction"
+  },
+  {
+    "title": "Educated",
+    "authors": [
+      "Tara Westover"
+    ],
+    "isbn_13": "9780399590504",
+    "category": "Biography"
+  },
+  {
+    "title": "Becoming",
+    "authors": [
+      "Michelle Obama"
+    ],
+    "isbn_13": "9781524763138",
+    "category": "Biography"
+  },
+  {
+    "title": "Steve Jobs",
+    "authors": [
+      "Walter Isaacson"
+    ],
+    "isbn_13": "9781451648539",
+    "category": "Biography"
+  },
+  {
+    "title": "The Diary of a Young Girl",
+    "authors": [
+      "Anne Frank"
+    ],
+    "isbn_13": "9780553296983",
+    "category": "Biography"
+  },
+  {
+    "title": "Long Walk to Freedom",
+    "authors": [
+      "Nelson Mandela"
+    ],
+    "isbn_13": "9780316548182",
+    "category": "Biography"
+  },
+  {
+    "title": "When Breath Becomes Air",
+    "authors": [
+      "Paul Kalanithi"
+    ],
+    "isbn_13": "9780812988406",
+    "category": "Biography"
+  },
+  {
+    "title": "Born a Crime",
+    "authors": [
+      "Trevor Noah"
+    ],
+    "isbn_13": "9780399588174",
+    "category": "Biography"
+  },
+  {
+    "title": "The Glass Castle",
+    "authors": [
+      "Jeannette Walls"
+    ],
+    "isbn_13": "9780743247542",
+    "category": "Biography"
+  },
+  {
+    "title": "Shoe Dog",
+    "authors": [
+      "Phil Knight"
+    ],
+    "isbn_13": "9781501135910",
+    "category": "Biography"
+  },
+  {
+    "title": "I Know Why the Caged Bird Sings",
+    "authors": [
+      "Maya Angelou"
+    ],
+    "isbn_13": "9780345514400",
+    "category": "Biography"
+  },
+  {
+    "title": "The Autobiography of Malcolm X",
+    "authors": [
+      "Malcolm X",
+      "Alex Haley"
+    ],
+    "isbn_13": "9780345350688",
+    "category": "Biography"
+  },
+  {
+    "title": "Benjamin Franklin: An American Life",
+    "authors": [
+      "Walter Isaacson"
+    ],
+    "isbn_13": "9780743258074",
+    "category": "Biography"
+  },
+  {
+    "title": "Einstein: His Life and Universe",
+    "authors": [
+      "Walter Isaacson"
+    ],
+    "isbn_13": "9780743264747",
+    "category": "Biography"
+  },
+  {
+    "title": "Alexander Hamilton",
+    "authors": [
+      "Ron Chernow"
+    ],
+    "isbn_13": "9780143034759",
+    "category": "Biography"
+  },
+  {
+    "title": "Leonardo da Vinci",
+    "authors": [
+      "Walter Isaacson"
+    ],
+    "isbn_13": "9781501139154",
+    "category": "Biography"
+  },
+  {
+    "title": "Open",
+    "authors": [
+      "Andre Agassi"
+    ],
+    "isbn_13": "9780307388407",
+    "category": "Biography"
+  },
+  {
+    "title": "Greenlights",
+    "authors": [
+      "Matthew McConaughey"
+    ],
+    "isbn_13": "9780593139134",
+    "category": "Biography"
+  },
+  {
+    "title": "A Promised Land",
+    "authors": [
+      "Barack Obama"
+    ],
+    "isbn_13": "9781524763169",
+    "category": "Biography"
+  },
+  {
+    "title": "Kitchen Confidential",
+    "authors": [
+      "Anthony Bourdain"
+    ],
+    "isbn_13": "9780060899226",
+    "category": "Biography"
+  },
+  {
+    "title": "Man's Search for Meaning",
+    "authors": [
+      "Viktor E. Frankl"
+    ],
+    "isbn_13": "9780807014295",
+    "category": "Biography"
+  },
+  {
+    "title": "The Year of Magical Thinking",
+    "authors": [
+      "Joan Didion"
+    ],
+    "isbn_13": "9781400078431",
+    "category": "Biography"
+  },
+  {
+    "title": "Wild",
+    "authors": [
+      "Cheryl Strayed"
+    ],
+    "isbn_13": "9780307476074",
+    "category": "Biography"
+  },
+  {
+    "title": "Elon Musk",
+    "authors": [
+      "Walter Isaacson"
+    ],
+    "isbn_13": "9781982181284",
+    "category": "Biography"
+  },
+  {
+    "title": "Spare",
+    "authors": [
+      "Prince Harry"
+    ],
+    "isbn_13": "9780593593806",
+    "category": "Biography"
+  },
+  {
+    "title": "Endurance",
+    "authors": [
+      "Alfred Lansing"
+    ],
+    "isbn_13": "9780465062881",
+    "category": "Biography"
+  },
+  {
+    "title": "Dune",
+    "authors": [
+      "Frank Herbert"
+    ],
+    "isbn_13": "9780441172719",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "The Hitchhiker's Guide to the Galaxy",
+    "authors": [
+      "Douglas Adams"
+    ],
+    "isbn_13": "9780345391803",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "Ender's Game",
+    "authors": [
+      "Orson Scott Card"
+    ],
+    "isbn_13": "9780812550702",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "Foundation",
+    "authors": [
+      "Isaac Asimov"
+    ],
+    "isbn_13": "9780553293357",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "Neuromancer",
+    "authors": [
+      "William Gibson"
+    ],
+    "isbn_13": "9780441569595",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "The Left Hand of Darkness",
+    "authors": [
+      "Ursula K. Le Guin"
+    ],
+    "isbn_13": "9780441478125",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "The Martian",
+    "authors": [
+      "Andy Weir"
+    ],
+    "isbn_13": "9780553418026",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "Fahrenheit 451",
+    "authors": [
+      "Ray Bradbury"
+    ],
+    "isbn_13": "9781451673319",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "The War of the Worlds",
+    "authors": [
+      "H.G. Wells"
+    ],
+    "isbn_13": "9780141441030",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "2001: A Space Odyssey",
+    "authors": [
+      "Arthur C. Clarke"
+    ],
+    "isbn_13": "9780451457998",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "Childhood's End",
+    "authors": [
+      "Arthur C. Clarke"
+    ],
+    "isbn_13": "9780345347510",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "Do Androids Dream of Electric Sheep?",
+    "authors": [
+      "Philip K. Dick"
+    ],
+    "isbn_13": "9780345404473",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "Snow Crash",
+    "authors": [
+      "Neal Stephenson"
+    ],
+    "isbn_13": "9780553380958",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "The Dispossessed",
+    "authors": [
+      "Ursula K. Le Guin"
+    ],
+    "isbn_13": "9780061054884",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "Hyperion",
+    "authors": [
+      "Dan Simmons"
+    ],
+    "isbn_13": "9780553283686",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "The Three-Body Problem",
+    "authors": [
+      "Liu Cixin"
+    ],
+    "isbn_13": "9780765382030",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "Project Hail Mary",
+    "authors": [
+      "Andy Weir"
+    ],
+    "isbn_13": "9780593135204",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "Ringworld",
+    "authors": [
+      "Larry Niven"
+    ],
+    "isbn_13": "9780345333926",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "The Forever War",
+    "authors": [
+      "Joe Haldeman"
+    ],
+    "isbn_13": "9780312536633",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "Rendezvous with Rama",
+    "authors": [
+      "Arthur C. Clarke"
+    ],
+    "isbn_13": "9780553287899",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "Solaris",
+    "authors": [
+      "Stanisław Lem"
+    ],
+    "isbn_13": "9780156027601",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "Starship Troopers",
+    "authors": [
+      "Robert A. Heinlein"
+    ],
+    "isbn_13": "9780441783588",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "Station Eleven",
+    "authors": [
+      "Emily St. John Mandel"
+    ],
+    "isbn_13": "9780385353304",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "Exhalation",
+    "authors": [
+      "Ted Chiang"
+    ],
+    "isbn_13": "9781101947883",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "Dark Matter",
+    "authors": [
+      "Blake Crouch"
+    ],
+    "isbn_13": "9781101904220",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "Recursion",
+    "authors": [
+      "Blake Crouch"
+    ],
+    "isbn_13": "9781524759780",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "Red Mars",
+    "authors": [
+      "Kim Stanley Robinson"
+    ],
+    "isbn_13": "9780553560732",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "The Expanse: Leviathan Wakes",
+    "authors": [
+      "James S.A. Corey"
+    ],
+    "isbn_13": "9780316129084",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "Altered Carbon",
+    "authors": [
+      "Richard K. Morgan"
+    ],
+    "isbn_13": "9780345457684",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "Children of Time",
+    "authors": [
+      "Adrian Tchaikovsky"
+    ],
+    "isbn_13": "9780316452502",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "The Lord of the Rings",
+    "authors": [
+      "J.R.R. Tolkien"
+    ],
+    "isbn_13": "9780618640157",
+    "category": "Fantasy"
+  },
+  {
+    "title": "The Hobbit",
+    "authors": [
+      "J.R.R. Tolkien"
+    ],
+    "isbn_13": "9780547928227",
+    "category": "Fantasy"
+  },
+  {
+    "title": "Harry Potter and the Sorcerer's Stone",
+    "authors": [
+      "J.K. Rowling"
+    ],
+    "isbn_13": "9780590353427",
+    "category": "Fantasy"
+  },
+  {
+    "title": "Harry Potter and the Prisoner of Azkaban",
+    "authors": [
+      "J.K. Rowling"
+    ],
+    "isbn_13": "9780439136365",
+    "category": "Fantasy"
+  },
+  {
+    "title": "Harry Potter and the Goblet of Fire",
+    "authors": [
+      "J.K. Rowling"
+    ],
+    "isbn_13": "9780439139601",
+    "category": "Fantasy"
+  },
+  {
+    "title": "A Game of Thrones",
+    "authors": [
+      "George R.R. Martin"
+    ],
+    "isbn_13": "9780553593716",
+    "category": "Fantasy"
+  },
+  {
+    "title": "A Storm of Swords",
+    "authors": [
+      "George R.R. Martin"
+    ],
+    "isbn_13": "9780553573428",
+    "category": "Fantasy"
+  },
+  {
+    "title": "The Name of the Wind",
+    "authors": [
+      "Patrick Rothfuss"
+    ],
+    "isbn_13": "9780756404741",
+    "category": "Fantasy"
+  },
+  {
+    "title": "The Way of Kings",
+    "authors": [
+      "Brandon Sanderson"
+    ],
+    "isbn_13": "9780765365279",
+    "category": "Fantasy"
+  },
+  {
+    "title": "Mistborn: The Final Empire",
+    "authors": [
+      "Brandon Sanderson"
+    ],
+    "isbn_13": "9780765311788",
+    "category": "Fantasy"
+  },
+  {
+    "title": "The Chronicles of Narnia: The Lion, the Witch and the Wardrobe",
+    "authors": [
+      "C.S. Lewis"
+    ],
+    "isbn_13": "9780064471046",
+    "category": "Fantasy"
+  },
+  {
+    "title": "A Wizard of Earthsea",
+    "authors": [
+      "Ursula K. Le Guin"
+    ],
+    "isbn_13": "9780547722023",
+    "category": "Fantasy"
+  },
+  {
+    "title": "The Wheel of Time: The Eye of the World",
+    "authors": [
+      "Robert Jordan"
+    ],
+    "isbn_13": "9780812511819",
+    "category": "Fantasy"
+  },
+  {
+    "title": "American Gods",
+    "authors": [
+      "Neil Gaiman"
+    ],
+    "isbn_13": "9780063081918",
+    "category": "Fantasy"
+  },
+  {
+    "title": "Good Omens",
+    "authors": [
+      "Neil Gaiman",
+      "Terry Pratchett"
+    ],
+    "isbn_13": "9780060853983",
+    "category": "Fantasy"
+  },
+  {
+    "title": "The Color of Magic",
+    "authors": [
+      "Terry Pratchett"
+    ],
+    "isbn_13": "9780062225672",
+    "category": "Fantasy"
+  },
+  {
+    "title": "Guards! Guards!",
+    "authors": [
+      "Terry Pratchett"
+    ],
+    "isbn_13": "9780062225757",
+    "category": "Fantasy"
+  },
+  {
+    "title": "The Night Circus",
+    "authors": [
+      "Erin Morgenstern"
+    ],
+    "isbn_13": "9780385534635",
+    "category": "Fantasy"
+  },
+  {
+    "title": "The Priory of the Orange Tree",
+    "authors": [
+      "Samantha Shannon"
+    ],
+    "isbn_13": "9781635570298",
+    "category": "Fantasy"
+  },
+  {
+    "title": "The Fifth Season",
+    "authors": [
+      "N.K. Jemisin"
+    ],
+    "isbn_13": "9780316229296",
+    "category": "Fantasy"
+  },
+  {
+    "title": "Piranesi",
+    "authors": [
+      "Susanna Clarke"
+    ],
+    "isbn_13": "9781635575941",
+    "category": "Fantasy"
+  },
+  {
+    "title": "Jonathan Strange & Mr Norrell",
+    "authors": [
+      "Susanna Clarke"
+    ],
+    "isbn_13": "9781582346038",
+    "category": "Fantasy"
+  },
+  {
+    "title": "The Lies of Locke Lamora",
+    "authors": [
+      "Scott Lynch"
+    ],
+    "isbn_13": "9780553588941",
+    "category": "Fantasy"
+  },
+  {
+    "title": "The Blade Itself",
+    "authors": [
+      "Joe Abercrombie"
+    ],
+    "isbn_13": "9780316387316",
+    "category": "Fantasy"
+  },
+  {
+    "title": "Assassin's Apprentice",
+    "authors": [
+      "Robin Hobb"
+    ],
+    "isbn_13": "9780553573398",
+    "category": "Fantasy"
+  },
+  {
+    "title": "The Once and Future King",
+    "authors": [
+      "T.H. White"
+    ],
+    "isbn_13": "9780441627400",
+    "category": "Fantasy"
+  },
+  {
+    "title": "Coraline",
+    "authors": [
+      "Neil Gaiman"
+    ],
+    "isbn_13": "9780380807345",
+    "category": "Fantasy"
+  },
+  {
+    "title": "The Poppy War",
+    "authors": [
+      "R.F. Kuang"
+    ],
+    "isbn_13": "9780062662569",
+    "category": "Fantasy"
+  },
+  {
+    "title": "Fourth Wing",
+    "authors": [
+      "Rebecca Yarros"
+    ],
+    "isbn_13": "9781649374042",
+    "category": "Fantasy"
+  },
+  {
+    "title": "Gone Girl",
+    "authors": [
+      "Gillian Flynn"
+    ],
+    "isbn_13": "9780307588371",
+    "category": "Mystery"
+  },
+  {
+    "title": "The Girl with the Dragon Tattoo",
+    "authors": [
+      "Stieg Larsson"
+    ],
+    "isbn_13": "9780307454546",
+    "category": "Mystery"
+  },
+  {
+    "title": "And Then There Were None",
+    "authors": [
+      "Agatha Christie"
+    ],
+    "isbn_13": "9780062073488",
+    "category": "Mystery"
+  },
+  {
+    "title": "Murder on the Orient Express",
+    "authors": [
+      "Agatha Christie"
+    ],
+    "isbn_13": "9780062693662",
+    "category": "Mystery"
+  },
+  {
+    "title": "The Da Vinci Code",
+    "authors": [
+      "Dan Brown"
+    ],
+    "isbn_13": "9780307474278",
+    "category": "Mystery"
+  },
+  {
+    "title": "The Girl on the Train",
+    "authors": [
+      "Paula Hawkins"
+    ],
+    "isbn_13": "9781594634024",
+    "category": "Mystery"
+  },
+  {
+    "title": "In the Woods",
+    "authors": [
+      "Tana French"
+    ],
+    "isbn_13": "9780143113492",
+    "category": "Mystery"
+  },
+  {
+    "title": "The Silent Patient",
+    "authors": [
+      "Alex Michaelides"
+    ],
+    "isbn_13": "9781250301697",
+    "category": "Mystery"
+  },
+  {
+    "title": "Big Little Lies",
+    "authors": [
+      "Liane Moriarty"
+    ],
+    "isbn_13": "9780399587191",
+    "category": "Mystery"
+  },
+  {
+    "title": "The Woman in the Window",
+    "authors": [
+      "A.J. Finn"
+    ],
+    "isbn_13": "9780062678416",
+    "category": "Mystery"
+  },
+  {
+    "title": "Sharp Objects",
+    "authors": [
+      "Gillian Flynn"
+    ],
+    "isbn_13": "9780307341556",
+    "category": "Mystery"
+  },
+  {
+    "title": "Rebecca",
+    "authors": [
+      "Daphne du Maurier"
+    ],
+    "isbn_13": "9780380730407",
+    "category": "Mystery"
+  },
+  {
+    "title": "The Hound of the Baskervilles",
+    "authors": [
+      "Arthur Conan Doyle"
+    ],
+    "isbn_13": "9780141329390",
+    "category": "Mystery"
+  },
+  {
+    "title": "The Big Sleep",
+    "authors": [
+      "Raymond Chandler"
+    ],
+    "isbn_13": "9780394758282",
+    "category": "Mystery"
+  },
+  {
+    "title": "The Maltese Falcon",
+    "authors": [
+      "Dashiell Hammett"
+    ],
+    "isbn_13": "9780679722649",
+    "category": "Mystery"
+  },
+  {
+    "title": "The No. 1 Ladies' Detective Agency",
+    "authors": [
+      "Alexander McCall Smith"
+    ],
+    "isbn_13": "9781400034772",
+    "category": "Mystery"
+  },
+  {
+    "title": "Mexican Gothic",
+    "authors": [
+      "Silvia Moreno-Garcia"
+    ],
+    "isbn_13": "9780525620785",
+    "category": "Mystery"
+  },
+  {
+    "title": "The Maid",
+    "authors": [
+      "Nita Prose"
+    ],
+    "isbn_13": "9780593356159",
+    "category": "Mystery"
+  },
+  {
+    "title": "The Thursday Murder Club",
+    "authors": [
+      "Richard Osman"
+    ],
+    "isbn_13": "9781984880987",
+    "category": "Mystery"
+  },
+  {
+    "title": "Verity",
+    "authors": [
+      "Colleen Hoover"
+    ],
+    "isbn_13": "9781538724736",
+    "category": "Mystery"
+  },
+  {
+    "title": "Outlander",
+    "authors": [
+      "Diana Gabaldon"
+    ],
+    "isbn_13": "9780440212560",
+    "category": "Romance"
+  },
+  {
+    "title": "The Notebook",
+    "authors": [
+      "Nicholas Sparks"
+    ],
+    "isbn_13": "9781455582877",
+    "category": "Romance"
+  },
+  {
+    "title": "Me Before You",
+    "authors": [
+      "Jojo Moyes"
+    ],
+    "isbn_13": "9780143124542",
+    "category": "Romance"
+  },
+  {
+    "title": "Beach Read",
+    "authors": [
+      "Emily Henry"
+    ],
+    "isbn_13": "9781984806734",
+    "category": "Romance"
+  },
+  {
+    "title": "People We Meet on Vacation",
+    "authors": [
+      "Emily Henry"
+    ],
+    "isbn_13": "9781984806758",
+    "category": "Romance"
+  },
+  {
+    "title": "Book Lovers",
+    "authors": [
+      "Emily Henry"
+    ],
+    "isbn_13": "9780593334836",
+    "category": "Romance"
+  },
+  {
+    "title": "It Ends with Us",
+    "authors": [
+      "Colleen Hoover"
+    ],
+    "isbn_13": "9781501110368",
+    "category": "Romance"
+  },
+  {
+    "title": "The Seven Husbands of Evelyn Hugo",
+    "authors": [
+      "Taylor Jenkins Reid"
+    ],
+    "isbn_13": "9781501161933",
+    "category": "Romance"
+  },
+  {
+    "title": "Daisy Jones & The Six",
+    "authors": [
+      "Taylor Jenkins Reid"
+    ],
+    "isbn_13": "9781524798628",
+    "category": "Romance"
+  },
+  {
+    "title": "Red, White & Royal Blue",
+    "authors": [
+      "Casey McQuiston"
+    ],
+    "isbn_13": "9781250316776",
+    "category": "Romance"
+  },
+  {
+    "title": "The Rosie Project",
+    "authors": [
+      "Graeme Simsion"
+    ],
+    "isbn_13": "9781476729091",
+    "category": "Romance"
+  },
+  {
+    "title": "The Time Traveler's Wife",
+    "authors": [
+      "Audrey Niffenegger"
+    ],
+    "isbn_13": "9781476764832",
+    "category": "Romance"
+  },
+  {
+    "title": "Eleanor & Park",
+    "authors": [
+      "Rainbow Rowell"
+    ],
+    "isbn_13": "9781250012579",
+    "category": "Romance"
+  },
+  {
+    "title": "The Fault in Our Stars",
+    "authors": [
+      "John Green"
+    ],
+    "isbn_13": "9780142424179",
+    "category": "Romance"
+  },
+  {
+    "title": "Sapiens: A Brief History of Humankind",
+    "authors": [
+      "Yuval Noah Harari"
+    ],
+    "isbn_13": "9780062316097",
+    "category": "History"
+  },
+  {
+    "title": "Guns, Germs, and Steel",
+    "authors": [
+      "Jared Diamond"
+    ],
+    "isbn_13": "9780393354324",
+    "category": "History"
+  },
+  {
+    "title": "A People's History of the United States",
+    "authors": [
+      "Howard Zinn"
+    ],
+    "isbn_13": "9780060838652",
+    "category": "History"
+  },
+  {
+    "title": "The Silk Roads",
+    "authors": [
+      "Peter Frankopan"
+    ],
+    "isbn_13": "9781101912379",
+    "category": "History"
+  },
+  {
+    "title": "Team of Rivals",
+    "authors": [
+      "Doris Kearns Goodwin"
+    ],
+    "isbn_13": "9780743270755",
+    "category": "History"
+  },
+  {
+    "title": "The Rise and Fall of the Third Reich",
+    "authors": [
+      "William L. Shirer"
+    ],
+    "isbn_13": "9781451651683",
+    "category": "History"
+  },
+  {
+    "title": "1776",
+    "authors": [
+      "David McCullough"
+    ],
+    "isbn_13": "9780743226721",
+    "category": "History"
+  },
+  {
+    "title": "SPQR: A History of Ancient Rome",
+    "authors": [
+      "Mary Beard"
+    ],
+    "isbn_13": "9781631492228",
+    "category": "History"
+  },
+  {
+    "title": "The Wright Brothers",
+    "authors": [
+      "David McCullough"
+    ],
+    "isbn_13": "9781476728742",
+    "category": "History"
+  },
+  {
+    "title": "Empire of the Summer Moon",
+    "authors": [
+      "S.C. Gwynne"
+    ],
+    "isbn_13": "9781416591054",
+    "category": "History"
+  },
+  {
+    "title": "The Devil in the White City",
+    "authors": [
+      "Erik Larson"
+    ],
+    "isbn_13": "9780375725609",
+    "category": "History"
+  },
+  {
+    "title": "Dead Wake",
+    "authors": [
+      "Erik Larson"
+    ],
+    "isbn_13": "9780307408877",
+    "category": "History"
+  },
+  {
+    "title": "Unbroken",
+    "authors": [
+      "Laura Hillenbrand"
+    ],
+    "isbn_13": "9780812974492",
+    "category": "History"
+  },
+  {
+    "title": "The Immortal Life of Henrietta Lacks",
+    "authors": [
+      "Rebecca Skloot"
+    ],
+    "isbn_13": "9781400052189",
+    "category": "History"
+  },
+  {
+    "title": "Homo Deus",
+    "authors": [
+      "Yuval Noah Harari"
+    ],
+    "isbn_13": "9780062464316",
+    "category": "History"
+  },
+  {
+    "title": "Collapse",
+    "authors": [
+      "Jared Diamond"
+    ],
+    "isbn_13": "9780143036555",
+    "category": "History"
+  },
+  {
+    "title": "The Warmth of Other Suns",
+    "authors": [
+      "Isabel Wilkerson"
+    ],
+    "isbn_13": "9780679763888",
+    "category": "History"
+  },
+  {
+    "title": "Caste",
+    "authors": [
+      "Isabel Wilkerson"
+    ],
+    "isbn_13": "9780593230251",
+    "category": "History"
+  },
+  {
+    "title": "Stamped from the Beginning",
+    "authors": [
+      "Ibram X. Kendi"
+    ],
+    "isbn_13": "9781568585987",
+    "category": "History"
+  },
+  {
+    "title": "The New Jim Crow",
+    "authors": [
+      "Michelle Alexander"
+    ],
+    "isbn_13": "9781595588609",
+    "category": "History"
+  },
+  {
+    "title": "Say Nothing",
+    "authors": [
+      "Patrick Radden Keefe"
+    ],
+    "isbn_13": "9780385521314",
+    "category": "History"
+  },
+  {
+    "title": "Killers of the Flower Moon",
+    "authors": [
+      "David Grann"
+    ],
+    "isbn_13": "9780385534246",
+    "category": "History"
+  },
+  {
+    "title": "The Splendid and the Vile",
+    "authors": [
+      "Erik Larson"
+    ],
+    "isbn_13": "9780385348713",
+    "category": "History"
+  },
+  {
+    "title": "Genghis Khan and the Making of the Modern World",
+    "authors": [
+      "Jack Weatherford"
+    ],
+    "isbn_13": "9780609809648",
+    "category": "History"
+  },
+  {
+    "title": "Thinking, Fast and Slow",
+    "authors": [
+      "Daniel Kahneman"
+    ],
+    "isbn_13": "9780374533557",
+    "category": "Business"
+  },
+  {
+    "title": "Zero to One",
+    "authors": [
+      "Peter Thiel",
+      "Blake Masters"
+    ],
+    "isbn_13": "9780804139298",
+    "category": "Business"
+  },
+  {
+    "title": "The Lean Startup",
+    "authors": [
+      "Eric Ries"
+    ],
+    "isbn_13": "9780307887894",
+    "category": "Business"
+  },
+  {
+    "title": "Good to Great",
+    "authors": [
+      "Jim Collins"
+    ],
+    "isbn_13": "9780066620992",
+    "category": "Business"
+  },
+  {
+    "title": "The Hard Thing About Hard Things",
+    "authors": [
+      "Ben Horowitz"
+    ],
+    "isbn_13": "9780062273208",
+    "category": "Business"
+  },
+  {
+    "title": "Start with Why",
+    "authors": [
+      "Simon Sinek"
+    ],
+    "isbn_13": "9781591846444",
+    "category": "Business"
+  },
+  {
+    "title": "The Innovator's Dilemma",
+    "authors": [
+      "Clayton M. Christensen"
+    ],
+    "isbn_13": "9780062060242",
+    "category": "Business"
+  },
+  {
+    "title": "Principles",
+    "authors": [
+      "Ray Dalio"
+    ],
+    "isbn_13": "9781501124020",
+    "category": "Business"
+  },
+  {
+    "title": "Rich Dad Poor Dad",
+    "authors": [
+      "Robert T. Kiyosaki"
+    ],
+    "isbn_13": "9781612680194",
+    "category": "Business"
+  },
+  {
+    "title": "The 4-Hour Workweek",
+    "authors": [
+      "Timothy Ferriss"
+    ],
+    "isbn_13": "9780307465351",
+    "category": "Business"
+  },
+  {
+    "title": "How to Win Friends and Influence People",
+    "authors": [
+      "Dale Carnegie"
+    ],
+    "isbn_13": "9780671027032",
+    "category": "Business"
+  },
+  {
+    "title": "The Psychology of Money",
+    "authors": [
+      "Morgan Housel"
+    ],
+    "isbn_13": "9780857197689",
+    "category": "Business"
+  },
+  {
+    "title": "Measure What Matters",
+    "authors": [
+      "John Doerr"
+    ],
+    "isbn_13": "9780525536222",
+    "category": "Business"
+  },
+  {
+    "title": "High Output Management",
+    "authors": [
+      "Andrew S. Grove"
+    ],
+    "isbn_13": "9780679762881",
+    "category": "Business"
+  },
+  {
+    "title": "The Five Dysfunctions of a Team",
+    "authors": [
+      "Patrick Lencioni"
+    ],
+    "isbn_13": "9780787960759",
+    "category": "Business"
+  },
+  {
+    "title": "Built to Last",
+    "authors": [
+      "Jim Collins",
+      "Jerry I. Porras"
+    ],
+    "isbn_13": "9780060516406",
+    "category": "Business"
+  },
+  {
+    "title": "Crossing the Chasm",
+    "authors": [
+      "Geoffrey A. Moore"
+    ],
+    "isbn_13": "9780062292988",
+    "category": "Business"
+  },
+  {
+    "title": "The E-Myth Revisited",
+    "authors": [
+      "Michael E. Gerber"
+    ],
+    "isbn_13": "9780887307287",
+    "category": "Business"
+  },
+  {
+    "title": "Influence: The Psychology of Persuasion",
+    "authors": [
+      "Robert B. Cialdini"
+    ],
+    "isbn_13": "9780062937650",
+    "category": "Business"
+  },
+  {
+    "title": "Never Split the Difference",
+    "authors": [
+      "Chris Voss"
+    ],
+    "isbn_13": "9780062407801",
+    "category": "Business"
+  },
+  {
+    "title": "Blitzscaling",
+    "authors": [
+      "Reid Hoffman",
+      "Chris Yeh"
+    ],
+    "isbn_13": "9781524761417",
+    "category": "Business"
+  },
+  {
+    "title": "The Mom Test",
+    "authors": [
+      "Rob Fitzpatrick"
+    ],
+    "isbn_13": "9781492180746",
+    "category": "Business"
+  },
+  {
+    "title": "Trillion Dollar Coach",
+    "authors": [
+      "Eric Schmidt",
+      "Jonathan Rosenberg",
+      "Alan Eagle"
+    ],
+    "isbn_13": "9780062839268",
+    "category": "Business"
+  },
+  {
+    "title": "No Rules Rules",
+    "authors": [
+      "Reed Hastings",
+      "Erin Meyer"
+    ],
+    "isbn_13": "9781984877864",
+    "category": "Business"
+  },
+  {
+    "title": "The Ride of a Lifetime",
+    "authors": [
+      "Robert Iger"
+    ],
+    "isbn_13": "9780399592096",
+    "category": "Business"
+  },
+  {
+    "title": "Amp It Up",
+    "authors": [
+      "Frank Slootman"
+    ],
+    "isbn_13": "9781119836117",
+    "category": "Business"
+  },
+  {
+    "title": "Atomic Habits",
+    "authors": [
+      "James Clear"
+    ],
+    "isbn_13": "9780735211292",
+    "category": "Self-Help"
+  },
+  {
+    "title": "The 7 Habits of Highly Effective People",
+    "authors": [
+      "Stephen R. Covey"
+    ],
+    "isbn_13": "9781982137274",
+    "category": "Self-Help"
+  },
+  {
+    "title": "The Power of Now",
+    "authors": [
+      "Eckhart Tolle"
+    ],
+    "isbn_13": "9781577314806",
+    "category": "Self-Help"
+  },
+  {
+    "title": "Mindset",
+    "authors": [
+      "Carol S. Dweck"
+    ],
+    "isbn_13": "9780345472328",
+    "category": "Self-Help"
+  },
+  {
+    "title": "The Subtle Art of Not Giving a F*ck",
+    "authors": [
+      "Mark Manson"
+    ],
+    "isbn_13": "9780062457714",
+    "category": "Self-Help"
+  },
+  {
+    "title": "Daring Greatly",
+    "authors": [
+      "Brené Brown"
+    ],
+    "isbn_13": "9781592408412",
+    "category": "Self-Help"
+  },
+  {
+    "title": "The Gifts of Imperfection",
+    "authors": [
+      "Brené Brown"
+    ],
+    "isbn_13": "9781592858491",
+    "category": "Self-Help"
+  },
+  {
+    "title": "Grit",
+    "authors": [
+      "Angela Duckworth"
+    ],
+    "isbn_13": "9781501111112",
+    "category": "Self-Help"
+  },
+  {
+    "title": "Deep Work",
+    "authors": [
+      "Cal Newport"
+    ],
+    "isbn_13": "9781455586691",
+    "category": "Self-Help"
+  },
+  {
+    "title": "Digital Minimalism",
+    "authors": [
+      "Cal Newport"
+    ],
+    "isbn_13": "9780525536512",
+    "category": "Self-Help"
+  },
+  {
+    "title": "Essentialism",
+    "authors": [
+      "Greg McKeown"
+    ],
+    "isbn_13": "9780804137386",
+    "category": "Self-Help"
+  },
+  {
+    "title": "The Power of Habit",
+    "authors": [
+      "Charles Duhigg"
+    ],
+    "isbn_13": "9780812981605",
+    "category": "Self-Help"
+  },
+  {
+    "title": "Can't Hurt Me",
+    "authors": [
+      "David Goggins"
+    ],
+    "isbn_13": "9781544512280",
+    "category": "Self-Help"
+  },
+  {
+    "title": "12 Rules for Life",
+    "authors": [
+      "Jordan B. Peterson"
+    ],
+    "isbn_13": "9780345816023",
+    "category": "Self-Help"
+  },
+  {
+    "title": "The Four Agreements",
+    "authors": [
+      "Don Miguel Ruiz"
+    ],
+    "isbn_13": "9781878424310",
+    "category": "Self-Help"
+  },
+  {
+    "title": "Think and Grow Rich",
+    "authors": [
+      "Napoleon Hill"
+    ],
+    "isbn_13": "9781585424337",
+    "category": "Self-Help"
+  },
+  {
+    "title": "Outliers",
+    "authors": [
+      "Malcolm Gladwell"
+    ],
+    "isbn_13": "9780316017930",
+    "category": "Self-Help"
+  },
+  {
+    "title": "The Tipping Point",
+    "authors": [
+      "Malcolm Gladwell"
+    ],
+    "isbn_13": "9780316346627",
+    "category": "Self-Help"
+  },
+  {
+    "title": "Blink",
+    "authors": [
+      "Malcolm Gladwell"
+    ],
+    "isbn_13": "9780316010665",
+    "category": "Self-Help"
+  },
+  {
+    "title": "Range",
+    "authors": [
+      "David Epstein"
+    ],
+    "isbn_13": "9780735214484",
+    "category": "Self-Help"
+  },
+  {
+    "title": "The Daily Stoic",
+    "authors": [
+      "Ryan Holiday"
+    ],
+    "isbn_13": "9780735211735",
+    "category": "Self-Help"
+  },
+  {
+    "title": "The Obstacle Is the Way",
+    "authors": [
+      "Ryan Holiday"
+    ],
+    "isbn_13": "9781591846352",
+    "category": "Self-Help"
+  },
+  {
+    "title": "Ego Is the Enemy",
+    "authors": [
+      "Ryan Holiday"
+    ],
+    "isbn_13": "9781591847816",
+    "category": "Self-Help"
+  },
+  {
+    "title": "Meditations",
+    "authors": [
+      "Marcus Aurelius"
+    ],
+    "isbn_13": "9780140449334",
+    "category": "Philosophy"
+  },
+  {
+    "title": "The Republic",
+    "authors": [
+      "Plato"
+    ],
+    "isbn_13": "9780140455113",
+    "category": "Philosophy"
+  },
+  {
+    "title": "Nicomachean Ethics",
+    "authors": [
+      "Aristotle"
+    ],
+    "isbn_13": "9780140449495",
+    "category": "Philosophy"
+  },
+  {
+    "title": "Thus Spoke Zarathustra",
+    "authors": [
+      "Friedrich Nietzsche"
+    ],
+    "isbn_13": "9780140441185",
+    "category": "Philosophy"
+  },
+  {
+    "title": "Beyond Good and Evil",
+    "authors": [
+      "Friedrich Nietzsche"
+    ],
+    "isbn_13": "9780140449235",
+    "category": "Philosophy"
+  },
+  {
+    "title": "Being and Nothingness",
+    "authors": [
+      "Jean-Paul Sartre"
+    ],
+    "isbn_13": "9780671867805",
+    "category": "Philosophy"
+  },
+  {
+    "title": "The Stranger",
+    "authors": [
+      "Albert Camus"
+    ],
+    "isbn_13": "9780679720201",
+    "category": "Philosophy"
+  },
+  {
+    "title": "The Myth of Sisyphus",
+    "authors": [
+      "Albert Camus"
+    ],
+    "isbn_13": "9780525564454",
+    "category": "Philosophy"
+  },
+  {
+    "title": "Zen and the Art of Motorcycle Maintenance",
+    "authors": [
+      "Robert M. Pirsig"
+    ],
+    "isbn_13": "9780060839871",
+    "category": "Philosophy"
+  },
+  {
+    "title": "Sophie's World",
+    "authors": [
+      "Jostein Gaarder"
+    ],
+    "isbn_13": "9780374530716",
+    "category": "Philosophy"
+  },
+  {
+    "title": "The Art of War",
+    "authors": [
+      "Sun Tzu"
+    ],
+    "isbn_13": "9781590302255",
+    "category": "Philosophy"
+  },
+  {
+    "title": "Tao Te Ching",
+    "authors": [
+      "Lao Tzu"
+    ],
+    "isbn_13": "9780061142666",
+    "category": "Philosophy"
+  },
+  {
+    "title": "Letters from a Stoic",
+    "authors": [
+      "Seneca"
+    ],
+    "isbn_13": "9780140442106",
+    "category": "Philosophy"
+  },
+  {
+    "title": "Justice",
+    "authors": [
+      "Michael J. Sandel"
+    ],
+    "isbn_13": "9780374532505",
+    "category": "Philosophy"
+  },
+  {
+    "title": "The Prince",
+    "authors": [
+      "Niccolò Machiavelli"
+    ],
+    "isbn_13": "9780140449150",
+    "category": "Philosophy"
+  },
+  {
+    "title": "A Brief History of Time",
+    "authors": [
+      "Stephen Hawking"
+    ],
+    "isbn_13": "9780553380163",
+    "category": "Science"
+  },
+  {
+    "title": "The Selfish Gene",
+    "authors": [
+      "Richard Dawkins"
+    ],
+    "isbn_13": "9780198788607",
+    "category": "Science"
+  },
+  {
+    "title": "Cosmos",
+    "authors": [
+      "Carl Sagan"
+    ],
+    "isbn_13": "9780345539434",
+    "category": "Science"
+  },
+  {
+    "title": "The Origin of Species",
+    "authors": [
+      "Charles Darwin"
+    ],
+    "isbn_13": "9780451529060",
+    "category": "Science"
+  },
+  {
+    "title": "The Gene",
+    "authors": [
+      "Siddhartha Mukherjee"
+    ],
+    "isbn_13": "9781476733524",
+    "category": "Science"
+  },
+  {
+    "title": "The Emperor of All Maladies",
+    "authors": [
+      "Siddhartha Mukherjee"
+    ],
+    "isbn_13": "9781439170915",
+    "category": "Science"
+  },
+  {
+    "title": "Astrophysics for People in a Hurry",
+    "authors": [
+      "Neil deGrasse Tyson"
+    ],
+    "isbn_13": "9780393609394",
+    "category": "Science"
+  },
+  {
+    "title": "The Elegant Universe",
+    "authors": [
+      "Brian Greene"
+    ],
+    "isbn_13": "9780393338102",
+    "category": "Science"
+  },
+  {
+    "title": "Silent Spring",
+    "authors": [
+      "Rachel Carson"
+    ],
+    "isbn_13": "9780618249060",
+    "category": "Science"
+  },
+  {
+    "title": "The Structure of Scientific Revolutions",
+    "authors": [
+      "Thomas S. Kuhn"
+    ],
+    "isbn_13": "9780226458120",
+    "category": "Science"
+  },
+  {
+    "title": "Surely You're Joking, Mr. Feynman!",
+    "authors": [
+      "Richard P. Feynman"
+    ],
+    "isbn_13": "9780393316049",
+    "category": "Science"
+  },
+  {
+    "title": "The Demon-Haunted World",
+    "authors": [
+      "Carl Sagan"
+    ],
+    "isbn_13": "9780345409461",
+    "category": "Science"
+  },
+  {
+    "title": "Chaos",
+    "authors": [
+      "James Gleick"
+    ],
+    "isbn_13": "9780143113454",
+    "category": "Science"
+  },
+  {
+    "title": "The Double Helix",
+    "authors": [
+      "James D. Watson"
+    ],
+    "isbn_13": "9780743216302",
+    "category": "Science"
+  },
+  {
+    "title": "Why We Sleep",
+    "authors": [
+      "Matthew Walker"
+    ],
+    "isbn_13": "9781501144318",
+    "category": "Science"
+  },
+  {
+    "title": "The Body",
+    "authors": [
+      "Bill Bryson"
+    ],
+    "isbn_13": "9780385539302",
+    "category": "Science"
+  },
+  {
+    "title": "A Short History of Nearly Everything",
+    "authors": [
+      "Bill Bryson"
+    ],
+    "isbn_13": "9780767908184",
+    "category": "Science"
+  },
+  {
+    "title": "Entangled Life",
+    "authors": [
+      "Merlin Sheldrake"
+    ],
+    "isbn_13": "9780525510314",
+    "category": "Science"
+  },
+  {
+    "title": "The Sixth Extinction",
+    "authors": [
+      "Elizabeth Kolbert"
+    ],
+    "isbn_13": "9781250062185",
+    "category": "Science"
+  },
+  {
+    "title": "Behave",
+    "authors": [
+      "Robert M. Sapolsky"
+    ],
+    "isbn_13": "9781594205071",
+    "category": "Science"
+  },
+  {
+    "title": "What If?",
+    "authors": [
+      "Randall Munroe"
+    ],
+    "isbn_13": "9780544272996",
+    "category": "Science"
+  },
+  {
+    "title": "The Order of Time",
+    "authors": [
+      "Carlo Rovelli"
+    ],
+    "isbn_13": "9780735216112",
+    "category": "Science"
+  },
+  {
+    "title": "Seven Brief Lessons on Physics",
+    "authors": [
+      "Carlo Rovelli"
+    ],
+    "isbn_13": "9780399184413",
+    "category": "Science"
+  },
+  {
+    "title": "Breath",
+    "authors": [
+      "James Nestor"
+    ],
+    "isbn_13": "9780735213616",
+    "category": "Science"
+  },
+  {
+    "title": "The Pragmatic Programmer",
+    "authors": [
+      "David Thomas",
+      "Andrew Hunt"
+    ],
+    "isbn_13": "9780135957059",
+    "category": "Technology"
+  },
+  {
+    "title": "Clean Code",
+    "authors": [
+      "Robert C. Martin"
+    ],
+    "isbn_13": "9780132350884",
+    "category": "Technology"
+  },
+  {
+    "title": "Designing Data-Intensive Applications",
+    "authors": [
+      "Martin Kleppmann"
+    ],
+    "isbn_13": "9781449373320",
+    "category": "Technology"
+  },
+  {
+    "title": "The Mythical Man-Month",
+    "authors": [
+      "Frederick P. Brooks Jr."
+    ],
+    "isbn_13": "9780201835953",
+    "category": "Technology"
+  },
+  {
+    "title": "Code",
+    "authors": [
+      "Charles Petzold"
+    ],
+    "isbn_13": "9780137909100",
+    "category": "Technology"
+  },
+  {
+    "title": "Cracking the Coding Interview",
+    "authors": [
+      "Gayle Laakmann McDowell"
+    ],
+    "isbn_13": "9780984782857",
+    "category": "Technology"
+  },
+  {
+    "title": "The Design of Everyday Things",
+    "authors": [
+      "Don Norman"
+    ],
+    "isbn_13": "9780465050659",
+    "category": "Technology"
+  },
+  {
+    "title": "Don't Make Me Think",
+    "authors": [
+      "Steve Krug"
+    ],
+    "isbn_13": "9780321965516",
+    "category": "Technology"
+  },
+  {
+    "title": "Hackers & Painters",
+    "authors": [
+      "Paul Graham"
+    ],
+    "isbn_13": "9781449389550",
+    "category": "Technology"
+  },
+  {
+    "title": "The Phoenix Project",
+    "authors": [
+      "Gene Kim",
+      "Kevin Behr",
+      "George Spafford"
+    ],
+    "isbn_13": "9781942788294",
+    "category": "Technology"
+  },
+  {
+    "title": "Superintelligence",
+    "authors": [
+      "Nick Bostrom"
+    ],
+    "isbn_13": "9780198739838",
+    "category": "Technology"
+  },
+  {
+    "title": "Life 3.0",
+    "authors": [
+      "Max Tegmark"
+    ],
+    "isbn_13": "9781101946596",
+    "category": "Technology"
+  },
+  {
+    "title": "The Master Algorithm",
+    "authors": [
+      "Pedro Domingos"
+    ],
+    "isbn_13": "9780465065707",
+    "category": "Technology"
+  },
+  {
+    "title": "Algorithms to Live By",
+    "authors": [
+      "Brian Christian",
+      "Tom Griffiths"
+    ],
+    "isbn_13": "9781627790369",
+    "category": "Technology"
+  },
+  {
+    "title": "The Innovators",
+    "authors": [
+      "Walter Isaacson"
+    ],
+    "isbn_13": "9781476708706",
+    "category": "Technology"
+  },
+  {
+    "title": "Thinking in Systems",
+    "authors": [
+      "Donella H. Meadows"
+    ],
+    "isbn_13": "9781603580557",
+    "category": "Technology"
+  },
+  {
+    "title": "The Man Who Mistook His Wife for a Hat",
+    "authors": [
+      "Oliver Sacks"
+    ],
+    "isbn_13": "9780684853949",
+    "category": "Psychology"
+  },
+  {
+    "title": "Emotional Intelligence",
+    "authors": [
+      "Daniel Goleman"
+    ],
+    "isbn_13": "9780553383713",
+    "category": "Psychology"
+  },
+  {
+    "title": "Flow",
+    "authors": [
+      "Mihaly Csikszentmihalyi"
+    ],
+    "isbn_13": "9780061339202",
+    "category": "Psychology"
+  },
+  {
+    "title": "Predictably Irrational",
+    "authors": [
+      "Dan Ariely"
+    ],
+    "isbn_13": "9780061353246",
+    "category": "Psychology"
+  },
+  {
+    "title": "The Body Keeps the Score",
+    "authors": [
+      "Bessel van der Kolk"
+    ],
+    "isbn_13": "9780143127741",
+    "category": "Psychology"
+  },
+  {
+    "title": "Quiet",
+    "authors": [
+      "Susan Cain"
+    ],
+    "isbn_13": "9780307352156",
+    "category": "Psychology"
+  },
+  {
+    "title": "Attached",
+    "authors": [
+      "Amir Levine",
+      "Rachel Heller"
+    ],
+    "isbn_13": "9781585429134",
+    "category": "Psychology"
+  },
+  {
+    "title": "The Happiness Hypothesis",
+    "authors": [
+      "Jonathan Haidt"
+    ],
+    "isbn_13": "9780465028023",
+    "category": "Psychology"
+  },
+  {
+    "title": "The Righteous Mind",
+    "authors": [
+      "Jonathan Haidt"
+    ],
+    "isbn_13": "9780307455772",
+    "category": "Psychology"
+  },
+  {
+    "title": "Stumbling on Happiness",
+    "authors": [
+      "Daniel Gilbert"
+    ],
+    "isbn_13": "9781400077427",
+    "category": "Psychology"
+  },
+  {
+    "title": "Drive",
+    "authors": [
+      "Daniel H. Pink"
+    ],
+    "isbn_13": "9781594484803",
+    "category": "Psychology"
+  },
+  {
+    "title": "The Social Animal",
+    "authors": [
+      "David Brooks"
+    ],
+    "isbn_13": "9780812979374",
+    "category": "Psychology"
+  },
+  {
+    "title": "Nudge",
+    "authors": [
+      "Richard H. Thaler",
+      "Cass R. Sunstein"
+    ],
+    "isbn_13": "9780143115267",
+    "category": "Psychology"
+  },
+  {
+    "title": "The Whole-Brain Child",
+    "authors": [
+      "Daniel J. Siegel",
+      "Tina Payne Bryson"
+    ],
+    "isbn_13": "9780553386691",
+    "category": "Psychology"
+  },
+  {
+    "title": "How to Be an Antiracist",
+    "authors": [
+      "Ibram X. Kendi"
+    ],
+    "isbn_13": "9780525509288",
+    "category": "Psychology"
+  },
+  {
+    "title": "Being Mortal",
+    "authors": [
+      "Atul Gawande"
+    ],
+    "isbn_13": "9780805095159",
+    "category": "Health"
+  },
+  {
+    "title": "The China Study",
+    "authors": [
+      "T. Colin Campbell",
+      "Thomas M. Campbell II"
+    ],
+    "isbn_13": "9781941631560",
+    "category": "Health"
+  },
+  {
+    "title": "In Defense of Food",
+    "authors": [
+      "Michael Pollan"
+    ],
+    "isbn_13": "9780143114963",
+    "category": "Health"
+  },
+  {
+    "title": "The Omnivore's Dilemma",
+    "authors": [
+      "Michael Pollan"
+    ],
+    "isbn_13": "9780143038580",
+    "category": "Health"
+  },
+  {
+    "title": "Lifespan",
+    "authors": [
+      "David A. Sinclair"
+    ],
+    "isbn_13": "9781501191978",
+    "category": "Health"
+  },
+  {
+    "title": "Outlive",
+    "authors": [
+      "Peter Attia"
+    ],
+    "isbn_13": "9780593236598",
+    "category": "Health"
+  },
+  {
+    "title": "How Not to Die",
+    "authors": [
+      "Michael Greger"
+    ],
+    "isbn_13": "9781250066114",
+    "category": "Health"
+  },
+  {
+    "title": "The 4-Hour Body",
+    "authors": [
+      "Timothy Ferriss"
+    ],
+    "isbn_13": "9780307463630",
+    "category": "Health"
+  },
+  {
+    "title": "Born to Run",
+    "authors": [
+      "Christopher McDougall"
+    ],
+    "isbn_13": "9780307279187",
+    "category": "Health"
+  },
+  {
+    "title": "Spark",
+    "authors": [
+      "John J. Ratey"
+    ],
+    "isbn_13": "9780316113502",
+    "category": "Health"
+  },
+  {
+    "title": "In a Sunburned Country",
+    "authors": [
+      "Bill Bryson"
+    ],
+    "isbn_13": "9780767903868",
+    "category": "Travel"
+  },
+  {
+    "title": "A Walk in the Woods",
+    "authors": [
+      "Bill Bryson"
+    ],
+    "isbn_13": "9780767902526",
+    "category": "Travel"
+  },
+  {
+    "title": "Into the Wild",
+    "authors": [
+      "Jon Krakauer"
+    ],
+    "isbn_13": "9780385486804",
+    "category": "Travel"
+  },
+  {
+    "title": "Into Thin Air",
+    "authors": [
+      "Jon Krakauer"
+    ],
+    "isbn_13": "9780385494786",
+    "category": "Travel"
+  },
+  {
+    "title": "Eat, Pray, Love",
+    "authors": [
+      "Elizabeth Gilbert"
+    ],
+    "isbn_13": "9780143038412",
+    "category": "Travel"
+  },
+  {
+    "title": "On the Road",
+    "authors": [
+      "Jack Kerouac"
+    ],
+    "isbn_13": "9780140283297",
+    "category": "Travel"
+  },
+  {
+    "title": "Travels with Charley",
+    "authors": [
+      "John Steinbeck"
+    ],
+    "isbn_13": "9780140053203",
+    "category": "Travel"
+  },
+  {
+    "title": "The Art of Travel",
+    "authors": [
+      "Alain de Botton"
+    ],
+    "isbn_13": "9780375725340",
+    "category": "Travel"
+  },
+  {
+    "title": "Shantaram",
+    "authors": [
+      "Gregory David Roberts"
+    ],
+    "isbn_13": "9780312330521",
+    "category": "Travel"
+  },
+  {
+    "title": "Salt, Fat, Acid, Heat",
+    "authors": [
+      "Samin Nosrat"
+    ],
+    "isbn_13": "9781476753836",
+    "category": "Cooking"
+  },
+  {
+    "title": "The Joy of Cooking",
+    "authors": [
+      "Irma S. Rombauer",
+      "Marion Rombauer Becker",
+      "Ethan Becker"
+    ],
+    "isbn_13": "9781501169717",
+    "category": "Cooking"
+  },
+  {
+    "title": "Mastering the Art of French Cooking",
+    "authors": [
+      "Julia Child",
+      "Louisette Bertholle",
+      "Simone Beck"
+    ],
+    "isbn_13": "9780375413407",
+    "category": "Cooking"
+  },
+  {
+    "title": "The Food Lab",
+    "authors": [
+      "J. Kenji López-Alt"
+    ],
+    "isbn_13": "9780393081084",
+    "category": "Cooking"
+  },
+  {
+    "title": "Plenty",
+    "authors": [
+      "Yotam Ottolenghi"
+    ],
+    "isbn_13": "9781452101248",
+    "category": "Cooking"
+  },
+  {
+    "title": "Jerusalem",
+    "authors": [
+      "Yotam Ottolenghi",
+      "Sami Tamimi"
+    ],
+    "isbn_13": "9781607743941",
+    "category": "Cooking"
+  },
+  {
+    "title": "The Flavor Bible",
+    "authors": [
+      "Karen Page",
+      "Andrew Dornenburg"
+    ],
+    "isbn_13": "9780316118408",
+    "category": "Cooking"
+  },
+  {
+    "title": "An Everlasting Meal",
+    "authors": [
+      "Tamar Adler"
+    ],
+    "isbn_13": "9781439181881",
+    "category": "Cooking"
+  },
+  {
+    "title": "Essentials of Classic Italian Cooking",
+    "authors": [
+      "Marcella Hazan"
+    ],
+    "isbn_13": "9780394584041",
+    "category": "Cooking"
+  },
+  {
+    "title": "On Food and Cooking",
+    "authors": [
+      "Harold McGee"
+    ],
+    "isbn_13": "9780684800011",
+    "category": "Cooking"
+  },
+  {
+    "title": "The Story of Art",
+    "authors": [
+      "E.H. Gombrich"
+    ],
+    "isbn_13": "9780714832470",
+    "category": "Art"
+  },
+  {
+    "title": "Ways of Seeing",
+    "authors": [
+      "John Berger"
+    ],
+    "isbn_13": "9780140135152",
+    "category": "Art"
+  },
+  {
+    "title": "The War of Art",
+    "authors": [
+      "Steven Pressfield"
+    ],
+    "isbn_13": "9781936891023",
+    "category": "Art"
+  },
+  {
+    "title": "Big Magic",
+    "authors": [
+      "Elizabeth Gilbert"
+    ],
+    "isbn_13": "9781594634727",
+    "category": "Art"
+  },
+  {
+    "title": "Steal Like an Artist",
+    "authors": [
+      "Austin Kleon"
+    ],
+    "isbn_13": "9780761169253",
+    "category": "Art"
+  },
+  {
+    "title": "The Artist's Way",
+    "authors": [
+      "Julia Cameron"
+    ],
+    "isbn_13": "9781585421473",
+    "category": "Art"
+  },
+  {
+    "title": "Show Your Work!",
+    "authors": [
+      "Austin Kleon"
+    ],
+    "isbn_13": "9780761178972",
+    "category": "Art"
+  },
+  {
+    "title": "On Photography",
+    "authors": [
+      "Susan Sontag"
+    ],
+    "isbn_13": "9780312420093",
+    "category": "Art"
+  },
+  {
+    "title": "Just Kids",
+    "authors": [
+      "Patti Smith"
+    ],
+    "isbn_13": "9780060936228",
+    "category": "Art"
+  },
+  {
+    "title": "The Collected Poems of W.B. Yeats",
+    "authors": [
+      "W.B. Yeats"
+    ],
+    "isbn_13": "9780684807317",
+    "category": "Poetry"
+  },
+  {
+    "title": "Leaves of Grass",
+    "authors": [
+      "Walt Whitman"
+    ],
+    "isbn_13": "9780140421996",
+    "category": "Poetry"
+  },
+  {
+    "title": "The Waste Land and Other Poems",
+    "authors": [
+      "T.S. Eliot"
+    ],
+    "isbn_13": "9780451526847",
+    "category": "Poetry"
+  },
+  {
+    "title": "Milk and Honey",
+    "authors": [
+      "Rupi Kaur"
+    ],
+    "isbn_13": "9781449474256",
+    "category": "Poetry"
+  },
+  {
+    "title": "The Sun and Her Flowers",
+    "authors": [
+      "Rupi Kaur"
+    ],
+    "isbn_13": "9781449486792",
+    "category": "Poetry"
+  },
+  {
+    "title": "The Complete Poems of Emily Dickinson",
+    "authors": [
+      "Emily Dickinson"
+    ],
+    "isbn_13": "9780316184137",
+    "category": "Poetry"
+  },
+  {
+    "title": "Selected Poems",
+    "authors": [
+      "Pablo Neruda"
+    ],
+    "isbn_13": "9780395544181",
+    "category": "Poetry"
+  },
+  {
+    "title": "The Odyssey",
+    "authors": [
+      "Homer"
+    ],
+    "isbn_13": "9780140268867",
+    "category": "Poetry"
+  },
+  {
+    "title": "The Iliad",
+    "authors": [
+      "Homer"
+    ],
+    "isbn_13": "9780140275360",
+    "category": "Poetry"
+  },
+  {
+    "title": "Devotions",
+    "authors": [
+      "Mary Oliver"
+    ],
+    "isbn_13": "9780399563263",
+    "category": "Poetry"
+  },
+  {
+    "title": "The Bible",
+    "authors": [
+      "Various"
+    ],
+    "isbn_13": "9780310449768",
+    "category": "Religion"
+  },
+  {
+    "title": "Mere Christianity",
+    "authors": [
+      "C.S. Lewis"
+    ],
+    "isbn_13": "9780060652920",
+    "category": "Religion"
+  },
+  {
+    "title": "The Screwtape Letters",
+    "authors": [
+      "C.S. Lewis"
+    ],
+    "isbn_13": "9780060652937",
+    "category": "Religion"
+  },
+  {
+    "title": "Siddhartha",
+    "authors": [
+      "Hermann Hesse"
+    ],
+    "isbn_13": "9780553208849",
+    "category": "Religion"
+  },
+  {
+    "title": "The Prophet",
+    "authors": [
+      "Kahlil Gibran"
+    ],
+    "isbn_13": "9780394404288",
+    "category": "Religion"
+  },
+  {
+    "title": "When Things Fall Apart",
+    "authors": [
+      "Pema Chödrön"
+    ],
+    "isbn_13": "9781611803433",
+    "category": "Religion"
+  },
+  {
+    "title": "The Power of Myth",
+    "authors": [
+      "Joseph Campbell"
+    ],
+    "isbn_13": "9780385418867",
+    "category": "Religion"
+  },
+  {
+    "title": "The Bhagavad Gita",
+    "authors": [
+      "Eknath Easwaran"
+    ],
+    "isbn_13": "9781586380199",
+    "category": "Religion"
+  },
+  {
+    "title": "Autobiography of a Yogi",
+    "authors": [
+      "Paramahansa Yogananda"
+    ],
+    "isbn_13": "9780876120798",
+    "category": "Religion"
+  },
+  {
+    "title": "The Book of Joy",
+    "authors": [
+      "Dalai Lama",
+      "Desmond Tutu",
+      "Douglas Abrams"
+    ],
+    "isbn_13": "9780399185045",
+    "category": "Religion"
+  },
+  {
+    "title": "Freakonomics",
+    "authors": [
+      "Steven D. Levitt",
+      "Stephen J. Dubner"
+    ],
+    "isbn_13": "9780060731335",
+    "category": "Other"
+  },
+  {
+    "title": "The Tao of Pooh",
+    "authors": [
+      "Benjamin Hoff"
+    ],
+    "isbn_13": "9780140067477",
+    "category": "Other"
+  },
+  {
+    "title": "Eating Animals",
+    "authors": [
+      "Jonathan Safran Foer"
+    ],
+    "isbn_13": "9780316069885",
+    "category": "Other"
+  },
+  {
+    "title": "Cradle to Cradle",
+    "authors": [
+      "William McDonough",
+      "Michael Braungart"
+    ],
+    "isbn_13": "9780865475878",
+    "category": "Other"
+  },
+  {
+    "title": "The Elements of Style",
+    "authors": [
+      "William Strunk Jr.",
+      "E.B. White"
+    ],
+    "isbn_13": "9780205309023",
+    "category": "Other"
+  },
+  {
+    "title": "On Writing",
+    "authors": [
+      "Stephen King"
+    ],
+    "isbn_13": "9781439156810",
+    "category": "Other"
+  },
+  {
+    "title": "Bird by Bird",
+    "authors": [
+      "Anne Lamott"
+    ],
+    "isbn_13": "9780385480017",
+    "category": "Other"
+  },
+  {
+    "title": "Talking to Strangers",
+    "authors": [
+      "Malcolm Gladwell"
+    ],
+    "isbn_13": "9780316478526",
+    "category": "Other"
+  },
+  {
+    "title": "The Black Swan",
+    "authors": [
+      "Nassim Nicholas Taleb"
+    ],
+    "isbn_13": "9780812973815",
+    "category": "Other"
+  },
+  {
+    "title": "Antifragile",
+    "authors": [
+      "Nassim Nicholas Taleb"
+    ],
+    "isbn_13": "9780812979688",
+    "category": "Other"
+  },
+  {
+    "title": "Fooled by Randomness",
+    "authors": [
+      "Nassim Nicholas Taleb"
+    ],
+    "isbn_13": "9780812975215",
+    "category": "Other"
+  },
+  {
+    "title": "Factfulness",
+    "authors": [
+      "Hans Rosling"
+    ],
+    "isbn_13": "9781250107817",
+    "category": "Other"
+  },
+  {
+    "title": "Bad Blood",
+    "authors": [
+      "John Carreyrou"
+    ],
+    "isbn_13": "9781524731656",
+    "category": "Other"
+  },
+  {
+    "title": "Moneyball",
+    "authors": [
+      "Michael Lewis"
+    ],
+    "isbn_13": "9780393324815",
+    "category": "Other"
+  },
+  {
+    "title": "The Big Short",
+    "authors": [
+      "Michael Lewis"
+    ],
+    "isbn_13": "9780393338829",
+    "category": "Other"
+  },
+  {
+    "title": "Flash Boys",
+    "authors": [
+      "Michael Lewis"
+    ],
+    "isbn_13": "9780393351590",
+    "category": "Other"
+  },
+  {
+    "title": "Liar's Poker",
+    "authors": [
+      "Michael Lewis"
+    ],
+    "isbn_13": "9780393338690",
+    "category": "Other"
+  },
+  {
+    "title": "Thinking in Bets",
+    "authors": [
+      "Annie Duke"
+    ],
+    "isbn_13": "9780735216358",
+    "category": "Other"
+  },
+  {
+    "title": "Sapiens: A Graphic Novel",
+    "authors": [
+      "Yuval Noah Harari",
+      "David Vandermeulen"
+    ],
+    "isbn_13": "9780063051331",
+    "category": "Other"
+  },
+  {
+    "title": "The Sun Also Rises",
+    "authors": [
+      "Ernest Hemingway"
+    ],
+    "isbn_13": "9780743297332",
+    "category": "Fiction"
+  },
+  {
+    "title": "For Whom the Bell Tolls",
+    "authors": [
+      "Ernest Hemingway"
+    ],
+    "isbn_13": "9780684803357",
+    "category": "Fiction"
+  },
+  {
+    "title": "The Old Man and the Sea",
+    "authors": [
+      "Ernest Hemingway"
+    ],
+    "isbn_13": "9780684801223",
+    "category": "Fiction"
+  },
+  {
+    "title": "A Farewell to Arms",
+    "authors": [
+      "Ernest Hemingway"
+    ],
+    "isbn_13": "9780684801469",
+    "category": "Fiction"
+  },
+  {
+    "title": "Of Mice and Men",
+    "authors": [
+      "John Steinbeck"
+    ],
+    "isbn_13": "9780140186420",
+    "category": "Fiction"
+  },
+  {
+    "title": "The Sound and the Fury",
+    "authors": [
+      "William Faulkner"
+    ],
+    "isbn_13": "9780679732242",
+    "category": "Fiction"
+  },
+  {
+    "title": "Lolita",
+    "authors": [
+      "Vladimir Nabokov"
+    ],
+    "isbn_13": "9780679723165",
+    "category": "Fiction"
+  },
+  {
+    "title": "One Flew Over the Cuckoo's Nest",
+    "authors": [
+      "Ken Kesey"
+    ],
+    "isbn_13": "9780451163967",
+    "category": "Fiction"
+  },
+  {
+    "title": "The Metamorphosis",
+    "authors": [
+      "Franz Kafka"
+    ],
+    "isbn_13": "9780553213690",
+    "category": "Fiction"
+  },
+  {
+    "title": "The Trial",
+    "authors": [
+      "Franz Kafka"
+    ],
+    "isbn_13": "9780805209990",
+    "category": "Fiction"
+  },
+  {
+    "title": "Steppenwolf",
+    "authors": [
+      "Hermann Hesse"
+    ],
+    "isbn_13": "9780312278670",
+    "category": "Fiction"
+  },
+  {
+    "title": "Things Fall Apart",
+    "authors": [
+      "Chinua Achebe"
+    ],
+    "isbn_13": "9780385474542",
+    "category": "Fiction"
+  },
+  {
+    "title": "The Poisonwood Bible",
+    "authors": [
+      "Barbara Kingsolver"
+    ],
+    "isbn_13": "9780060786502",
+    "category": "Fiction"
+  },
+  {
+    "title": "Atonement",
+    "authors": [
+      "Ian McEwan"
+    ],
+    "isbn_13": "9780385721790",
+    "category": "Fiction"
+  },
+  {
+    "title": "The God of Small Things",
+    "authors": [
+      "Arundhati Roy"
+    ],
+    "isbn_13": "9780812979657",
+    "category": "Fiction"
+  },
+  {
+    "title": "White Teeth",
+    "authors": [
+      "Zadie Smith"
+    ],
+    "isbn_13": "9780375703867",
+    "category": "Fiction"
+  },
+  {
+    "title": "The Corrections",
+    "authors": [
+      "Jonathan Franzen"
+    ],
+    "isbn_13": "9780312421274",
+    "category": "Fiction"
+  },
+  {
+    "title": "Cloud Atlas",
+    "authors": [
+      "David Mitchell"
+    ],
+    "isbn_13": "9780375507250",
+    "category": "Fiction"
+  },
+  {
+    "title": "The Midnight Library",
+    "authors": [
+      "Matt Haig"
+    ],
+    "isbn_13": "9780525559474",
+    "category": "Fiction"
+  },
+  {
+    "title": "Klara and the Sun",
+    "authors": [
+      "Kazuo Ishiguro"
+    ],
+    "isbn_13": "9780593318171",
+    "category": "Fiction"
+  },
+  {
+    "title": "Lessons in Chemistry",
+    "authors": [
+      "Bonnie Garmus"
+    ],
+    "isbn_13": "9780385547345",
+    "category": "Fiction"
+  },
+  {
+    "title": "Tomorrow, and Tomorrow, and Tomorrow",
+    "authors": [
+      "Gabrielle Zevin"
+    ],
+    "isbn_13": "9780593321201",
+    "category": "Fiction"
+  },
+  {
+    "title": "Demon Copperhead",
+    "authors": [
+      "Barbara Kingsolver"
+    ],
+    "isbn_13": "9780063251922",
+    "category": "Fiction"
+  },
+  {
+    "title": "The Covenant of Water",
+    "authors": [
+      "Abraham Verghese"
+    ],
+    "isbn_13": "9780802162175",
+    "category": "Fiction"
+  },
+  {
+    "title": "Dune Messiah",
+    "authors": [
+      "Frank Herbert"
+    ],
+    "isbn_13": "9780593098233",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "The Hunger Games",
+    "authors": [
+      "Suzanne Collins"
+    ],
+    "isbn_13": "9780439023481",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "The Time Machine",
+    "authors": [
+      "H.G. Wells"
+    ],
+    "isbn_13": "9780141439976",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "Stranger in a Strange Land",
+    "authors": [
+      "Robert A. Heinlein"
+    ],
+    "isbn_13": "9780441788385",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "Annihilation",
+    "authors": [
+      "Jeff VanderMeer"
+    ],
+    "isbn_13": "9780374104092",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "Parable of the Sower",
+    "authors": [
+      "Octavia E. Butler"
+    ],
+    "isbn_13": "9781538732182",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "Kindred",
+    "authors": [
+      "Octavia E. Butler"
+    ],
+    "isbn_13": "9780807083697",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "Flowers for Algernon",
+    "authors": [
+      "Daniel Keyes"
+    ],
+    "isbn_13": "9780156030304",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "The Stormlight Archive: Words of Radiance",
+    "authors": [
+      "Brandon Sanderson"
+    ],
+    "isbn_13": "9780765326362",
+    "category": "Fantasy"
+  },
+  {
+    "title": "The Witcher: The Last Wish",
+    "authors": [
+      "Andrzej Sapkowski"
+    ],
+    "isbn_13": "9780316029186",
+    "category": "Fantasy"
+  },
+  {
+    "title": "The House in the Cerulean Sea",
+    "authors": [
+      "TJ Klune"
+    ],
+    "isbn_13": "9781250217318",
+    "category": "Fantasy"
+  },
+  {
+    "title": "Ninth Rain",
+    "authors": [
+      "Jen Williams"
+    ],
+    "isbn_13": null,
+    "category": "Fantasy"
+  },
+  {
+    "title": "The Starless Sea",
+    "authors": [
+      "Erin Morgenstern"
+    ],
+    "isbn_13": "9780385541213",
+    "category": "Fantasy"
+  },
+  {
+    "title": "Howl's Moving Castle",
+    "authors": [
+      "Diana Wynne Jones"
+    ],
+    "isbn_13": "9780061478789",
+    "category": "Fantasy"
+  },
+  {
+    "title": "The Name of the Rose",
+    "authors": [
+      "Umberto Eco"
+    ],
+    "isbn_13": "9780544176560",
+    "category": "Mystery"
+  },
+  {
+    "title": "The Westing Game",
+    "authors": [
+      "Ellen Raskin"
+    ],
+    "isbn_13": "9780142401200",
+    "category": "Mystery"
+  },
+  {
+    "title": "Tinker Tailor Soldier Spy",
+    "authors": [
+      "John le Carré"
+    ],
+    "isbn_13": "9780143119784",
+    "category": "Mystery"
+  },
+  {
+    "title": "The Curious Incident of the Dog in the Night-Time",
+    "authors": [
+      "Mark Haddon"
+    ],
+    "isbn_13": "9781400032716",
+    "category": "Mystery"
+  },
+  {
+    "title": "The Talented Mr. Ripley",
+    "authors": [
+      "Patricia Highsmith"
+    ],
+    "isbn_13": "9780393332148",
+    "category": "Mystery"
+  },
+  {
+    "title": "An Ugly Truth",
+    "authors": [
+      "Sheera Frenkel",
+      "Cecilia Kang"
+    ],
+    "isbn_13": "9780062960672",
+    "category": "Technology"
+  },
+  {
+    "title": "The Age of Surveillance Capitalism",
+    "authors": [
+      "Shoshana Zuboff"
+    ],
+    "isbn_13": "9781610395694",
+    "category": "Technology"
+  },
+  {
+    "title": "Weapons of Math Destruction",
+    "authors": [
+      "Cathy O'Neil"
+    ],
+    "isbn_13": "9780553418835",
+    "category": "Technology"
+  },
+  {
+    "title": "The Second Machine Age",
+    "authors": [
+      "Erik Brynjolfsson",
+      "Andrew McAfee"
+    ],
+    "isbn_13": "9780393350647",
+    "category": "Technology"
+  },
+  {
+    "title": "Chaos Monkeys",
+    "authors": [
+      "Antonio García Martínez"
+    ],
+    "isbn_13": "9780062458193",
+    "category": "Technology"
+  },
+  {
+    "title": "Working in Public",
+    "authors": [
+      "Nadia Eghbal"
+    ],
+    "isbn_13": "9780578675862",
+    "category": "Technology"
+  },
+  {
+    "title": "Radical Candor",
+    "authors": [
+      "Kim Scott"
+    ],
+    "isbn_13": "9781250235374",
+    "category": "Business"
+  },
+  {
+    "title": "An Elegant Puzzle",
+    "authors": [
+      "Will Larson"
+    ],
+    "isbn_13": "9781732265189",
+    "category": "Business"
+  },
+  {
+    "title": "The Culture Map",
+    "authors": [
+      "Erin Meyer"
+    ],
+    "isbn_13": "9781610392501",
+    "category": "Business"
+  },
+  {
+    "title": "Creativity, Inc.",
+    "authors": [
+      "Ed Catmull",
+      "Amy Wallace"
+    ],
+    "isbn_13": "9780812993011",
+    "category": "Business"
+  },
+  {
+    "title": "Think Again",
+    "authors": [
+      "Adam Grant"
+    ],
+    "isbn_13": "9781984878106",
+    "category": "Self-Help"
+  },
+  {
+    "title": "The Mountain Is You",
+    "authors": [
+      "Brianna Wiest"
+    ],
+    "isbn_13": "9781949759228",
+    "category": "Self-Help"
+  },
+  {
+    "title": "Ikigai",
+    "authors": [
+      "Héctor García",
+      "Francesc Miralles"
+    ],
+    "isbn_13": "9780143130727",
+    "category": "Self-Help"
+  },
+  {
+    "title": "Maybe You Should Talk to Someone",
+    "authors": [
+      "Lori Gottlieb"
+    ],
+    "isbn_13": "9781328662057",
+    "category": "Psychology"
+  },
+  {
+    "title": "Man and His Symbols",
+    "authors": [
+      "Carl G. Jung"
+    ],
+    "isbn_13": "9780440351832",
+    "category": "Psychology"
+  },
+  {
+    "title": "The Interpretation of Dreams",
+    "authors": [
+      "Sigmund Freud"
+    ],
+    "isbn_13": "9780465019779",
+    "category": "Psychology"
+  },
+  {
+    "title": "Empire of Pain",
+    "authors": [
+      "Patrick Radden Keefe"
+    ],
+    "isbn_13": "9780385545686",
+    "category": "History"
+  },
+  {
+    "title": "The Color of Law",
+    "authors": [
+      "Richard Rothstein"
+    ],
+    "isbn_13": "9781631492853",
+    "category": "History"
+  },
+  {
+    "title": "Homegoing",
+    "authors": [
+      "Yaa Gyasi"
+    ],
+    "isbn_13": "9781101971062",
+    "category": "Fiction"
+  },
+  {
+    "title": "The Vanishing Half",
+    "authors": [
+      "Brit Bennett"
+    ],
+    "isbn_13": "9780525536291",
+    "category": "Fiction"
+  },
+  {
+    "title": "Hamnet",
+    "authors": [
+      "Maggie O'Farrell"
+    ],
+    "isbn_13": "9780525657606",
+    "category": "Fiction"
+  },
+  {
+    "title": "The Overstory",
+    "authors": [
+      "Richard Powers"
+    ],
+    "isbn_13": "9780393356687",
+    "category": "Fiction"
+  },
+  {
+    "title": "My Brilliant Friend",
+    "authors": [
+      "Elena Ferrante"
+    ],
+    "isbn_13": "9781609450786",
+    "category": "Fiction"
+  },
+  {
+    "title": "The Underground Railroad",
+    "authors": [
+      "Colson Whitehead"
+    ],
+    "isbn_13": "9780385542364",
+    "category": "Fiction"
+  },
+  {
+    "title": "Anxious People",
+    "authors": [
+      "Fredrik Backman"
+    ],
+    "isbn_13": "9781501160837",
+    "category": "Fiction"
+  },
+  {
+    "title": "A Man Called Ove",
+    "authors": [
+      "Fredrik Backman"
+    ],
+    "isbn_13": "9781476738024",
+    "category": "Fiction"
+  },
+  {
+    "title": "The House of the Spirits",
+    "authors": [
+      "Isabel Allende"
+    ],
+    "isbn_13": "9781501117015",
+    "category": "Fiction"
+  },
+  {
+    "title": "Love in the Time of Cholera",
+    "authors": [
+      "Gabriel García Márquez"
+    ],
+    "isbn_13": "9780307389732",
+    "category": "Fiction"
+  },
+  {
+    "title": "The Little Prince",
+    "authors": [
+      "Antoine de Saint-Exupéry"
+    ],
+    "isbn_13": "9780156012195",
+    "category": "Fiction"
+  },
+  {
+    "title": "Lord of the Flies",
+    "authors": [
+      "William Golding"
+    ],
+    "isbn_13": "9780399501487",
+    "category": "Fiction"
+  },
+  {
+    "title": "Animal Farm",
+    "authors": [
+      "George Orwell"
+    ],
+    "isbn_13": "9780451526342",
+    "category": "Fiction"
+  },
+  {
+    "title": "Persepolis",
+    "authors": [
+      "Marjane Satrapi"
+    ],
+    "isbn_13": "9780375714573",
+    "category": "Biography"
+  },
+  {
+    "title": "The Last Lecture",
+    "authors": [
+      "Randy Pausch"
+    ],
+    "isbn_13": "9781401323257",
+    "category": "Biography"
+  },
+  {
+    "title": "Tuesdays with Morrie",
+    "authors": [
+      "Mitch Albom"
+    ],
+    "isbn_13": "9780767905923",
+    "category": "Biography"
+  },
+  {
+    "title": "Empire Falls",
+    "authors": [
+      "Richard Russo"
+    ],
+    "isbn_13": "9780375726408",
+    "category": "Fiction"
+  },
+  {
+    "title": "Gilead",
+    "authors": [
+      "Marilynne Robinson"
+    ],
+    "isbn_13": "9780374153892",
+    "category": "Fiction"
+  },
+  {
+    "title": "The Brief Wondrous Life of Oscar Wao",
+    "authors": [
+      "Junot Díaz"
+    ],
+    "isbn_13": "9781594483295",
+    "category": "Fiction"
+  },
+  {
+    "title": "The Road to Serfdom",
+    "authors": [
+      "Friedrich A. Hayek"
+    ],
+    "isbn_13": "9780226320557",
+    "category": "Philosophy"
+  },
+  {
+    "title": "A Theory of Justice",
+    "authors": [
+      "John Rawls"
+    ],
+    "isbn_13": "9780674000780",
+    "category": "Philosophy"
+  },
+  {
+    "title": "The Second Sex",
+    "authors": [
+      "Simone de Beauvoir"
+    ],
+    "isbn_13": "9780307277787",
+    "category": "Philosophy"
+  },
+  {
+    "title": "Sapiens",
+    "authors": [
+      "Yuval Noah Harari"
+    ],
+    "isbn_13": "9780062316097",
+    "category": "Philosophy"
+  },
+  {
+    "title": "Discipline Equals Freedom",
+    "authors": [
+      "Jocko Willink"
+    ],
+    "isbn_13": "9781250156945",
+    "category": "Self-Help"
+  },
+  {
+    "title": "Extreme Ownership",
+    "authors": [
+      "Jocko Willink",
+      "Leif Babin"
+    ],
+    "isbn_13": "9781250183866",
+    "category": "Business"
+  },
+  {
+    "title": "Who Moved My Cheese?",
+    "authors": [
+      "Spencer Johnson"
+    ],
+    "isbn_13": "9780399144462",
+    "category": "Business"
+  },
+  {
+    "title": "The Intelligent Investor",
+    "authors": [
+      "Benjamin Graham"
+    ],
+    "isbn_13": "9780060555665",
+    "category": "Business"
+  },
+  {
+    "title": "Sapiens for Young Adults",
+    "authors": [
+      "Yuval Noah Harari"
+    ],
+    "isbn_13": null,
+    "category": "History"
+  },
+  {
+    "title": "Destiny of the Republic",
+    "authors": [
+      "Candice Millard"
+    ],
+    "isbn_13": "9780767929714",
+    "category": "History"
+  },
+  {
+    "title": "The Guns of August",
+    "authors": [
+      "Barbara W. Tuchman"
+    ],
+    "isbn_13": "9780345476098",
+    "category": "History"
+  },
+  {
+    "title": "Midnight in the Garden of Good and Evil",
+    "authors": [
+      "John Berendt"
+    ],
+    "isbn_13": "9780679751526",
+    "category": "Other"
+  },
+  {
+    "title": "Braiding Sweetgrass",
+    "authors": [
+      "Robin Wall Kimmerer"
+    ],
+    "isbn_13": "9781571313560",
+    "category": "Science"
+  },
+  {
+    "title": "The Hidden Life of Trees",
+    "authors": [
+      "Peter Wohlleben"
+    ],
+    "isbn_13": "9781771642484",
+    "category": "Science"
+  },
+  {
+    "title": "An Immense World",
+    "authors": [
+      "Ed Yong"
+    ],
+    "isbn_13": "9780593133231",
+    "category": "Science"
+  },
+  {
+    "title": "I Contain Multitudes",
+    "authors": [
+      "Ed Yong"
+    ],
+    "isbn_13": "9780062368591",
+    "category": "Science"
+  },
+  {
+    "title": "The Shining",
+    "authors": [
+      "Stephen King"
+    ],
+    "isbn_13": "9780307743657",
+    "category": "Fiction"
+  },
+  {
+    "title": "It",
+    "authors": [
+      "Stephen King"
+    ],
+    "isbn_13": "9781501142970",
+    "category": "Fiction"
+  },
+  {
+    "title": "Jurassic Park",
+    "authors": [
+      "Michael Crichton"
+    ],
+    "isbn_13": "9780345538987",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "Contact",
+    "authors": [
+      "Carl Sagan"
+    ],
+    "isbn_13": "9781501197987",
+    "category": "Sci-Fi"
+  },
+  {
+    "title": "Blood Meridian",
+    "authors": [
+      "Cormac McCarthy"
+    ],
+    "isbn_13": "9780679728757",
+    "category": "Fiction"
+  },
+  {
+    "title": "No Country for Old Men",
+    "authors": [
+      "Cormac McCarthy"
+    ],
+    "isbn_13": "9780375706677",
+    "category": "Fiction"
+  },
+  {
+    "title": "Give and Take",
+    "authors": [
+      "Adam Grant"
+    ],
+    "isbn_13": "9780143124986",
+    "category": "Business"
+  },
+  {
+    "title": "Originals",
+    "authors": [
+      "Adam Grant"
+    ],
+    "isbn_13": "9780143128854",
+    "category": "Business"
+  },
+  {
+    "title": "Sapiens: 21 Lessons for the 21st Century",
+    "authors": [
+      "Yuval Noah Harari"
+    ],
+    "isbn_13": "9780525512172",
+    "category": "History"
+  },
+  {
+    "title": "The Innovator's Solution",
+    "authors": [
+      "Clayton M. Christensen",
+      "Michael E. Raynor"
+    ],
+    "isbn_13": "9781422196571",
+    "category": "Business"
+  }
+]

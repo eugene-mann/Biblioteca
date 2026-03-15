@@ -53,6 +53,7 @@ export function BookGrid({ books }: BookGridProps) {
       {books.map((book, index) => (
         <Link
           key={book.id}
+          data-book-id={book.id}
           href={`/library/${book.slug || book.id}`}
           className="group flex flex-col items-center gap-2 p-1 transition-all duration-200"
           style={{ animationDelay: `${index * 30}ms` }}
