@@ -145,7 +145,7 @@ export async function searchBooks(query: string): Promise<Omit<Book, "id" | "dat
 
   let res = await fetch(
     `https://www.googleapis.com/books/v1/volumes?${params}`,
-    { next: { revalidate: 3600 } }
+    { cache: "no-store" }
   );
 
   // Retry once after a short delay on rate limit
@@ -153,7 +153,7 @@ export async function searchBooks(query: string): Promise<Omit<Book, "id" | "dat
     await new Promise((r) => setTimeout(r, 1500));
     res = await fetch(
       `https://www.googleapis.com/books/v1/volumes?${params}`,
-      { next: { revalidate: 3600 } }
+      { cache: "no-store" }
     );
   }
 
