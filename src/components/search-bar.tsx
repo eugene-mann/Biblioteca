@@ -76,7 +76,7 @@ export function SearchBar() {
         } else {
           setExternalResults([]);
         }
-        setIsOpen(libResults.length > 0 || popular.length > 0);
+        setIsOpen(true);
       }
     },
     [libraryBooks]
@@ -102,6 +102,7 @@ export function SearchBar() {
         setExternalResults(deduplicated);
         setIsOpen(true);
       } catch (err) {
+        console.error("[SearchBar] External search failed:", err);
         setError(err instanceof Error ? err.message : "Search failed. Please try again.");
       } finally {
         setIsLoadingExternal(false);
