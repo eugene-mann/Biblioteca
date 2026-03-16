@@ -129,6 +129,7 @@ function volumeToBookPartial(
     is_favorite: false,
     date_started: null,
     date_finished: null,
+    notes: null,
   };
 }
 

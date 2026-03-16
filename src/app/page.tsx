@@ -7,7 +7,10 @@ import { CollectionCarousel } from "@/components/collection-carousel";
 import { QuoteDivider } from "@/components/quote-carousel";
 import { AddBookCard } from "@/components/add-book-card";
 import { AddBookToCollectionModal } from "@/components/add-book-to-collection-modal";
-import { BookOpen, Heart } from "lucide-react";
+import { BookOpen, Heart, Sparkles } from "lucide-react";
+import { NowReadingHero } from "@/components/now-reading-hero";
+import { ReadingStats } from "@/components/reading-stats";
+import Link from "next/link";
 import type { Book, BookStatus, BookCategory } from "@/types/database";
 import { BOOK_CATEGORIES } from "@/types/database";
 
@@ -214,6 +217,13 @@ function LibraryPageContent() {
         </p>
       </div>
 
+      {!isLoading && books.length > 0 && (
+        <>
+          <NowReadingHero books={books} />
+          <ReadingStats books={books} />
+        </>
+      )}
+
       {books.length > 0 && (
         <CollectionCarousel
           key={collectionKey}
@@ -224,7 +234,7 @@ function LibraryPageContent() {
       )}
 
       {books.length > 0 && (
-        <div className="flex w-full flex-wrap items-center gap-4">
+        <div className="flex w-full flex-col gap-3">
           {/* Status filter — slash-separated links */}
           <div className="flex items-center gap-1 font-sans text-sm">
             {statusOptions.map((opt, i) => (
@@ -244,20 +254,8 @@ function LibraryPageContent() {
             ))}
           </div>
 
-          {/* Favorites toggle */}
-          <button
-            onClick={() => setShowFavorites((v) => !v)}
-            className={`flex items-center gap-1 rounded-sm px-2 py-1 text-sm transition-colors ${
-              showFavorites
-                ? "text-amber"
-                : "text-warm-gray hover:text-foreground"
-            }`}
-            title="Show favorites only"
-          >
-            <Heart className={`h-3.5 w-3.5 ${showFavorites ? "fill-amber" : ""}`} />
-          </button>
-
-          <div className="ml-auto flex items-center gap-3">
+          {/* Second row: category, sort, favorites, themes */}
+          <div className="flex w-full flex-wrap items-center gap-3">
             {/* Category filter */}
             {availableCategories.length > 0 && (
               <select
@@ -286,6 +284,29 @@ function LibraryPageContent() {
                 </option>
               ))}
             </select>
+
+            {/* Favorites toggle — subtle */}
+            <button
+              onClick={() => setShowFavorites((v) => !v)}
+              className={`flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs transition-colors ${
+                showFavorites
+                  ? "border-amber text-amber"
+                  : "border-warm-border text-warm-gray hover:text-foreground hover:border-foreground/20"
+              }`}
+              title="Show favorites only"
+            >
+              <Heart className={`h-3 w-3 ${showFavorites ? "fill-amber" : ""}`} />
+              <span className="hidden sm:inline">Favorites</span>
+            </button>
+
+            {/* Themes link */}
+            <Link
+              href="/connections"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-warm-border text-sm text-warm-gray hover:text-foreground hover:border-foreground/20 transition-colors"
+            >
+              <Sparkles className="h-3.5 w-3.5" />
+              Themes
+            </Link>
           </div>
         </div>
       )}

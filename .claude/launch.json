@@ -4,7 +4,7 @@
     {
       "name": "dev",
       "runtimeExecutable": "bash",
-      "runtimeArgs": ["-c", "cd '/Users/eugenemann/Library/Mobile Documents/com~apple~CloudDocs/Repos/Personal/Biblioteca' && npm run dev"],
+      "runtimeArgs": ["-c", "cd /tmp/biblioteca-dev && npm run dev"],
       "port": 3000
     },
     {

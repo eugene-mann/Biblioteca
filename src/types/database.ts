@@ -73,6 +73,7 @@ export interface Book {
   date_started: string | null;
   date_finished: string | null;
   user_id: string;
+  notes: string | null;
 }
 
 export interface ReadingList {
