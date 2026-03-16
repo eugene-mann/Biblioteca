@@ -3,13 +3,14 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, Sparkles, Clock, User, Search } from "lucide-react";
+import { BookOpen, Compass, Sparkles, Clock, User, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SearchBar } from "./search-bar";
 import { MobileSearchOverlay } from "@/components/mobile-search-overlay";
 
 const navItems = [
   { href: "/", label: "Library", icon: BookOpen },
+  { href: "/explore", label: "Explore", icon: Compass },
   { href: "/discover", label: "Discover", icon: Sparkles },
   { href: "/activity", label: "Activity", icon: Clock },
   { href: "/profile", label: "Profile", icon: User },
