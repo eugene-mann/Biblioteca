@@ -170,5 +170,6 @@ export function popularBookToResult(book: PopularBook): BookResult {
     is_favorite: false,
     date_started: null,
     date_finished: null,
+    notes: null,
   };
 }

@@ -1,20 +1,23 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, Sparkles, Compass, Info } from "lucide-react";
+import { BookOpen, Sparkles, Clock, User, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SearchBar } from "./search-bar";
+import { MobileSearchOverlay } from "@/components/mobile-search-overlay";
 
 const navItems = [
   { href: "/", label: "Library", icon: BookOpen },
-  { href: "/explore", label: "Explore", icon: Sparkles },
-  { href: "/discover", label: "Discover", icon: Compass },
-  { href: "/about", label: "About", icon: Info },
+  { href: "/discover", label: "Discover", icon: Sparkles },
+  { href: "/activity", label: "Activity", icon: Clock },
+  { href: "/profile", label: "Profile", icon: User },
 ];
 
 export function Nav() {
   const pathname = usePathname();
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
 
   return (
     <>
@@ -50,6 +53,21 @@ export function Nav() {
           })}
         </div>
       </nav>
+
+      {/* Mobile search button — floating top-right */}
+      <button
+        onClick={() => setMobileSearchOpen(true)}
+        className="fixed top-4 right-4 z-50 md:hidden bg-card border border-warm-border rounded-full p-2.5 shadow-md"
+        aria-label="Search"
+      >
+        <Search className="h-5 w-5 text-foreground" />
+      </button>
+
+      {/* Mobile search overlay */}
+      <MobileSearchOverlay
+        isOpen={mobileSearchOpen}
+        onClose={() => setMobileSearchOpen(false)}
+      />
 
       {/* Mobile bottom nav — fixed frosted glass */}
       <nav className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around border-t border-warm-border bg-background/92 backdrop-blur-md py-2 md:hidden">

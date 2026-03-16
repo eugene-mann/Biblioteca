@@ -99,6 +99,7 @@ function docToBookPartial(doc: OpenLibraryDoc): Omit<Book, "id" | "date_added" |
     is_favorite: false,
     date_started: null,
     date_finished: null,
+    notes: null,
   };
 }
 

@@ -62,9 +62,10 @@ export default function RootLayout({
                 <span className="font-sans text-[10px] font-semibold uppercase tracking-widest">Navigate</span>
                 <nav className="flex flex-col gap-1.5">
                   <a href="/" className="font-sans text-xs transition-colors hover:text-foreground">Library</a>
-                  <a href="/explore" className="font-sans text-xs transition-colors hover:text-foreground">Explore</a>
+                  <a href="/connections" className="font-sans text-xs transition-colors hover:text-foreground">Connections</a>
                   <a href="/discover" className="font-sans text-xs transition-colors hover:text-foreground">Discover</a>
-                  <a href="/about" className="font-sans text-xs transition-colors hover:text-foreground">About</a>
+                  <a href="/activity" className="font-sans text-xs transition-colors hover:text-foreground">Activity</a>
+                  <a href="/profile" className="font-sans text-xs transition-colors hover:text-foreground">Profile</a>
                   <a href="/settings" className="font-sans text-xs transition-colors hover:text-foreground">Settings</a>
                 </nav>
               </div>
