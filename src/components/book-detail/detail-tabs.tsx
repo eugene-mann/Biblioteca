@@ -5,7 +5,7 @@ interface DetailTabsProps {
   onTabChange: (tab: string) => void;
 }
 
-const TABS = ["About", "Insights", "Notes"] as const;
+const TABS = ["Insights", "About", "Notes"] as const;
 
 export function DetailTabs({ activeTab, onTabChange }: DetailTabsProps) {
   return (

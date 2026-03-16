@@ -36,7 +36,7 @@ export default function BookDetailPage({
   const [book, setBook] = useState<Book | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [activeTab, setActiveTab] = useState<string>("About");
+  const [activeTab, setActiveTab] = useState<string>("Insights");
 
   useEffect(() => {
     async function fetchBook() {
