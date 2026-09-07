@@ -1,18 +1,30 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { BookOpen } from "lucide-react";
+import { BookOpen, Search, ArrowDown } from "lucide-react";
 import { SuggestedBookCard } from "@/components/suggested-book-card";
 import type { ExploreCluster, ExploreBook } from "@/app/api/explore/route";
 
 const ACCENT_CLASSES = [
-  { pill: "border-emerald-300/60 text-emerald-700 bg-emerald-50", quote: "border-emerald-300" },
+  {
+    pill: "border-emerald-300/60 text-emerald-700 bg-emerald-50",
+    quote: "border-emerald-300",
+  },
   { pill: "border-amber/60 text-amber-800 bg-amber-50", quote: "border-amber" },
-  { pill: "border-blue-300/60 text-blue-700 bg-blue-50", quote: "border-blue-300" },
-  { pill: "border-purple-300/60 text-purple-700 bg-purple-50", quote: "border-purple-300" },
-  { pill: "border-rose-300/60 text-rose-700 bg-rose-50", quote: "border-rose-300" },
+  {
+    pill: "border-blue-300/60 text-blue-700 bg-blue-50",
+    quote: "border-blue-300",
+  },
+  {
+    pill: "border-purple-300/60 text-purple-700 bg-purple-50",
+    quote: "border-purple-300",
+  },
+  {
+    pill: "border-rose-300/60 text-rose-700 bg-rose-50",
+    quote: "border-rose-300",
+  },
 ];
 
 function stars(rating: number | null): string {
@@ -29,20 +41,32 @@ function BookLink({
   children: React.ReactNode;
   className?: string;
 }) {
-  if (!book.slug) return <div className={className}>{children}</div>;
   return (
-    <Link href={`/library/${book.slug}`} className={className}>
+    <Link
+      prefetch={false}
+      href={`/library/${book.slug || book.id}`}
+      className={className}
+    >
       {children}
     </Link>
   );
 }
 
-function HeroCard({ book, accent }: { book: ExploreBook; accent: (typeof ACCENT_CLASSES)[0] }) {
+function HeroCard({
+  book,
+  accent,
+}: {
+  book: ExploreBook;
+  accent: (typeof ACCENT_CLASSES)[0];
+}) {
   return (
-    <BookLink book={book} className="flex flex-col md:flex-row gap-6 md:gap-10 mb-10 group">
+    <BookLink
+      book={book}
+      className="flex flex-col sm:flex-row gap-6 md:gap-8 mb-8 group"
+    >
       {/* Cover */}
       {book.cover_image_url && (
-        <div className="shrink-0 w-[180px] md:w-[250px]">
+        <div className="shrink-0 w-[120px] md:w-[180px]">
           <Image
             src={book.cover_image_url}
             alt={book.title}
@@ -63,11 +87,15 @@ function HeroCard({ book, accent }: { book: ExploreBook; accent: (typeof ACCENT_
             </span>
           )}
           {book.rating && (
-            <span className="text-sm text-amber tracking-wider">{stars(book.rating)}</span>
+            <span className="text-sm text-amber tracking-wider">
+              {stars(book.rating)}
+            </span>
           )}
         </div>
 
-        <h3 className="font-serif text-2xl font-bold leading-tight mb-1">{book.title}</h3>
+        <h3 className="font-serif text-2xl font-bold leading-tight mb-1">
+          {book.title}
+        </h3>
         <p className="text-[15px] text-warm-gray italic mb-4">
           by {book.authors.join(", ")}
         </p>
@@ -129,7 +157,9 @@ function CompactCard({ book }: { book: ExploreBook }) {
         </p>
         <div className="flex items-center gap-2 mb-2.5">
           {book.rating && (
-            <span className="text-xs text-amber tracking-wider">{stars(book.rating)}</span>
+            <span className="text-xs text-amber tracking-wider">
+              {stars(book.rating)}
+            </span>
           )}
           {book.category && (
             <span className="font-sans text-[10px] font-semibold tracking-[0.1em] uppercase text-warm-gray">
@@ -151,27 +181,73 @@ export default function ExplorePage() {
   const [clusters, setClusters] = useState<ExploreCluster[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetch("/api/explore")
-      .then((r) => r.json())
-      .then((data: ExploreCluster[]) => {
-        setClusters(data);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
+  const [error, setError] = useState<string | null>(null);
+  const [query, setQuery] = useState("");
+  const [limit, setLimit] = useState(4);
+  const load = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/explore");
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      if (!Array.isArray(data)) throw new Error();
+      setClusters(data);
+    } catch {
+      setError("Your connections couldn’t load. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   }, []);
+  useEffect(() => {
+    void load();
+  }, [load]);
+  const filtered = useMemo(
+    () =>
+      clusters.filter((cluster) =>
+        [
+          cluster.clusterName,
+          cluster.heroBook.title,
+          ...cluster.heroBook.insight.themes,
+        ].some((value) => value.toLowerCase().includes(query.toLowerCase())),
+      ),
+    [clusters, query],
+  );
 
   return (
-    <div className="max-w-[900px] mx-auto px-6 py-12 md:py-16">
+    <div className="max-w-[1000px] mx-auto">
       {/* Header */}
-      <header className="text-center mb-16">
-        <h1 className="font-serif text-4xl font-bold tracking-wide mb-2">Explore</h1>
-        <p className="font-sans text-sm text-warm-gray tracking-[0.08em] uppercase font-medium">
-          A curated reading companion
+      <header className="explore-header mb-9">
+        <p className="eyebrow">The unexpected connections</p>
+        <h1>Books in conversation.</h1>
+        <p className="text-sm text-warm-gray">
+          Follow an idea from one book into the next.
         </p>
-        <div className="w-[60px] h-0.5 bg-warm-gray mx-auto mt-5" />
       </header>
-
+      <label className="mb-8 flex items-center gap-3 border-b border-warm-border pb-4">
+        <Search className="h-4 w-4 text-warm-gray" />
+        <input
+          aria-label="Search themes"
+          value={query}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            setLimit(4);
+          }}
+          placeholder="Find a theme, idea, or book…"
+          className="min-w-0 flex-1 bg-transparent text-sm outline-none"
+        />
+        <span className="text-xs text-warm-gray">
+          {filtered.length} connections
+        </span>
+      </label>
+      {error && (
+        <div className="error-panel" role="alert">
+          {error}
+          <button onClick={() => void load()} className="quiet-button">
+            Try again
+          </button>
+        </div>
+      )}
       {/* Content */}
       {loading ? (
         <div className="space-y-16">
@@ -190,19 +266,21 @@ export default function ExplorePage() {
             </div>
           ))}
         </div>
-      ) : clusters.length === 0 ? (
+      ) : !error && filtered.length === 0 ? (
         <div className="text-center py-20">
           <BookOpen className="w-10 h-10 mx-auto text-warm-gray mb-3" />
           <p className="text-warm-gray font-sans">
-            No insights yet. Generate insights on a book&apos;s detail page to see them here.
+            {query
+              ? "No connections match this search. Try another idea."
+              : "Open a book and generate insights to start exploring connections."}
           </p>
         </div>
       ) : (
         <div>
-          {clusters.map((cluster, idx) => {
+          {filtered.slice(0, limit).map((cluster, idx) => {
             const accent = ACCENT_CLASSES[idx % ACCENT_CLASSES.length];
             return (
-              <div key={cluster.clusterName + idx}>
+              <div key={cluster.heroBook.id}>
                 {/* Divider between clusters */}
                 {idx > 0 && (
                   <div className="flex items-center gap-5 my-14 text-warm-border">
@@ -253,6 +331,16 @@ export default function ExplorePage() {
               </div>
             );
           })}
+          {filtered.length > limit && (
+            <div className="shelf-more">
+              <button
+                className="quiet-button"
+                onClick={() => setLimit((n) => n + 4)}
+              >
+                Explore more connections <ArrowDown className="h-4 w-4" />
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>

@@ -7,6 +7,7 @@ import {
   DndContext,
   closestCenter,
   PointerSensor,
+  KeyboardSensor,
   useSensor,
   useSensors,
   type DragEndEvent,
@@ -14,6 +15,7 @@ import {
 import {
   SortableContext,
   rectSortingStrategy,
+  sortableKeyboardCoordinates,
   useSortable,
   arrayMove,
 } from "@dnd-kit/sortable";
@@ -21,7 +23,10 @@ import { CSS } from "@dnd-kit/utilities";
 import type { CollectionWithCovers } from "@/types/database";
 
 function toSlug(name: string): string {
-  return name.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+  return name
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^a-z0-9-]/g, "");
 }
 
 interface CollectionCarouselProps {
@@ -63,7 +68,9 @@ function GalleryCovers({ coverUrls }: { coverUrls: (string | null)[] }) {
               className="h-full w-full object-cover"
             />
           ) : (
-            <div className={`h-full w-full ${placeholderColors[i] ?? "bg-amber/20"}`} />
+            <div
+              className={`h-full w-full ${placeholderColors[i] ?? "bg-amber/20"}`}
+            />
           )}
         </div>
       ))}
@@ -85,8 +92,14 @@ function SortableGalleryCard({
   onDelete: (id: string) => void;
 }) {
   const [confirmDelete, setConfirmDelete] = useState(false);
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
-    useSortable({ id: collection.id });
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: collection.id });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -100,8 +113,10 @@ function SortableGalleryCard({
     <div
       ref={setNodeRef}
       style={style}
-      className={`group relative h-[120px] overflow-hidden rounded-xl bg-gradient-to-br ${gradient} transition-all hover:-translate-y-0.5 hover:shadow-lg ${
-        isSelected ? "ring-2 ring-amber ring-offset-2 ring-offset-background" : ""
+      className={`collection-tile group relative h-[120px] overflow-hidden rounded-xl bg-gradient-to-br ${gradient} transition-all hover:-translate-y-0.5 hover:shadow-lg ${
+        isSelected
+          ? "ring-2 ring-amber ring-offset-2 ring-offset-background"
+          : ""
       }`}
     >
       {confirmDelete ? (
@@ -129,7 +144,8 @@ function SortableGalleryCard({
               e.stopPropagation();
               setConfirmDelete(true);
             }}
-            className="absolute right-1.5 top-1.5 z-10 rounded-full p-0.5 text-white/40 opacity-0 transition-opacity hover:text-white group-hover:opacity-100"
+            aria-label={`Delete ${collection.name}`}
+            className="absolute right-1.5 top-1.5 z-10 rounded-full p-0.5 text-white/40 opacity-0 transition-opacity hover:text-white group-hover:opacity-100 group-focus-within:opacity-100"
           >
             <X className="h-3.5 w-3.5" />
           </button>
@@ -137,14 +153,16 @@ function SortableGalleryCard({
             {...attributes}
             {...listeners}
             onClick={onSelect}
+            aria-pressed={isSelected}
             className="flex h-full w-full cursor-pointer flex-col justify-end p-4"
           >
             <GalleryCovers coverUrls={collection.cover_urls} />
-            <p className="relative z-[2] truncate font-serif text-[15px] font-semibold text-white">
+            <p className="relative z-[2] line-clamp-2 text-left font-serif text-[15px] font-semibold text-white">
               {collection.name}
             </p>
             <p className="relative z-[2] text-[11px] text-amber">
-              {collection.book_count} {collection.book_count === 1 ? "book" : "books"}
+              {collection.book_count}{" "}
+              {collection.book_count === 1 ? "book" : "books"}
             </p>
           </button>
           {/* Bottom gradient overlay for text readability */}
@@ -161,13 +179,17 @@ export function CollectionCarousel({
   onCollectionChange,
 }: CollectionCarouselProps) {
   const [collections, setCollections] = useState<CollectionWithCovers[]>([]);
+  const [error, setError] = useState<string | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [newName, setNewName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 8 } })
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
   );
 
   const fetchCollections = useCallback(async () => {
@@ -176,9 +198,9 @@ export function CollectionCarousel({
       if (res.ok) {
         const data = await res.json();
         setCollections(data);
-      }
+      } else throw new Error();
     } catch {
-      // silent
+      setError("Collections couldn’t load. Please try again.");
     }
   }, []);
 
@@ -189,9 +211,13 @@ export function CollectionCarousel({
   // Resolve slug → ID on initial load for URL-based navigation
   useEffect(() => {
     if (selectedCollectionSlug && collections.length > 0) {
-      const match = collections.find((c) => toSlug(c.name) === selectedCollectionSlug);
+      const match = collections.find(
+        (c) => toSlug(c.name) === selectedCollectionSlug,
+      );
       if (match) {
         onSelectCollection(selectedCollectionSlug, match.id);
+      } else {
+        onSelectCollection(null, null);
       }
     }
   }, [collections, selectedCollectionSlug]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -212,11 +238,17 @@ export function CollectionCarousel({
     setCollections(reordered);
 
     const orderedIds = reordered.map((c) => c.id);
-    await fetch("/api/collections/reorder", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ orderedIds }),
-    });
+    try {
+      const res = await fetch("/api/collections/reorder", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderedIds }),
+      });
+      if (!res.ok) throw new Error();
+    } catch {
+      setCollections(collections);
+      setError("The new order couldn’t be saved. Try again.");
+    }
   }
 
   async function handleDelete(id: string) {
@@ -229,9 +261,9 @@ export function CollectionCarousel({
           onSelectCollection(null, null);
         }
         onCollectionChange();
-      }
+      } else throw new Error();
     } catch {
-      // silent
+      setError("The collection couldn’t be deleted. Please try again.");
     }
   }
 
@@ -239,6 +271,7 @@ export function CollectionCarousel({
     const trimmed = newName.trim();
     if (!trimmed || isSubmitting) return;
 
+    setError(null);
     setIsSubmitting(true);
     try {
       const res = await fetch("/api/collections", {
@@ -251,7 +284,9 @@ export function CollectionCarousel({
         setIsCreating(false);
         await fetchCollections();
         onCollectionChange();
-      }
+      } else throw new Error();
+    } catch {
+      setError("The collection couldn’t be created. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -259,14 +294,26 @@ export function CollectionCarousel({
 
   return (
     <div className="w-full">
-      <p className="mb-3 font-serif text-[11px] uppercase tracking-[2.5px] text-warm-gray">
-        Collections
-      </p>
-      <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-5">
+      {error && (
+        <div className="error-panel" role="alert">
+          {error}
+          <button
+            onClick={() => {
+              setError(null);
+              void fetchCollections();
+            }}
+          >
+            Retry
+          </button>
+        </div>
+      )}
+      <p className="eyebrow mb-3">Collections</p>
+      <div className="collection-strip">
         {/* All Books card */}
         <button
+          aria-pressed={selectedCollectionSlug === null}
           onClick={() => onSelectCollection(null, null)}
-          className={`relative flex h-[120px] cursor-pointer flex-col justify-end overflow-hidden rounded-xl bg-gradient-to-br from-[#2C2416] to-[#4A3828] p-4 transition-all hover:-translate-y-0.5 hover:shadow-lg ${
+          className={`collection-tile relative flex h-[120px] cursor-pointer flex-col justify-end overflow-hidden rounded-xl bg-gradient-to-br from-[#2C2416] to-[#4A3828] p-4 transition-all hover:-translate-y-0.5 hover:shadow-lg ${
             selectedCollectionSlug === null
               ? "ring-2 ring-amber ring-offset-2 ring-offset-background"
               : ""
@@ -298,7 +345,9 @@ export function CollectionCarousel({
                 collection={collection}
                 isSelected={selectedCollectionSlug === toSlug(collection.name)}
                 gradientIndex={i + 1}
-                onSelect={() => onSelectCollection(toSlug(collection.name), collection.id)}
+                onSelect={() =>
+                  onSelectCollection(toSlug(collection.name), collection.id)
+                }
                 onDelete={handleDelete}
               />
             ))}
@@ -307,7 +356,7 @@ export function CollectionCarousel({
 
         {/* New Collection card */}
         {isCreating ? (
-          <div className="flex h-[120px] flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-warm-border p-3">
+          <div className="collection-tile flex h-[120px] flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-warm-border p-3">
             <input
               ref={inputRef}
               type="text"
@@ -341,10 +390,12 @@ export function CollectionCarousel({
         ) : (
           <button
             onClick={() => setIsCreating(true)}
-            className="flex h-[120px] flex-col items-center justify-center gap-1 rounded-xl border border-dashed border-warm-border transition-all hover:border-amber hover:text-amber"
+            className="collection-tile flex h-[120px] flex-col items-center justify-center gap-1 rounded-xl border border-dashed border-warm-border transition-all hover:border-amber hover:text-amber"
           >
             <Plus className="h-5 w-5 text-warm-gray" />
-            <span className="font-sans text-xs text-warm-gray">New Collection</span>
+            <span className="font-sans text-xs text-warm-gray">
+              New Collection
+            </span>
           </button>
         )}
       </div>

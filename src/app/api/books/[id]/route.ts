@@ -5,7 +5,10 @@ import type { ChangelogAction } from "@/types/database";
 
 // Lookup by UUID or slug
 async function findBook(idOrSlug: string) {
-  const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(idOrSlug);
+  const isUUID =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+      idOrSlug,
+    );
 
   if (isUUID) {
     return supabase.from("books").select("*").eq("id", idOrSlug).single();
@@ -15,7 +18,7 @@ async function findBook(idOrSlug: string) {
 
 export async function GET(
   _request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
   const { data, error } = await findBook(id);
@@ -29,7 +32,7 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
   const { data: book } = await findBook(id);
@@ -38,6 +41,20 @@ export async function PATCH(
   }
 
   const body = await request.json();
+
+  if (!body || typeof body !== "object" || Array.isArray(body)) {
+    return NextResponse.json({ error: "Expected an object" }, { status: 400 });
+  }
+  if (
+    "notes" in body &&
+    body.notes !== null &&
+    (typeof body.notes !== "string" || body.notes.length > 50000)
+  ) {
+    return NextResponse.json(
+      { error: "Notes must be text, up to 50,000 characters" },
+      { status: 400 },
+    );
+  }
 
   // Whitelist allowed fields
   const allowedFields = [
@@ -54,6 +71,7 @@ export async function PATCH(
     "amazon_link",
     "date_started",
     "date_finished",
+    "notes",
   ];
 
   const updates: Record<string, unknown> = {};
@@ -64,10 +82,20 @@ export async function PATCH(
   }
 
   // Auto-set dates based on status changes
-  if (updates.status === "reading" && !updates.date_started) {
+  if (
+    updates.status === "reading" &&
+    book.status !== "reading" &&
+    !book.date_started &&
+    !updates.date_started
+  ) {
     updates.date_started = new Date().toISOString();
   }
-  if (updates.status === "read" && !updates.date_finished) {
+  if (
+    updates.status === "read" &&
+    book.status !== "read" &&
+    !book.date_finished &&
+    !updates.date_finished
+  ) {
     updates.date_finished = new Date().toISOString();
   }
 
@@ -92,7 +120,10 @@ export async function PATCH(
 
   // Log changes for tracked fields
   for (const { field, action } of trackedFields) {
-    if (field in updates && String(book[field] ?? "") !== String(updates[field] ?? "")) {
+    if (
+      field in updates &&
+      String(book[field] ?? "") !== String(updates[field] ?? "")
+    ) {
       await logChange({
         bookId: book.id,
         bookTitle: book.title,
@@ -109,7 +140,7 @@ export async function PATCH(
 
 export async function DELETE(
   _request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
   const { data: book } = await findBook(id);
@@ -125,10 +156,7 @@ export async function DELETE(
     action: "removed",
   });
 
-  const { error } = await supabase
-    .from("books")
-    .delete()
-    .eq("id", book.id);
+  const { error } = await supabase.from("books").delete().eq("id", book.id);
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });

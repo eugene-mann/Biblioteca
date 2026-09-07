@@ -11,23 +11,43 @@ interface SuggestedBookCardProps {
   onAdd?: () => void;
 }
 
-export function SuggestedBookCard({ book, variant, onAdd }: SuggestedBookCardProps) {
+export function SuggestedBookCard({
+  book,
+  variant,
+  onAdd,
+}: SuggestedBookCardProps) {
+  const [error, setError] = useState<string | null>(null);
   const [isAdding, setIsAdding] = useState(false);
   const [isAdded, setIsAdded] = useState(false);
 
   async function handleAdd() {
     setIsAdding(true);
+    setError(null);
     try {
       // Search for full metadata first
       const query = book.isbn_13
         ? `isbn:${book.isbn_13}`
         : `${book.title} ${book.authors[0] ?? ""}`;
-      const searchRes = await fetch(`/api/books/search?q=${encodeURIComponent(query)}`);
+      const searchRes = await fetch(
+        `/api/books/search?q=${encodeURIComponent(query)}`,
+      );
       const results = await searchRes.json();
 
       // Use first result, or construct minimal book data
-      const bookData = Array.isArray(results) && results.length > 0
-        ? results[0]
+      const match = Array.isArray(results)
+        ? results.find(
+            (result) =>
+              (book.isbn_13 && result.isbn_13 === book.isbn_13) ||
+              (result.title?.toLowerCase() === book.title.toLowerCase() &&
+                result.authors?.some((author: string) =>
+                  book.authors.some(
+                    (name) => name.toLowerCase() === author.toLowerCase(),
+                  ),
+                )),
+          )
+        : undefined;
+      const bookData = match
+        ? match
         : {
             title: book.title,
             authors: book.authors,
@@ -47,9 +67,9 @@ export function SuggestedBookCard({ book, variant, onAdd }: SuggestedBookCardPro
         setIsAdded(true);
         window.dispatchEvent(new Event("biblioteca:book-added"));
         onAdd?.();
-      }
+      } else throw new Error();
     } catch {
-      // Silent fail — user can retry
+      setError("Couldn’t add this book. Please try again.");
     } finally {
       setIsAdding(false);
     }
@@ -65,6 +85,11 @@ export function SuggestedBookCard({ book, variant, onAdd }: SuggestedBookCardPro
           className="!w-16 !h-24 shrink-0"
         />
         <div className="min-w-0 flex-1">
+          {error && (
+            <p role="alert" className="text-xs text-destructive">
+              {error}
+            </p>
+          )}
           <div className="flex items-center gap-2 mb-0.5">
             <h4 className="font-serif text-base font-semibold leading-tight truncate">
               {book.title}
@@ -113,6 +138,11 @@ export function SuggestedBookCard({ book, variant, onAdd }: SuggestedBookCardPro
         className="!h-[48px] !w-[32px]"
       />
       <div className="min-w-0 flex-1">
+        {error && (
+          <p role="alert" className="text-xs text-destructive">
+            {error}
+          </p>
+        )}
         <div className="flex items-center gap-2">
           <p className="truncate font-sans text-sm font-medium text-foreground">
             {book.title}

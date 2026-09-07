@@ -34,14 +34,16 @@ export default function BookDetailPage({
   const { id } = use(params);
   const router = useRouter();
   const [book, setBook] = useState<Book | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [isUpdating, setIsUpdating] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
   const [activeTab, setActiveTab] = useState<string>("Insights");
 
   useEffect(() => {
     async function fetchBook() {
-      const res = await fetch(`/api/books/${id}`);
-      if (res.ok) {
+      const res = await fetch(`/api/books/${id}`).catch(() => null);
+      if (res?.ok) {
         setBook(await res.json());
       }
       setIsLoading(false);
@@ -50,25 +52,36 @@ export default function BookDetailPage({
   }, [id]);
 
   async function updateBook(updates: Partial<Book>) {
-    if (!book) return;
-    setBook({ ...book, ...updates });
-    const res = await fetch(`/api/books/${id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updates),
-    });
-    if (res.ok) {
+    if (!book || isUpdating) return;
+    setIsUpdating(true);
+    setError(null);
+    try {
+      const res = await fetch(`/api/books/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updates),
+      });
+      if (!res.ok) throw new Error();
       setBook(await res.json());
+      window.dispatchEvent(new Event("biblioteca:book-added"));
+    } catch {
+      setError("That change wasn’t saved. Please try again.");
+    } finally {
+      setIsUpdating(false);
     }
   }
 
   async function deleteBook() {
     if (!book) return;
     setIsDeleting(true);
-    const res = await fetch(`/api/books/${id}`, { method: "DELETE" });
-    if (res.ok) {
+    const res = await fetch(`/api/books/${id}`, { method: "DELETE" }).catch(
+      () => null,
+    );
+    if (res?.ok) {
+      window.dispatchEvent(new Event("biblioteca:book-added"));
       router.push("/");
     } else {
+      setError("This book couldn’t be removed. Please try again.");
       setIsDeleting(false);
     }
   }
@@ -78,7 +91,10 @@ export default function BookDetailPage({
       <div className="mx-auto max-w-3xl animate-pulse">
         <div className="mb-6 h-5 w-32 rounded bg-muted" />
         <div className="flex flex-col gap-8 sm:flex-row">
-          <div className="shrink-0 rounded-lg bg-muted" style={{ width: 200, height: 300 }} />
+          <div
+            className="shrink-0 rounded-lg bg-muted"
+            style={{ width: 200, height: 300 }}
+          />
           <div className="flex flex-1 flex-col gap-4">
             <div className="h-8 w-3/4 rounded bg-muted" />
             <div className="h-5 w-1/2 rounded bg-muted" />
@@ -108,8 +124,13 @@ export default function BookDetailPage({
 
   return (
     <div className="mx-auto max-w-3xl animate-in fade-in duration-300">
+      {error && (
+        <div role="alert" className="error-panel">
+          {error}
+        </div>
+      )}
       {/* Hero Section */}
-      <div className="bg-gradient-to-b from-amber/5 to-transparent rounded-xl p-6 sm:p-8 mb-8">
+      <div className="rounded-lg border border-warm-border bg-[#eeefe5] p-6 sm:p-8 mb-8">
         {/* Back navigation */}
         <button
           onClick={() => router.back()}
@@ -134,7 +155,9 @@ export default function BookDetailPage({
 
             {/* Subtitle */}
             {book.subtitle && (
-              <p className="font-sans text-base text-warm-gray italic">{book.subtitle}</p>
+              <p className="font-sans text-base text-warm-gray italic">
+                {book.subtitle}
+              </p>
             )}
 
             {/* Author(s) */}
@@ -154,7 +177,10 @@ export default function BookDetailPage({
             </p>
 
             {/* Primary Actions Row */}
-            <div className="flex items-center gap-3 mt-4">
+            <div
+              className={`flex flex-wrap items-center gap-3 mt-4 ${isUpdating ? "pointer-events-none opacity-60" : ""}`}
+              aria-busy={isUpdating}
+            >
               {/* Status dropdown */}
               <StatusDropdown
                 status={book.status}
@@ -186,20 +212,25 @@ export default function BookDetailPage({
       <div className="mt-6">
         {activeTab === "About" && (
           <div className="space-y-6">
-            {book.description && <DescriptionSection description={book.description} />}
+            {book.description && (
+              <DescriptionSection description={book.description} />
+            )}
             <MetadataGrid book={book} />
           </div>
         )}
 
         {activeTab === "Insights" && <InsightsSection bookId={book.id} />}
 
-        {activeTab === "Notes" && (
+        <div hidden={activeTab !== "Notes"}>
           <NotesTab
             bookId={book.id}
             initialNotes={book.notes}
             bookStatus={book.status}
+            onSaved={(notes) =>
+              setBook((current) => (current ? { ...current, notes } : current))
+            }
           />
-        )}
+        </div>
       </div>
 
       {/* More by Author — always visible below tabs */}
@@ -237,7 +268,10 @@ function StatusDropdown({
       </button>
       {isOpen && (
         <>
-          <div className="fixed inset-0 z-10" onClick={() => setIsOpen(false)} />
+          <div
+            className="fixed inset-0 z-10"
+            onClick={() => setIsOpen(false)}
+          />
           <div className="absolute left-0 z-20 mt-1 min-w-[160px] rounded-lg border border-warm-border bg-card p-1 shadow-lg">
             {STATUS_OPTIONS.map((opt) => (
               <button
@@ -247,7 +281,9 @@ function StatusDropdown({
                   setIsOpen(false);
                 }}
                 className={`flex w-full items-center rounded-sm px-3 py-1.5 text-left text-sm transition-colors hover:bg-secondary ${
-                  status === opt.value ? "font-semibold text-foreground" : "text-warm-gray"
+                  status === opt.value
+                    ? "font-semibold text-foreground"
+                    : "text-warm-gray"
                 }`}
               >
                 {opt.label}
@@ -274,7 +310,9 @@ function RatingStars({
       {externalRating != null && (
         <>
           <Star className="h-3.5 w-3.5 fill-amber text-amber" />
-          <span className="font-sans text-xs text-foreground">{externalRating}</span>
+          <span className="font-sans text-xs text-foreground">
+            {externalRating}
+          </span>
           <span className="mx-1 text-warm-border">|</span>
         </>
       )}
@@ -283,11 +321,15 @@ function RatingStars({
           <button
             key={n}
             onClick={() => onChange(n === rating ? null : n)}
-            className="p-0"
+            aria-label={`Rate ${n} out of 5`}
+            aria-pressed={rating === n}
+            className="p-1"
           >
             <Star
               className={`h-3.5 w-3.5 ${
-                n <= (rating ?? 0) ? "fill-amber text-amber" : "text-warm-border"
+                n <= (rating ?? 0)
+                  ? "fill-amber text-amber"
+                  : "text-warm-border"
               }`}
             />
           </button>

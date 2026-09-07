@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import Link from "next/link";
+import { LibraryProvider } from "@/components/library-provider";
 import { Playfair_Display, Libre_Franklin } from "next/font/google";
 import { Nav } from "@/components/nav";
 import "./globals.css";
@@ -45,39 +47,88 @@ export default function RootLayout({
       <body
         className={`${playfair.variable} ${libreFranklin.variable} antialiased`}
       >
-        <Nav />
-        <main className="mx-auto max-w-6xl px-4 py-6 pb-20 md:px-8 md:pb-6">
-          {children}
-        </main>
-        <footer className="hidden md:block border-t border-warm-border px-8 py-10 text-warm-gray">
-          <div className="mx-auto max-w-6xl flex items-start justify-between gap-12">
-            <div className="flex flex-col gap-2">
-              <span className="font-serif text-lg font-semibold text-foreground">Biblioteca</span>
-              <p className="max-w-xs font-sans text-xs leading-relaxed">
-                Organize your books. Enrich them with meaning. Discover what to read next.
-              </p>
-            </div>
-            <div className="flex gap-12">
+        <LibraryProvider>
+          <a href="#main-content" className="skip-link">
+            Skip to content
+          </a>
+          <Nav />
+          <main id="main-content" className="app-main">
+            {children}
+          </main>
+          <footer className="hidden md:block border-t border-warm-border px-8 py-10 text-warm-gray">
+            <div className="mx-auto max-w-6xl flex items-start justify-between gap-12">
               <div className="flex flex-col gap-2">
-                <span className="font-sans text-[10px] font-semibold uppercase tracking-widest">Navigate</span>
-                <nav className="flex flex-col gap-1.5">
-                  <a href="/" className="font-sans text-xs transition-colors hover:text-foreground">Library</a>
-                  <a href="/connections" className="font-sans text-xs transition-colors hover:text-foreground">Connections</a>
-                  <a href="/discover" className="font-sans text-xs transition-colors hover:text-foreground">Discover</a>
-                  <a href="/activity" className="font-sans text-xs transition-colors hover:text-foreground">Activity</a>
-                  <a href="/profile" className="font-sans text-xs transition-colors hover:text-foreground">Profile</a>
-                  <a href="/settings" className="font-sans text-xs transition-colors hover:text-foreground">Settings</a>
-                </nav>
+                <span className="font-serif text-lg font-semibold text-foreground">
+                  Biblioteca
+                </span>
+                <p className="max-w-xs font-sans text-xs leading-relaxed">
+                  Organize your books. Enrich them with meaning. Discover what
+                  to read next.
+                </p>
               </div>
-              <div className="flex flex-col gap-2">
-                <span className="font-sans text-[10px] font-semibold uppercase tracking-widest">Project</span>
-                <nav className="flex flex-col gap-1.5">
-                  <a href="https://github.com/eugene-mann/Biblioteca" target="_blank" rel="noopener noreferrer" className="font-sans text-xs transition-colors hover:text-foreground">Contribute</a>
-                </nav>
+              <div className="flex gap-12">
+                <div className="flex flex-col gap-2">
+                  <span className="font-sans text-[10px] font-semibold uppercase tracking-widest">
+                    Navigate
+                  </span>
+                  <nav className="flex flex-col gap-1.5">
+                    <Link
+                      href="/"
+                      className="font-sans text-xs transition-colors hover:text-foreground"
+                    >
+                      Library
+                    </Link>
+                    <Link
+                      href="/connections"
+                      className="font-sans text-xs transition-colors hover:text-foreground"
+                    >
+                      Connections
+                    </Link>
+                    <Link
+                      href="/discover"
+                      className="font-sans text-xs transition-colors hover:text-foreground"
+                    >
+                      Discover
+                    </Link>
+                    <Link
+                      href="/activity"
+                      className="font-sans text-xs transition-colors hover:text-foreground"
+                    >
+                      Activity
+                    </Link>
+                    <Link
+                      href="/profile"
+                      className="font-sans text-xs transition-colors hover:text-foreground"
+                    >
+                      Profile
+                    </Link>
+                    <Link
+                      href="/settings"
+                      className="font-sans text-xs transition-colors hover:text-foreground"
+                    >
+                      Settings
+                    </Link>
+                  </nav>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <span className="font-sans text-[10px] font-semibold uppercase tracking-widest">
+                    Project
+                  </span>
+                  <nav className="flex flex-col gap-1.5">
+                    <a
+                      href="https://github.com/eugene-mann/Biblioteca"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-sans text-xs transition-colors hover:text-foreground"
+                    >
+                      Contribute
+                    </a>
+                  </nav>
+                </div>
               </div>
             </div>
-          </div>
-        </footer>
+          </footer>
+        </LibraryProvider>
       </body>
     </html>
   );

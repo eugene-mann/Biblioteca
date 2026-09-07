@@ -1,99 +1,107 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BookOpen, Compass, Sparkles, Clock, User, Search } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { SearchBar } from "./search-bar";
-import { MobileSearchOverlay } from "@/components/mobile-search-overlay";
-
-const navItems = [
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+const items = [
   { href: "/", label: "Library", icon: BookOpen },
   { href: "/explore", label: "Explore", icon: Compass },
   { href: "/discover", label: "Discover", icon: Sparkles },
   { href: "/activity", label: "Activity", icon: Clock },
   { href: "/profile", label: "Profile", icon: User },
 ];
-
 export function Nav() {
   const pathname = usePathname();
-  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
-
+  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    const show = () => setOpen(true);
+    const keyboard = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setOpen((value) => !value);
+      }
+    };
+    window.addEventListener("biblioteca:search", show);
+    window.addEventListener("keydown", keyboard);
+    return () => {
+      window.removeEventListener("biblioteca:search", show);
+      window.removeEventListener("keydown", keyboard);
+    };
+  }, []);
+  const active = (href: string) =>
+    href === "/"
+      ? pathname === "/" || pathname.startsWith("/library")
+      : pathname.startsWith(href);
   return (
     <>
-      {/* Desktop top nav — sticky frosted glass */}
-      <nav className="hidden md:flex items-center gap-6 sticky top-0 z-50 border-b border-warm-border bg-background/92 backdrop-blur-md px-8 py-3">
-        <Link
-          href="/"
-          className="shrink-0 font-serif italic text-xl font-semibold text-amber"
-        >
-          Biblioteca
-        </Link>
-        <SearchBar />
-        <div className="flex shrink-0 items-center gap-6">
-          {navItems.map((item) => {
-            const isActive =
-              item.href === "/"
-                ? pathname === "/" || pathname.startsWith("/library")
-                : pathname.startsWith(item.href);
-            return (
+      <header className="app-header">
+        <div className="app-header-inner">
+          <Link href="/" className="wordmark">
+            <span className="brand-seal">
+              <BookOpen className="h-4 w-4" />
+            </span>
+            Biblioteca<span className="brand-period">.</span>
+          </Link>
+          <nav aria-label="Main navigation" className="desktop-nav">
+            {items.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className={cn(
-                  "font-sans uppercase tracking-[0.15em] text-xs font-medium py-1 transition-colors border-b-2",
-                  isActive
-                    ? "text-foreground border-amber"
-                    : "text-warm-gray hover:text-foreground border-transparent"
-                )}
+                aria-current={active(item.href) ? "page" : undefined}
               >
                 {item.label}
               </Link>
-            );
-          })}
+            ))}
+          </nav>
+          <button
+            onClick={() => setOpen(true)}
+            className="nav-search"
+            aria-label="Search books"
+          >
+            <Search className="h-4 w-4" />
+            <span>Search books</span>
+            <kbd>⌘ K</kbd>
+          </button>
+          <Link
+            href="/profile"
+            className="nav-avatar"
+            aria-label="Your reading profile"
+          >
+            <User className="h-4 w-4" />
+          </Link>
         </div>
+      </header>
+      <nav className="mobile-nav" aria-label="Mobile navigation">
+        {items.map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            aria-current={active(item.href) ? "page" : undefined}
+          >
+            <item.icon className="h-5 w-5" />
+            <span>{item.label}</span>
+          </Link>
+        ))}
       </nav>
-
-      {/* Mobile search button — floating top-right */}
-      <button
-        onClick={() => setMobileSearchOpen(true)}
-        className="fixed top-4 right-4 z-50 md:hidden bg-card border border-warm-border rounded-full p-2.5 shadow-md"
-        aria-label="Search"
-      >
-        <Search className="h-5 w-5 text-foreground" />
-      </button>
-
-      {/* Mobile search overlay */}
-      <MobileSearchOverlay
-        isOpen={mobileSearchOpen}
-        onClose={() => setMobileSearchOpen(false)}
-      />
-
-      {/* Mobile bottom nav — fixed frosted glass */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-around border-t border-warm-border bg-background/92 backdrop-blur-md py-2 md:hidden">
-        {navItems.map((item) => {
-          const isActive =
-            item.href === "/"
-              ? pathname === "/" || pathname.startsWith("/library")
-              : pathname.startsWith(item.href);
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "flex flex-col items-center gap-1 px-3 py-1 font-sans uppercase tracking-[0.15em] text-[10px] font-medium transition-colors",
-                isActive
-                  ? "text-foreground"
-                  : "text-warm-gray"
-              )}
-            >
-              <item.icon className={cn("h-5 w-5", isActive ? "text-amber" : "")} />
-              {item.label}
-            </Link>
-          );
-        })}
-      </nav>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="!max-w-xl !p-6">
+          <DialogTitle className="!font-serif !text-2xl">
+            Find your next chapter.
+          </DialogTitle>
+          <DialogDescription>
+            Search your library or find a new book to add.
+          </DialogDescription>
+          <SearchBar onNavigate={() => setOpen(false)} />
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
