@@ -1,69 +1,115 @@
 "use client";
 
 import Link from "next/link";
+import { ArrowUpRight, ArrowRight, BookOpen } from "lucide-react";
 import { BookCover } from "@/components/book-cover";
 import type { Book } from "@/types/database";
 
-interface NowReadingHeroProps {
-  books: Book[];
-}
-
-function formatDate(dateStr: string | null): string {
-  if (!dateStr) return "";
-  const date = new Date(dateStr);
-  return date.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
-}
-
-function ReadingCard({ book }: { book: Book }) {
+export function NowReadingHero({ books }: { books: Book[] }) {
+  const reading = books
+    .filter((b) => b.status === "reading")
+    .sort(
+      (a, b) =>
+        Date.parse(b.date_started ?? b.date_added) -
+        Date.parse(a.date_started ?? a.date_added),
+    );
+  const featured = reading[0] ?? books.find((b) => b.status === "want_to_read");
+  if (!featured) return null;
   return (
-    <Link
-      href={`/library/${book.slug || book.id}`}
-      className="flex min-w-[340px] gap-5 rounded-lg p-2 transition-colors hover:bg-amber/5"
-    >
-      <div className="shrink-0">
-        <BookCover title={book.title} coverUrl={book.cover_image_url} size="lg" priority />
-      </div>
-      <div className="flex flex-col justify-center gap-1.5 py-2">
-        <h3 className="font-serif text-2xl font-bold text-foreground leading-tight">
-          {book.title}
-        </h3>
-        <p className="font-sans text-sm text-warm-gray">
-          {book.authors.join(", ")}
-        </p>
-        {book.date_started && (
-          <p className="font-sans text-xs text-warm-gray">
-            Started {formatDate(book.date_started)}
+    <section className="reading-desk" aria-label="Your reading desk">
+      <div className="reading-feature">
+        <div className="reading-feature-copy">
+          <p className="eyebrow flex items-center gap-2 !text-[#d6c49f]">
+            <span className="reading-dot" />
+            {reading.length ? "Currently reading" : "Next on your list"}
           </p>
-        )}
-        {book.page_count && (
-          <p className="font-sans text-xs text-warm-gray">
-            {book.page_count} pages
+          <h2 className="mt-4 font-serif text-3xl leading-[1.12] lg:text-[38px]">
+            {featured.title}
+          </h2>
+          <p className="mt-3 text-sm text-white/65">
+            {featured.authors.join(", ")}
           </p>
-        )}
-      </div>
-    </Link>
-  );
-}
-
-export function NowReadingHero({ books }: NowReadingHeroProps) {
-  const reading = books.filter((b) => b.status === "reading");
-
-  if (reading.length === 0) return null;
-
-  return (
-    <div className="animate-in fade-in duration-500 rounded-xl bg-gradient-to-r from-amber/5 to-amber/10 border border-amber/20 p-6 mb-8">
-      <h2 className="font-sans text-xs font-semibold uppercase tracking-widest text-warm-gray mb-4">
-        Now Reading
-      </h2>
-      {reading.length === 1 ? (
-        <ReadingCard book={reading[0]} />
-      ) : (
-        <div className="flex gap-6 overflow-x-auto pb-2 -mx-2">
-          {reading.map((book) => (
-            <ReadingCard key={book.id} book={book} />
-          ))}
+          <p className="mt-5 flex items-center gap-2 text-[11px] text-white/60">
+            <BookOpen className="h-3.5 w-3.5" />
+            {featured.page_count
+              ? `${featured.page_count} pages`
+              : "A good place to begin"}
+            {featured.category && (
+              <>
+                <span className="mx-1">·</span>
+                {featured.category}
+              </>
+            )}
+          </p>
+          <Link
+            href={`/library/${featured.slug || featured.id}`}
+            className="reading-continue"
+          >
+            {reading.length ? "Return to this book" : "Open this book"}
+            <ArrowRight className="h-4 w-4" />
+          </Link>
         </div>
-      )}
-    </div>
+        <Link
+          href={`/library/${featured.slug || featured.id}`}
+          className="reading-feature-cover"
+          aria-label={`Open ${featured.title}`}
+        >
+          <BookCover
+            title={featured.title}
+            coverUrl={featured.cover_image_url}
+            size="lg"
+            priority
+          />
+        </Link>
+        <span aria-hidden="true" className="reading-watermark">
+          B.
+        </span>
+      </div>
+      <aside className="reading-aside">
+        <div className="mb-4 flex items-center justify-between">
+          <p className="eyebrow">On your nightstand</p>
+          <span className="text-xs text-warm-gray">
+            {reading.length || "—"}
+          </span>
+        </div>
+        {reading.slice(1, 3).map((book) => (
+          <Link
+            key={book.id}
+            href={`/library/${book.slug || book.id}`}
+            className="nightstand-book"
+          >
+            <BookCover
+              title={book.title}
+              coverUrl={book.cover_image_url}
+              size="sm"
+              className="!h-[72px] !w-12"
+            />
+            <div className="min-w-0 flex-1">
+              <h3 className="line-clamp-2 font-serif text-base leading-snug">
+                {book.title}
+              </h3>
+              <p className="mt-1 text-[11px] text-warm-gray">
+                {book.authors[0]}
+              </p>
+            </div>
+            <ArrowUpRight className="h-4 w-4 shrink-0 text-warm-gray" />
+          </Link>
+        ))}
+        {reading.length < 2 && (
+          <p className="py-5 font-serif text-xl leading-relaxed text-warm-gray">
+            There’s always room for another good book.
+          </p>
+        )}
+        <Link
+          href={reading.length > 1 ? "/?status=reading" : "/discover"}
+          className="mt-auto flex items-center justify-between border-t border-warm-border pt-4 text-xs font-medium"
+        >
+          {reading.length > 1
+            ? "View your reading shelf"
+            : "Find your next read"}
+          <ArrowRight className="h-3.5 w-3.5" />
+        </Link>
+      </aside>
+    </section>
   );
 }

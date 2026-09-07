@@ -1,129 +1,99 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
-import { Heart, Star } from "lucide-react";
+import { Heart, Star, ArrowUpRight } from "lucide-react";
 import { BookCover } from "./book-cover";
 import type { Book } from "@/types/database";
 
+const STATUS = {
+  read: "Finished",
+  reading: "Reading",
+  want_to_read: "To read",
+};
 interface BookGridProps {
   books: Book[];
   renderAfter?: React.ReactNode;
-  /** Eagerly load images (for first visible chunk) */
   priority?: boolean;
-  /** Defer rendering until visible in viewport */
-  lazy?: boolean;
+  view?: "grid" | "list";
 }
-
-function RatingPill({ rating, externalRating }: { rating: number | null; externalRating: number | null }) {
-  if (rating === null && externalRating === null) return null;
+export function BookGridSkeleton({ count = 12 }: { count?: number }) {
   return (
-    <div className="mt-1.5 inline-flex items-center gap-1 rounded-full border border-warm-border px-2 py-0.5">
-      {externalRating != null && (
-        <>
-          <Star className="h-2.5 w-2.5 fill-amber text-amber" />
-          <span className="font-sans text-[10px] text-foreground">{externalRating}</span>
-          {rating != null && <span className="mx-0.5 text-[10px] text-warm-border">|</span>}
-        </>
-      )}
-      {rating != null && (
-        <div className="flex items-center">
-          {[1, 2, 3, 4, 5].map((n) => (
-            <Star
-              key={n}
-              className={`h-2.5 w-2.5 ${
-                n <= rating ? "fill-amber text-amber" : "text-warm-border"
-              }`}
-            />
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
-export function BookGridSkeleton({ count = 10 }: { count?: number }) {
-  return (
-    <div className="grid w-full grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-      {Array.from({ length: count }).map((_, i) => (
-        <div key={i} className="flex flex-col items-center gap-2 p-1">
-          <div
-            className="animate-pulse rounded-sm bg-muted"
-            style={{ width: 128, height: 192 }}
-          />
-          <div className="flex w-full flex-col items-center gap-1.5">
-            <div className="h-4 w-3/4 animate-pulse rounded-sm bg-muted" />
-            <div className="h-3 w-1/2 animate-pulse rounded-sm bg-muted" />
-          </div>
+    <div className="shelf-grid" aria-label="Loading books" aria-busy="true">
+      {Array.from({ length: count }, (_, i) => (
+        <div key={i} className="space-y-3">
+          <div className="h-56 animate-pulse rounded-lg bg-secondary" />
+          <div className="h-4 w-3/4 animate-pulse bg-secondary" />
+          <div className="h-3 w-1/2 animate-pulse bg-secondary" />
         </div>
       ))}
     </div>
   );
 }
-
-export function BookGrid({ books, renderAfter, priority = false, lazy = false }: BookGridProps) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(!lazy);
-
-  useEffect(() => {
-    if (!lazy || visible) return;
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: "200px" }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [lazy, visible]);
-
-  if (books.length === 0 && !renderAfter) return null;
-
-  if (!visible) {
-    // Reserve space: estimate ~260px per row, 5 cols on desktop
-    const rows = Math.ceil(books.length / 5);
-    return <div ref={ref} style={{ minHeight: rows * 260 }} />;
-  }
-
+export function BookGrid({
+  books,
+  renderAfter,
+  priority = false,
+  view = "grid",
+}: BookGridProps) {
   return (
-    <div ref={ref} className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+    <div className={view === "grid" ? "shelf-grid" : "shelf-list"}>
       {books.map((book, index) => (
         <Link
+          prefetch={false}
           key={book.id}
           data-book-id={book.id}
           href={`/library/${book.slug || book.id}`}
-          className="group flex flex-col items-center gap-2 p-1 transition-all duration-200"
-          style={{ animationDelay: `${index * 30}ms` }}
+          className={`shelf-book group ${view === "list" ? "shelf-book-row" : ""}`}
         >
-          <div className="relative transition-all duration-200 group-hover:-translate-y-0.5 group-hover:shadow-lg group-hover:shadow-warm-gray/10 rounded-sm">
+          <div className="shelf-cover-stage">
             <BookCover
               title={book.title}
               coverUrl={book.cover_image_url}
               size="md"
-              priority={priority}
+              priority={priority && index < 6}
             />
             {book.is_favorite && (
-              <div className="absolute right-1.5 top-1.5">
-                <Heart className="h-4 w-4 fill-amber text-amber drop-shadow" />
-              </div>
+              <Heart
+                aria-label="Favorite"
+                className="absolute right-3 top-3 h-4 w-4 fill-burgundy text-burgundy"
+              />
             )}
+            <span className="shelf-book-open">
+              <ArrowUpRight className="h-4 w-4" />
+            </span>
           </div>
-          <div className="w-full text-center">
-            <p className="truncate font-serif text-sm font-medium">{book.title}</p>
-            <p className="truncate font-sans text-xs text-warm-gray">
+          <div className="min-w-0 flex-1">
+            <p className="mb-1 text-[9px] font-semibold uppercase tracking-[.16em] text-warm-gray">
+              {book.category || "On your shelf"}
+            </p>
+            <h3 className="line-clamp-2 font-serif text-base leading-snug group-hover:text-burgundy">
+              {book.title}
+            </h3>
+            <p className="mt-1 truncate text-xs text-warm-gray">
               {book.authors.join(", ")}
             </p>
-            {book.category && (
-              <p className="mt-0.5 truncate text-[10px] uppercase tracking-wider text-warm-gray">
-                {book.category}
-              </p>
-            )}
-            <RatingPill rating={book.rating} externalRating={book.external_rating} />
+            <div className="mt-3 flex items-center justify-between gap-2 text-[10px]">
+              <span
+                className={`book-status ${book.status === "reading" ? "is-reading" : ""}`}
+              >
+                <span />
+                {STATUS[book.status]}
+              </span>
+              {(book.rating ?? book.external_rating) !== null && (
+                <span
+                  className="flex items-center gap-1 text-warm-gray"
+                  title={
+                    book.rating !== null ? "Your rating" : "Community rating"
+                  }
+                >
+                  <Star className="h-3 w-3 fill-amber text-amber" />
+                  {book.rating ?? book.external_rating}
+                  {book.rating !== null && (
+                    <span className="sr-only">Your rating</span>
+                  )}
+                </span>
+              )}
+            </div>
           </div>
         </Link>
       ))}

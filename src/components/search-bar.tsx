@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { useLibrary } from "./library-provider";
 import { Search, Plus, Loader2, ArrowRight } from "lucide-react";
 import type { Book } from "@/types/database";
 import {
@@ -16,32 +17,19 @@ import {
   type LibrarySearchResult,
 } from "@/lib/book-search";
 
-export function SearchBar() {
+export function SearchBar({ onNavigate }: { onNavigate?: () => void }) {
   const router = useRouter();
-  const [libraryBooks, setLibraryBooks] = useState<Book[]>([]);
+  const { books: libraryBooks } = useLibrary();
   const [query, setQuery] = useState("");
-  const [libraryResults, setLibraryResults] = useState<LibrarySearchResult[]>([]);
+  const [libraryResults, setLibraryResults] = useState<LibrarySearchResult[]>(
+    [],
+  );
   const [externalResults, setExternalResults] = useState<BookResult[]>([]);
   const [isLoadingExternal, setIsLoadingExternal] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [addingIndex, setAddingIndex] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const debounceRef = useRef<NodeJS.Timeout | null>(null);
-
-  // Self-load library books for local search + dedup
-  useEffect(() => {
-    async function fetchBooks() {
-      try {
-        const res = await fetch("/api/books");
-        if (res.ok) setLibraryBooks(await res.json());
-      } catch { /* silent */ }
-    }
-    fetchBooks();
-    const handler = () => fetchBooks();
-    window.addEventListener("biblioteca:book-added", handler);
-    return () => window.removeEventListener("biblioteca:book-added", handler);
-  }, []);
 
   const hasResults = libraryResults.length > 0 || externalResults.length > 0;
 
@@ -79,57 +67,48 @@ export function SearchBar() {
         setIsOpen(true);
       }
     },
-    [libraryBooks]
+    [libraryBooks],
   );
 
-  // Debounced Google Books API search
+  // Abort old requests so slower queries cannot replace newer results.
   useEffect(() => {
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    if (!query.trim()) return;
-
-    // Skip API call if we have a cache hit
-    if (getCachedSearch(query)) return;
-
+    if (!query.trim() || getCachedSearch(query)) {
+      setIsLoadingExternal(false);
+      return;
+    }
+    const controller = new AbortController();
     setIsLoadingExternal(true);
-    debounceRef.current = setTimeout(async () => {
+    const timer = setTimeout(async () => {
       try {
-        const res = await fetch(`/api/books/search?q=${encodeURIComponent(query)}`);
+        const res = await fetch(
+          `/api/books/search?q=${encodeURIComponent(query)}`,
+          { signal: controller.signal },
+        );
         const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Search failed");
-
+        if (!res.ok || !Array.isArray(data))
+          throw new Error("Book search is unavailable. Please try again.");
+        if (controller.signal.aborted) return;
         setCachedSearch(query, data);
-        const deduplicated = deduplicateExternal(data, libraryBooks);
-        setExternalResults(deduplicated);
-        setIsOpen(true);
+        setExternalResults(deduplicateExternal(data, libraryBooks));
       } catch (err) {
-        console.error("[SearchBar] External search failed:", err);
-        setError(err instanceof Error ? err.message : "Search failed. Please try again.");
+        if (!controller.signal.aborted)
+          setError(err instanceof Error ? err.message : "Search failed.");
       } finally {
-        setIsLoadingExternal(false);
+        if (!controller.signal.aborted) setIsLoadingExternal(false);
       }
     }, 300);
-
     return () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
+      clearTimeout(timer);
+      controller.abort();
     };
   }, [query, libraryBooks]);
-
-  // Close on click outside
-  useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-        setIsOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   function handleLibraryBookClick(book: Book) {
     setQuery("");
     setLibraryResults([]);
     setExternalResults([]);
     setIsOpen(false);
+    onNavigate?.();
     router.push(`/library/${book.slug || book.id}`);
   }
 
@@ -148,6 +127,7 @@ export function SearchBar() {
         setLibraryResults([]);
         setExternalResults([]);
         setIsOpen(false);
+        onNavigate?.();
         router.push(`/library/${data.slug || data.id}`);
         return;
       }
@@ -159,7 +139,10 @@ export function SearchBar() {
       setIsOpen(false);
       window.dispatchEvent(new Event("biblioteca:book-added"));
       // Auto-generate insights (non-blocking)
-      fetch(`/api/books/${data.id}/insights`, { method: "POST" }).catch(() => {});
+      fetch(`/api/books/${data.id}/insights`, { method: "POST" }).catch(
+        () => {},
+      );
+      onNavigate?.();
       router.push(`/library/${data.slug || data.id}`);
     } catch {
       setError("Failed to add book. Please try again.");
@@ -169,16 +152,18 @@ export function SearchBar() {
   }
 
   return (
-    <div ref={containerRef} className="relative w-full max-w-md">
+    <div ref={containerRef} className="relative w-full">
       <div className="relative">
         <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-warm-gray" />
         <input
-          type="text"
+          aria-label="Search titles and authors"
+          autoFocus
+          type="search"
           value={query}
           onChange={(e) => handleQueryChange(e.target.value)}
-          onFocus={() => hasResults && setIsOpen(true)}
-          placeholder="Search books..."
-          className="w-full rounded-sm border border-warm-border bg-background/60 py-1.5 pl-9 pr-8 font-sans text-sm outline-none transition-colors placeholder:text-warm-gray/60 focus:border-amber focus:ring-0"
+          onFocus={() => query.trim() && setIsOpen(true)}
+          placeholder="Search a title or author…"
+          className="w-full rounded-sm border border-warm-border bg-background/60 py-3 pl-9 pr-8 font-sans text-sm outline-none transition-colors placeholder:text-warm-gray/60 focus:border-amber focus:ring-0"
         />
         {isLoadingExternal && (
           <Loader2 className="absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 animate-spin text-warm-gray" />
@@ -186,12 +171,14 @@ export function SearchBar() {
       </div>
 
       {error && (
-        <p className="mt-2 text-sm text-destructive">{error}</p>
+        <p role="alert" className="mt-2 text-sm text-destructive">
+          {error}
+        </p>
       )}
 
-      {isOpen && hasResults && (
-        <div className="absolute z-50 mt-2 w-full rounded-sm border border-warm-border bg-card shadow-md">
-          <div className="max-h-96 overflow-y-auto">
+      {isOpen && (hasResults || isLoadingExternal) && (
+        <div className="relative mt-2 w-full rounded-sm border border-warm-border bg-card shadow-md">
+          <div className="max-h-[50dvh] overflow-y-auto">
             {/* My Library section */}
             {libraryResults.length > 0 && (
               <div>
@@ -280,7 +267,9 @@ export function SearchBar() {
                 {isLoadingExternal && (
                   <div className="flex items-center justify-center py-3">
                     <Loader2 className="h-4 w-4 animate-spin text-warm-gray" />
-                    <span className="ml-2 font-sans text-xs text-warm-gray">Searching more books...</span>
+                    <span className="ml-2 font-sans text-xs text-warm-gray">
+                      Searching more books...
+                    </span>
                   </div>
                 )}
               </div>
@@ -296,13 +285,17 @@ export function SearchBar() {
         </div>
       )}
 
-      {isOpen && !hasResults && !isLoadingExternal && query.trim() && (
-        <div className="absolute z-50 mt-2 w-full rounded-sm border border-warm-border bg-card p-6 text-center shadow-md">
-          <p className="font-sans text-sm text-warm-gray">
-            No results found for &ldquo;{query}&rdquo;
-          </p>
-        </div>
-      )}
+      {isOpen &&
+        !hasResults &&
+        !isLoadingExternal &&
+        !error &&
+        query.trim() && (
+          <div className="relative mt-2 w-full rounded-sm border border-warm-border bg-card p-6 text-center shadow-md">
+            <p className="font-sans text-sm text-warm-gray">
+              No results found for &ldquo;{query}&rdquo;
+            </p>
+          </div>
+        )}
     </div>
   );
 }

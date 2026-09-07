@@ -6,7 +6,13 @@ const DEFAULT_USER_ID = "00000000-0000-0000-0000-000000000001";
 
 export type ExploreBook = Pick<
   Book,
-  "id" | "slug" | "title" | "authors" | "cover_image_url" | "category" | "rating"
+  | "id"
+  | "slug"
+  | "title"
+  | "authors"
+  | "cover_image_url"
+  | "category"
+  | "rating"
 > & {
   insight: Pick<BookInsight, "why_read" | "themes" | "quotes">;
 };
@@ -18,14 +24,15 @@ export interface ExploreCluster {
   suggestedBooks: SuggestedBook[];
 }
 
-function clusterByThemes(books: ExploreBook[], suggestedMap: Map<string, SuggestedBook[]>): ExploreCluster[] {
+function clusterByThemes(
+  books: ExploreBook[],
+  suggestedMap: Map<string, SuggestedBook[]>,
+): ExploreCluster[] {
   const assigned = new Set<string>();
   const clusters: ExploreCluster[] = [];
 
   // Sort by rating descending so best books become heroes
-  const sorted = [...books].sort(
-    (a, b) => (b.rating ?? 0) - (a.rating ?? 0)
-  );
+  const sorted = [...books].sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
 
   for (const book of sorted) {
     if (assigned.has(book.id)) continue;
@@ -39,7 +46,7 @@ function clusterByThemes(books: ExploreBook[], suggestedMap: Map<string, Suggest
     for (const candidate of sorted) {
       if (assigned.has(candidate.id)) continue;
       const overlap = candidate.insight.themes.filter((t) =>
-        bookThemes.has(t.toLowerCase())
+        bookThemes.has(t.toLowerCase()),
       ).length;
       if (overlap >= 2) {
         group.push(candidate);
@@ -52,7 +59,7 @@ function clusterByThemes(books: ExploreBook[], suggestedMap: Map<string, Suggest
       for (const candidate of sorted) {
         if (assigned.has(candidate.id)) continue;
         const overlap = candidate.insight.themes.filter((t) =>
-          bookThemes.has(t.toLowerCase())
+          bookThemes.has(t.toLowerCase()),
         ).length;
         if (overlap >= 1) {
           group.push(candidate);
@@ -86,19 +93,10 @@ function clusterByThemes(books: ExploreBook[], suggestedMap: Map<string, Suggest
   return clusters;
 }
 
-function shuffle<T>(arr: T[]): T[] {
-  const result = [...arr];
-  for (let i = result.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [result[i], result[j]] = [result[j], result[i]];
-  }
-  return result;
-}
-
 export async function GET() {
   const { data: insights, error: insightsError } = await supabase
     .from("book_insights")
-    .select("*")
+    .select("book_id, why_read, themes, quotes, suggested_books")
     .eq("user_id", DEFAULT_USER_ID);
 
   if (insightsError) {
@@ -147,11 +145,14 @@ export async function GET() {
   const suggestedMap = new Map<string, SuggestedBook[]>();
   for (const insight of insights) {
     if (insight.suggested_books?.length) {
-      suggestedMap.set(insight.book_id, insight.suggested_books as SuggestedBook[]);
+      suggestedMap.set(
+        insight.book_id,
+        insight.suggested_books as SuggestedBook[],
+      );
     }
   }
 
   const clusters = clusterByThemes(exploreBooks, suggestedMap);
 
-  return NextResponse.json(shuffle(clusters));
+  return NextResponse.json(clusters);
 }
